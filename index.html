@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Brothers EGY - Contract System v74.0</title>
+    <title>Brothers EGY - Contract System v75.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ================= SCREEN UI ================= */
-        :root { --primary: #04509D; --secondary: #333; --bg: #eef2f5; --accent: #e67e22; }
+        :root { --primary: #04509D; --bg: #eef2f5; --accent: #e67e22; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         
         #print-container { display: none; }
@@ -44,9 +44,9 @@
         .btn-gen:hover { background: #033a75; }
         .btn-gen:disabled { background: #95a5a6; cursor: wait; }
 
-        .live-badge { background: #e74c3c; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; transition:0.3s; }
+        .live-badge { background: #27ae60; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; transition:0.3s; }
 
-        /* ================= PRINT CSS (PROFESSIONAL STYLE RESTORED) ================= */
+        /* ================= PRINT CSS (PROFESSIONAL FIXED) ================= */
         @media print {
             body { background: white; margin: 0; padding: 0; }
             .control-panel { display: none !important; }
@@ -55,7 +55,7 @@
 
             .a4-page {
                 width: 210mm; height: 296mm; margin: 0 auto; 
-                padding: 10mm 15mm; position: relative; box-sizing: border-box;
+                padding: 10mm 12mm; position: relative; box-sizing: border-box;
                 font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9.5pt; line-height: 1.3; color: #000;
                 display: flex; flex-direction: column; page-break-after: always;
             }
@@ -66,18 +66,13 @@
 
             /* Header */
             .doc-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #04509D; padding-bottom: 8px; margin-bottom: 15px; }
-            .logo { height: 65px; }
+            .logo { height: 60px; }
             .hq-info { text-align: right; font-size: 8pt; color: #333; }
 
-            /* Boxes & Titles */
-            .box-section { border: 1px solid #000; padding: 8px; margin-bottom: 15px; position: relative; }
-            .bs-title { 
-                background: #000; color: white; padding: 2px 8px; 
-                font-weight: bold; font-size: 9pt; position: absolute; top: -12px; left: -1px; 
-                text-transform: uppercase; 
-            }
+            /* Boxes */
+            .box-section { border: 1px solid #000; padding: 8px; margin-bottom: 12px; position: relative; }
+            .bs-title { background: #000; color: white; padding: 2px 8px; font-weight: bold; font-size: 9pt; position: absolute; top: -12px; left: -1px; text-transform: uppercase; }
             
-            /* Tables */
             table.pt { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 9.5pt; }
             table.pt th { background: #f0f0f0; text-align: left; padding: 5px; border: 1px solid #888; font-weight: bold; }
             table.pt td { border: 1px solid #888; padding: 5px; vertical-align: top; }
@@ -88,15 +83,14 @@
             .term-h { font-weight: 800; text-transform: uppercase; display: block; border-bottom: 1px solid #ccc; color: var(--primary); margin-bottom: 2px; }
             
             /* Insurance Box */
-            .ins-box { border: 2px solid #000; padding: 10px; background: #eef2f5; font-weight: bold; margin: 10px 0; break-inside: avoid; font-size: 9pt; text-align: center; }
+            .ins-box { border: 2px solid #000; padding: 8px; background: #f9f9f9; font-weight: bold; margin: 8px 0; break-inside: avoid; font-size: 9pt; text-align: center; }
 
             /* Inspection */
             .insp-legend-box { font-size: 9pt; text-align: center; background: #f9f9f9; border: 1px solid #000; padding: 5px; margin-bottom: 5px; font-weight: bold; }
-            .insp-img-box { width: 100%; height: 230px; border: 1px solid #ccc; margin: 5px 0; display: flex; align-items: center; justify-content: center; }
+            .insp-img-box { width: 100%; height: 220px; border: 1px solid #ccc; margin: 5px 0; display: flex; align-items: center; justify-content: center; }
             .insp-img-box img { width: 95%; height: 95%; object-fit: contain; }
-            .insp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-bottom: 5px; }
+            .insp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-bottom: 10px; }
             .insp-col { border: 1px solid #ccc; padding: 5px; }
-            .insp-col h4 { margin: 0 0 5px 0; font-size: 8.5pt; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px; text-align:center; }
             .insp-item { display: flex; justify-content: space-between; margin-bottom: 2px; }
             
             /* Receipts */
@@ -108,10 +102,9 @@
             .r-foot { margin-top: 25px; text-align: right; font-weight: bold; }
             .receipt:after { content:"✂"; position:absolute; bottom:-28px; left:50%; background:white; padding:0 5px; font-size:14px; }
 
-            /* Signatures (Fixed Spacing) */
-            .sig-table { width: 100%; margin-top: 40px; }
-            .sig-row { display:flex; justify-content: space-between; width:100%; }
-            .sig-box { border-top: 2px solid #000; text-align: center; font-weight: bold; padding-top: 5px; width: 40%; }
+            /* Signatures */
+            .sig-table { width: 100%; margin-top: 40px; border-collapse: separate; border-spacing: 50px 0; }
+            .sig-cell { border-top: 2px solid #000; text-align: center; font-weight: bold; padding-top: 5px; width: 40%; vertical-align: top; }
         }
     </style>
 </head>
@@ -119,10 +112,9 @@
 
 <div class="control-panel">
     <div class="cp-header">
-        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v74.0</h2>
+        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v75.0</h2>
         <div style="display:flex; gap:15px; align-items:center; font-size:12px;">
             <div id="clock" style="font-family:monospace; font-weight:bold;">--:--:--</div>
-            <div id="status-badge" class="live-badge">LOADING...</div>
             <div>USD: <input type="number" id="ex_usd" value="50.00" class="rate-input" oninput="calc()"></div>
             <div>EUR: <input type="number" id="ex_eur" value="54.00" class="rate-input" oninput="calc()"></div>
         </div>
@@ -234,37 +226,20 @@
             <div id="disp_status" style="font-size:12px;">Pending...</div>
         </div>
 
-        <button id="btnGen" class="btn-gen" onclick="generate()" disabled>LOADING RESOURCES...</button>
+        <button class="btn-gen" onclick="generate()">GENERATE CONTRACT</button>
     </div>
 </div>
 
 <div id="print-container"></div>
 
 <div style="display:none;">
-    <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" onload="resourceLoaded()" onerror="resourceError()">
-    <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" onload="resourceLoaded()">
-    <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" onload="resourceLoaded()">
+    <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous">
+    <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
+    <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" crossorigin="anonymous">
 </div>
 
 <script>
-    // 1. SYSTEM LOGIC
-    let loadedCount = 0;
-    function resourceLoaded() {
-        loadedCount++;
-        if(loadedCount >= 3) {
-            const btn = document.getElementById('btnGen');
-            const badge = document.getElementById('status-badge');
-            btn.disabled = false;
-            btn.innerText = "GENERATE CONTRACT";
-            badge.style.background = "#27ae60";
-            badge.innerText = "READY";
-        }
-    }
-    function resourceError() {
-        // Even if it fails, let them print (images will just be broken icons)
-        resourceLoaded();
-    }
-
+    // 1. DATA
     const fleet = [
         {code:"33", model:"Haval Jolion", year:"2022", plate:"ب ا ن | 2 6 4 9", vin:"606889", motor:"21499022758"},
         {code:"47", model:"Hyundai Tucson", year:"2022", plate:"ه س ب | 4 2 6 3", vin:"KMHJE81BGN", motor:"G4FPNU539488"},
@@ -341,17 +316,17 @@
 
     function generate() {
         const c = calc();
-        // Smart Contract ID
+        // Smart Contract Number
         const branchMap = {"HRG":"HRG", "ALX":"ALX", "CAI":"CAI", "RSD":"RSD"};
         const bCode = branchMap[safeVal('issuingBranch')] || "HRG";
-        const dStr = new Date().getDate().toString().padStart(2,'0') + (new Date().getMonth()+1).toString().padStart(2,'0');
+        const dStr = new Date().toISOString().slice(0,10).replace(/-/g,"");
         const cid = `BR-${bCode}-${dStr}-${Math.floor(1000 + Math.random() * 9000)}`;
         const today = new Date().toLocaleDateString();
         
         const usd = safeNum('ex_usd') || 50;
         const eur = safeNum('ex_eur') || 54;
 
-        // Payment Strings
+        // Payment String Logic
         const buildPay = (pfx) => {
             let egp = safeNum(pfx+'_egp'), u = safeNum(pfx+'_usd'), e = safeNum(pfx+'_eur'), card = safeNum(pfx+'_card');
             let total = egp + (u*usd) + (e*eur) + card;
@@ -375,7 +350,7 @@
         const plan = insPlans[safeVal('insPack')] || insPlans["Basic"];
         const logos = { logo: document.getElementById('img_logo').src, water: document.getElementById('img_water').src, car: document.getElementById('img_car').src };
 
-        // --- PAGE 1 ---
+        // --- PAGE 1: SCHEDULE ---
         let html = `
         <div class="a4-page">
             <div class="watermark"><img src="${logos.water}"></div>
@@ -392,7 +367,7 @@
             <div class="box-section"><span class="bs-title">PARTIES</span>
                 <table class="pt">
                     <tr><td width="30%"><strong>LESSOR</strong><br>El Alakhua El Mutahidun<br>${safeVal('issuingBranch')}</td>
-                        <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>ID: ${safeVal('cl_id')} | Nation: ${safeVal('cl_nation')}<br>Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | Addr: ${safeVal('cl_addr')}</td></tr>
+                        <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>ID: ${safeVal('cl_id')}<br>Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | Addr: ${safeVal('cl_addr')}</td></tr>
                 </table>
             </div>
 
@@ -425,12 +400,7 @@
                 DEPOSIT HELD: ${depInfo.text}
             </div>
 
-            <div class="sig-table">
-                <div class="sig-row">
-                    <div class="sig-box">LESSOR SIGNATURE</div>
-                    <div class="sig-box">LESSEE SIGNATURE</div>
-                </div>
-            </div>
+            <table class="sig-table"><tr><td class="sig-cell">LESSOR SIGNATURE</td><td style="width:20%"></td><td class="sig-cell">LESSEE SIGNATURE</td></tr></table>
         </div>`;
 
         // --- PAGE 2: TERMS ---
@@ -459,11 +429,7 @@
                 <div class="term-p"><span class="term-h">12. PENALTIES</span> Key: 20k, License: 12.5k, Tire: 10k, Interior: 5k+.</div>
                 <div class="term-p"><span class="term-h">13. DISPUTES</span> Disputes refer to Independent Car Service Center. Quote is binding.</div>
             </div>
-            <div class="sig-table">
-                <div class="sig-box" style="width:100%; text-align:left; border:none; border-top:1px solid #000;">
-                    I have read and accepted all terms.<br><br>Signature: __________________________
-                </div>
-            </div>
+            <table class="sig-table" style="margin-top:auto"><tr><td class="sig-cell" style="width:100%; border:none; border-top:1px solid #000;">I have read and accepted all terms.<br>Signature: __________________________</td></tr></table>
         </div>`;
 
         // --- PAGE 3: INSPECTION ---
@@ -479,7 +445,7 @@
                 <div class="insp-col"><h4>REAR</h4><div class="insp-item"><span>Trunk</span>[ ]</div><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Lights</span>[ ]</div></div>
                 <div class="insp-col"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div><div class="insp-item"><span>Door R</span>[ ]</div></div>
             </div>
-            <div style="margin-top:10px; font-weight:bold; border-top:1px solid #000; padding-top:5px;">Pickup Signature: __________________________</div>
+            <table class="sig-table"><tr><td class="sig-cell" style="border:none; border-top:1px solid #000; text-align:left; width:50%">Pickup Signature:</td></tr></table>
 
             <hr style="margin:20px 0; border:1px dashed #ccc;">
 
@@ -496,7 +462,7 @@
                 <tr><td>New Damages</td><td></td></tr><tr><td>Fines</td><td></td></tr><tr><td>Fuel</td><td></td></tr>
                 <tr><td align="right"><strong>TOTAL DEDUCT:</strong></td><td></td></tr></table>
             </div>
-            <div style="margin-top:auto; font-weight:bold; border-top:1px solid #000; padding-top:5px;">Return Signature: __________________________</div>
+            <table class="sig-table" style="margin-top:auto"><tr><td class="sig-cell" style="border:none; border-top:1px solid #000; text-align:left; width:50%">Return Signature:</td></tr></table>
         </div>`;
 
         // --- PAGE 4: RECEIPTS ---
@@ -509,7 +475,7 @@
             <div class="r-body">
                 <div class="r-row"><span>Date:</span> <span>${today}</span></div>
                 <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
-                <div class="r-row"><span>Received From:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
+                <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
                 <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
                 <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${depInfo.text}</b></div>
             </div>
@@ -533,7 +499,7 @@
                 <div class="r-body">
                     <div class="r-row"><span>Date:</span> <span>${today}</span></div>
                     <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
-                    <div class="r-row"><span>Received From:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
+                    <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
                     <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
                     <div class="r-row"><span>Period:</span> <span>${sDate.toLocaleDateString()} to ${eDate.toLocaleDateString()}</span></div>
                     <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${amt}</b></div>
@@ -545,7 +511,7 @@
         html += `</div></div>`;
 
         document.getElementById('print-container').innerHTML = html;
-        setTimeout(() => { window.print(); }, 2000);
+        setTimeout(() => { window.print(); }, 2000); // Allow images to load
     }
 </script>
 </body>
