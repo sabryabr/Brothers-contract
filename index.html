@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Brothers EGY - Contract System v73.0 (Perfected)</title>
+    <title>Brothers EGY - Contract System v74.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ================= SCREEN UI ================= */
         :root { --primary: #04509D; --secondary: #333; --bg: #eef2f5; --accent: #e67e22; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         
-        #print-container { display: none; } /* Hidden on screen */
+        #print-container { display: none; }
 
         .control-panel {
             max-width: 1280px; margin: 0 auto 40px auto; background: white;
@@ -46,7 +46,7 @@
 
         .live-badge { background: #e74c3c; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; transition:0.3s; }
 
-        /* ================= PRINT CSS ================= */
+        /* ================= PRINT CSS (PROFESSIONAL STYLE RESTORED) ================= */
         @media print {
             body { background: white; margin: 0; padding: 0; }
             .control-panel { display: none !important; }
@@ -69,10 +69,15 @@
             .logo { height: 65px; }
             .hq-info { text-align: right; font-size: 8pt; color: #333; }
 
-            /* Boxes */
-            .box-section { border: 1px solid #000; padding: 8px; margin-bottom: 12px; position: relative; }
-            .bs-title { background: #000; color: white; padding: 2px 8px; font-weight: bold; font-size: 9pt; position: absolute; top: -12px; left: -1px; text-transform: uppercase; }
+            /* Boxes & Titles */
+            .box-section { border: 1px solid #000; padding: 8px; margin-bottom: 15px; position: relative; }
+            .bs-title { 
+                background: #000; color: white; padding: 2px 8px; 
+                font-weight: bold; font-size: 9pt; position: absolute; top: -12px; left: -1px; 
+                text-transform: uppercase; 
+            }
             
+            /* Tables */
             table.pt { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 9.5pt; }
             table.pt th { background: #f0f0f0; text-align: left; padding: 5px; border: 1px solid #888; font-weight: bold; }
             table.pt td { border: 1px solid #888; padding: 5px; vertical-align: top; }
@@ -91,21 +96,22 @@
             .insp-img-box img { width: 95%; height: 95%; object-fit: contain; }
             .insp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-bottom: 5px; }
             .insp-col { border: 1px solid #ccc; padding: 5px; }
-            .insp-col h4 { margin: 0 0 5px 0; font-size: 8.5pt; border-bottom: 1px solid #000; text-transform: uppercase; }
+            .insp-col h4 { margin: 0 0 5px 0; font-size: 8.5pt; text-transform: uppercase; border-bottom: 1px solid #000; padding-bottom: 2px; text-align:center; }
             .insp-item { display: flex; justify-content: space-between; margin-bottom: 2px; }
             
             /* Receipts */
             .receipts-wrapper { display: flex; flex-direction: column; gap: 25px; margin-top: 10px; }
-            .receipt { border: 2px solid #333; padding: 15px 20px; background: white; position: relative; min-height: 240px; page-break-inside: avoid; }
+            .receipt { border: 2px solid #333; padding: 15px 20px; background: white; position: relative; min-height: 260px; page-break-inside: avoid; }
             .r-head { border-bottom: 3px double #04509D; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; font-weight: bold; font-size: 11pt; color: #04509D; }
             .r-body { display: flex; flex-direction: column; gap: 6px; font-size: 10pt; }
             .r-row { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; padding-bottom: 4px; }
             .r-foot { margin-top: 25px; text-align: right; font-weight: bold; }
             .receipt:after { content:"✂"; position:absolute; bottom:-28px; left:50%; background:white; padding:0 5px; font-size:14px; }
 
-            /* Signatures (Split Wide) */
-            .sig-table { width: 100%; margin-top: 40px; border-collapse: separate; border-spacing: 50px 0; }
-            .sig-cell { border-top: 2px solid #000; text-align: center; font-weight: bold; padding-top: 5px; width: 40%; vertical-align: top; }
+            /* Signatures (Fixed Spacing) */
+            .sig-table { width: 100%; margin-top: 40px; }
+            .sig-row { display:flex; justify-content: space-between; width:100%; }
+            .sig-box { border-top: 2px solid #000; text-align: center; font-weight: bold; padding-top: 5px; width: 40%; }
         }
     </style>
 </head>
@@ -113,7 +119,7 @@
 
 <div class="control-panel">
     <div class="cp-header">
-        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v73.0</h2>
+        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v74.0</h2>
         <div style="display:flex; gap:15px; align-items:center; font-size:12px;">
             <div id="clock" style="font-family:monospace; font-weight:bold;">--:--:--</div>
             <div id="status-badge" class="live-badge">LOADING...</div>
@@ -255,8 +261,8 @@
         }
     }
     function resourceError() {
-        alert("Logo failed to load. Check internet.");
-        resourceLoaded(); // Allow proceed anyway
+        // Even if it fails, let them print (images will just be broken icons)
+        resourceLoaded();
     }
 
     const fleet = [
@@ -288,7 +294,7 @@
         }, 1000);
     };
 
-    // 3. CALCULATION
+    // 3. LOGIC
     function safeVal(id) { var el = document.getElementById(id); return el ? el.value : ""; }
     function safeNum(id) { var el = document.getElementById(id); if(!el || el.value.trim() === "") return 0; return parseFloat(el.value) || 0; }
 
@@ -335,6 +341,7 @@
 
     function generate() {
         const c = calc();
+        // Smart Contract ID
         const branchMap = {"HRG":"HRG", "ALX":"ALX", "CAI":"CAI", "RSD":"RSD"};
         const bCode = branchMap[safeVal('issuingBranch')] || "HRG";
         const dStr = new Date().getDate().toString().padStart(2,'0') + (new Date().getMonth()+1).toString().padStart(2,'0');
@@ -351,7 +358,7 @@
             let parts = [];
             if(egp) parts.push(egp+" Cash"); if(u) parts.push(u+" USD"); if(e) parts.push(e+" EUR"); if(card) parts.push(card+" Card");
             let detail = parts.length > 0 ? `(${parts.join(' + ')})` : "";
-            return { total: total, text: `${Math.round(total).toLocaleString()} EGP ${detail}` };
+            return { total: total, text: `<strong>${Math.round(total).toLocaleString()} EGP</strong> ${detail}` };
         };
 
         let rentInfo = buildPay('pr');
@@ -385,7 +392,7 @@
             <div class="box-section"><span class="bs-title">PARTIES</span>
                 <table class="pt">
                     <tr><td width="30%"><strong>LESSOR</strong><br>El Alakhua El Mutahidun<br>${safeVal('issuingBranch')}</td>
-                        <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>ID: ${safeVal('cl_id')}<br>Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')}</td></tr>
+                        <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>ID: ${safeVal('cl_id')} | Nation: ${safeVal('cl_nation')}<br>Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | Addr: ${safeVal('cl_addr')}</td></tr>
                 </table>
             </div>
 
@@ -406,7 +413,7 @@
                     ${safeNum('rateIns')>0 ? `<tr><td>Insurance</td><td>${safeNum('rateIns')} x ${c.days} Days</td><td align="right">${(safeNum('rateIns')*c.days).toLocaleString()}</td></tr>` : ''}
                     ${safeNum('fee_del')>0 ? `<tr><td>Delivery Fee</td><td>${safeVal('p_loc')}</td><td align="right">${safeVal('fee_del')}</td></tr>` : ''}
                     ${safeNum('fee_col')>0 ? `<tr><td>Pickup Fee</td><td>${safeVal('d_loc')}</td><td align="right">${safeVal('fee_col')}</td></tr>` : ''}
-                    <tr style="border-top:2px solid #000"><td colspan="2" align="right"><b>TOTAL DUE</b></td><td align="right"><b>${Math.round(c.total).toLocaleString()} EGP</b></td></tr>
+                    <tr style="border-top:2px solid #000"><td colspan="2" align="right"><b>TOTAL CONTRACT VALUE</b></td><td align="right"><b>${Math.round(c.total).toLocaleString()} EGP</b></td></tr>
                 </table>
                 <div style="background:#f9f9f9; padding:10px; border:1px solid #ccc; text-align:center; font-size:10pt; margin-top:5px;">
                     <b>PAID NOW:</b> ${rentInfo.text} <br>
@@ -418,10 +425,15 @@
                 DEPOSIT HELD: ${depInfo.text}
             </div>
 
-            <table class="sig-table"><tr><td class="sig-cell">LESSOR SIGNATURE</td><td style="width:20%"></td><td class="sig-cell">LESSEE SIGNATURE</td></tr></table>
+            <div class="sig-table">
+                <div class="sig-row">
+                    <div class="sig-box">LESSOR SIGNATURE</div>
+                    <div class="sig-box">LESSEE SIGNATURE</div>
+                </div>
+            </div>
         </div>`;
 
-        // --- PAGE 2 ---
+        // --- PAGE 2: TERMS ---
         html += `
         <div class="a4-page">
             <div class="watermark"><img src="${logos.water}"></div>
@@ -447,10 +459,14 @@
                 <div class="term-p"><span class="term-h">12. PENALTIES</span> Key: 20k, License: 12.5k, Tire: 10k, Interior: 5k+.</div>
                 <div class="term-p"><span class="term-h">13. DISPUTES</span> Disputes refer to Independent Car Service Center. Quote is binding.</div>
             </div>
-            <table class="sig-table" style="margin-top:auto"><tr><td class="sig-cell" style="width:100%; border:none; border-top:1px solid #000;">I have read and accepted all terms.<br>Signature: __________________________</td></tr></table>
+            <div class="sig-table">
+                <div class="sig-box" style="width:100%; text-align:left; border:none; border-top:1px solid #000;">
+                    I have read and accepted all terms.<br><br>Signature: __________________________
+                </div>
+            </div>
         </div>`;
 
-        // --- PAGE 3 ---
+        // --- PAGE 3: INSPECTION ---
         html += `
         <div class="a4-page">
             <div class="watermark"><img src="${logos.water}"></div>
@@ -463,36 +479,44 @@
                 <div class="insp-col"><h4>REAR</h4><div class="insp-item"><span>Trunk</span>[ ]</div><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Lights</span>[ ]</div></div>
                 <div class="insp-col"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div><div class="insp-item"><span>Door R</span>[ ]</div></div>
             </div>
-            <table class="sig-table" style="margin-top:20px"><tr><td class="sig-cell" style="text-align:left; border:none; border-bottom:1px solid #000; width:50%">Pickup Signature:</td></tr></table>
+            <div style="margin-top:10px; font-weight:bold; border-top:1px solid #000; padding-top:5px;">Pickup Signature: __________________________</div>
 
-            <hr style="margin:30px 0; border:1px dashed #ccc;">
+            <hr style="margin:20px 0; border:1px dashed #ccc;">
 
             <div class="doc-head" style="border:none;"><strong>RETURN INSPECTION REPORT</strong><span>(Filled at Drop-off)</span></div>
              <div class="insp-img-box" style="height:150px;"><img src="${logos.car}"></div>
+             <div class="insp-grid">
+                <div class="insp-col"><h4>PASSENGER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div></div>
+                <div class="insp-col"><h4>FRONT</h4><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Hood</span>[ ]</div></div>
+                <div class="insp-col"><h4>REAR</h4><div class="insp-item"><span>Trunk</span>[ ]</div><div class="insp-item"><span>Bumper</span>[ ]</div></div>
+                <div class="insp-col"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div></div>
+            </div>
              <div class="box-section"><span class="bs-title">FINAL SETTLEMENT</span>
                 <table class="pt"><tr><th width="70%">Description</th><th>Cost (EGP)</th></tr>
                 <tr><td>New Damages</td><td></td></tr><tr><td>Fines</td><td></td></tr><tr><td>Fuel</td><td></td></tr>
                 <tr><td align="right"><strong>TOTAL DEDUCT:</strong></td><td></td></tr></table>
             </div>
-            <table class="sig-table" style="margin-top:auto"><tr><td class="sig-cell" style="text-align:left; border:none; border-bottom:1px solid #000; width:50%">Return Signature:</td></tr></table>
+            <div style="margin-top:auto; font-weight:bold; border-top:1px solid #000; padding-top:5px;">Return Signature: __________________________</div>
         </div>`;
 
         // --- PAGE 4: RECEIPTS ---
         html += `<div class="a4-page"><div class="doc-head"><strong>OFFICIAL RECEIPTS</strong><span>Page 4/4</span></div><div class="receipts-wrapper">`;
         
+        // Deposit
         html += `
         <div class="receipt">
             <div class="r-head"><span>SECURITY DEPOSIT RECEIPT (ON-HOLD)</span><span>CLIENT COPY</span></div>
             <div class="r-body">
                 <div class="r-row"><span>Date:</span> <span>${today}</span></div>
                 <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
-                <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
+                <div class="r-row"><span>Received From:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
                 <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
                 <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${depInfo.text}</b></div>
             </div>
             <div class="r-foot"><div class="r-sign">Auth Sig: __________________</div></div><div class="receipt:after">✂</div>
         </div>`;
 
+        // Rent Loop
         let loopCount = (c.mode==='Monthly') ? c.months : 1;
         let sDate = new Date(safeVal('p_time'));
         
@@ -509,7 +533,7 @@
                 <div class="r-body">
                     <div class="r-row"><span>Date:</span> <span>${today}</span></div>
                     <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
-                    <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
+                    <div class="r-row"><span>Received From:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
                     <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
                     <div class="r-row"><span>Period:</span> <span>${sDate.toLocaleDateString()} to ${eDate.toLocaleDateString()}</span></div>
                     <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${amt}</b></div>
@@ -521,7 +545,7 @@
         html += `</div></div>`;
 
         document.getElementById('print-container').innerHTML = html;
-        window.print();
+        setTimeout(() => { window.print(); }, 2000);
     }
 </script>
 </body>
