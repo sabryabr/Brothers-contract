@@ -373,7 +373,7 @@
         const insKey = safeVal('insPack') || "Basic";
         const insText = insuranceTexts[insKey] || "";
 
-        // PAGE 1: MAIN AGREEMENT
+        // --- PAGE 1: SCHEDULE ---
         let html = `
         <div class="a4-page">
             <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
@@ -416,53 +416,175 @@
                         <tr><td>Base Rent</td><td>${rateTxt}</td><td align="right">${Math.round(base).toLocaleString()}</td></tr>
                         ${c.i > 0 ? `<tr><td>Insurance Fees</td><td>${c.i} x ${c.days} Days</td><td align="right">${(c.i*c.days).toLocaleString()}</td></tr>` : ''}
                         ${c.adds > 0 ? `<tr><td>Add-ons</td><td>${c.adds} x ${c.days} Days</td><td align="right">${(c.adds*c.days).toLocaleString()}</td></tr>` : ''}
-                        ${c.fee_d > 0 ? `<tr><td>Delivery Fee</td><td>Fixed</td><td align="right">${c.fee_d}</td></tr>` : ''}
-                        ${c.fee_c > 0 ? `<tr><td>Pickup Fee</td><td>Fixed</td><td align="right">${c.fee_c}</td></tr>` : ''}
+                        ${c.fee_d > 0 ? `<tr><td>Delivery Fee (${pText})</td><td>Fixed</td><td align="right">${c.fee_d}</td></tr>` : ''}
+                        ${c.fee_c > 0 ? `<tr><td>Pickup Fee (${dText})</td><td>Fixed</td><td align="right">${c.fee_c}</td></tr>` : ''}
                         <tr style="font-weight:bold; border-top:2px solid #000;"><td colspan="2" align="right">TOTAL CONTRACT VALUE:</td><td align="right">${Math.round(c.totalDue).toLocaleString()} EGP</td></tr>
                     </table>
-                    <div style="background:#f0f0f0; border:1px solid #000; padding:5px; text-align:center; font-size:9pt; margin-bottom:5px;">${insText}</div>
+                    <div style="background:#f0f0f0; border:1px solid #000; padding:5px; text-align:center; font-size:9pt; margin-bottom:5px;">
+                       ${insText}
+                    </div>
                     <div style="background:#eee; padding:5px; text-align:center;">
-                        PAID NOW: ${rentStr} <br> <span style="font-weight:bold; color:${c.rentPending>0?'#c0392b':'#27ae60'}">PENDING: ${Math.round(c.rentPending).toLocaleString()} EGP</span>
+                        PAID NOW: ${rentStr} <br> <span style="color:${c.rentPending>0?'#c0392b':'#27ae60'}; font-weight:bold;">PENDING: ${Math.round(c.rentPending).toLocaleString()} EGP</span>
                     </div>
                 </div>
 
                 <div style="border:2px solid orange; padding:5px; margin-bottom:10px; font-size:9pt;">
                     <strong>DEPOSIT HELD:</strong> ${depStr} 
-                    <span style="float:right; font-weight:bold;">${c.depPending>0 ? Math.round(c.depPending) + ' EGP PENDING' : 'FULLY HELD'}</span>
+                    <span style="float:right; font-weight:bold; color:${c.depPending>0?'#c0392b':'#27ae60'}">${c.depPending>0 ? Math.round(c.depPending) + ' EGP PENDING' : 'FULLY HELD'}</span>
                 </div>
                 
+                 <div style="text-align:center; border:2px dashed #000; padding:10px; font-size:9pt;">
+                    <strong>IMPORTANT:</strong> Contract is void for any period NOT covered by an official payment receipt.
+                </div>
+
                 <table class="sig-block" width="100%"><tr><td>LESSOR SIGNATURE</td><td>LESSEE SIGNATURE</td></tr></table>
             </div>
-        </div>
+        </div>`;
 
+        // PAGE 2 (TERMS)
+        html += `
         <div class="a4-page">
             <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
             <div class="page-content">
-                <div class="doc-head"><strong>TERMS & CONDITIONS</strong><span>Page 2/4</span></div>
+                <div class="doc-head"><strong>TERMS & CONDITIONS</strong><span>Page 2/6</span></div>
                 <div class="terms-grid">
-                    <div class="term-p"><span class="term-h">1. COLLISION DAMAGE WAIVER (CDW)</span>Collision Damage Waiver reduces legal responsibility from total damage cost to a surplus amount...</div>
-                    <div class="term-p"><span class="term-h">2. THEFT WAIVER</span>Theft is NOT covered by insurance. The vehicle is the Lessee's sole responsibility...</div>
-                    <div class="term-p"><span class="term-h">3. DELIVERY & COLLECTION</span>Normal office hour charges apply...</div>
-                    <div class="term-p"><span class="term-h">4. LOCAL DEPOSITS</span>Deposit is refundable provided the car is returned in original condition...</div>
-                    <div class="term-p"><span class="term-h">5. SCHEDULE OF PENALTIES</span>Key: 20k | License: 12.5k | Tire: 10k | Dirty: 350 EGP.</div>
-                </div>
-                <div style="margin-top:auto; padding:15px; border-top:1px solid #000;">Signature: __________________________</div>
-            </div>
-        </div>
+                    <div class="term-p"><span class="term-h">1. COLLISION DAMAGE WAIVER (CDW)</span>
+                    Collision Damage Waiver or CDW reduces your legal responsibility from the total damage cost to a surplus amount applicable except if the damage caused by you is intentional and under the influence of drugs/alcohol; or if you use the car in a negligent way, such as renting it to other parties or driving off main roads. Collision Damage Waiver also covers charge for damage to the rented vehicle or its accessories. In some destinations windscreens, under carriage, replacement keys, tyres, towing charges and replacement locks are not covered by the insurance policy.</div>
+                    
+                    <div class="term-p"><span class="term-h">2. THEFT WAIVER</span>
+                    Theft is <strong>NOT covered</strong> by insurance. The vehicle is the Lessee's sole responsibility and must be parked in secure locations/garages.</div>
 
+                    <div class="term-p"><span class="term-h">3. DELIVERY & COLLECTION CHARGES</span>
+                    Delivery and collection charges will be applied by the car rental Company out of normal office hours, even when late collection vehicle is a result of a flight delay. In the majority of locations, the car rental Company will provide delivery and collection to and from accommodation, though a charge might apply in such case. Complete address details along with a vehicle delivery time must be provided during the time of rental booking. Please make a note that vehicle deliveries are not provided for private accommodation.</div>
+
+                    <div class="term-p"><span class="term-h">4. PERSONAL ACCIDENT INSURANCE</span>
+                    Our insurance system is optional to ensure transparency for a safe drive. Buying PAI is recommended for a trouble-free trip.</div>
+
+                    <div class="term-p"><span class="term-h">5. LOCAL DEPOSITS & PETROL</span>
+                    Usually, a car rental Company block a security amount at the rental desk which will be released as soon as the car is returned back at the drop-off location in same condition as per your rental agreement. This is to cover liability excess, petrol and other charges incurred during the rental. This deposit is refundable provided the car and its accessories are returned in the original condition and in accordance with fuel policy. Please check for these policies with the rental supplier, before you book a car.</div>
+
+                    <div class="term-p"><span class="term-h">6. AGE LIMITATIONS</span>
+                    Generally, the minimum age limitation for car hiring is 21 years.</div>
+
+                    <div class="term-p"><span class="term-h">7. RENTAL PERIOD & RETURN</span>
+                    A rental period is usually calculated and charged on the basis of a 24 hour time cycle. Once you have collected your vehicle, the rental period extension and late returns are charged at local tariff, by the Company. Time of your car rental starts and ends in accordance to pick-up and drop-off information. Late returns (Grace period: 1 Hour) are charged extra. Early return does not result in a refund (Non-Refundable).</div>
+
+                    <div class="term-p"><span class="term-h">8. CANCELLATION</span>
+                    * Cancel > 48h: 100% Refund.<br>* Cancel < 48h: 30% Deducted.<br>* No Show: No Refund.</div>
+
+                    <div class="term-p"><span class="term-h">9. EXTRA COVER INCLUSIONS</span>
+                    Roadside assistance, Body repair, Tires, Wheels, Undercarriage, Windows, Mirrors, Locks, Key loss, Admin fees.</div>
+
+                    <div class="term-p"><span class="term-h">10. EXTRA COVER EXCLUSIONS</span>
+                    Personal possessions, Rental Extras (Child Seat/GPS), Hotel charges, Interior damage, Cleaning costs, Third party damages, Force Majeure, DUI/Off-road/Wrong Fuel.</div>
+                    
+                    <div class="term-p"><span class="term-h">11. SCHEDULE OF PENALTIES (Negligence)</span>
+                    * Car Key: <strong>20,000 EGP</strong><br>
+                    * License Loss: <strong>12,500 EGP</strong><br>
+                    * Tire Damage: <strong>10,000 EGP</strong><br>
+                    * Fire Extinguisher: <strong>10,000 EGP</strong><br>
+                    * Interior Damage: <strong>5,000 - 50,000 EGP</strong><br>
+                    * Dirty Return: <strong>350 EGP</strong></div>
+
+                    <div class="term-p"><span class="term-h">12. DISPUTE RESOLUTION</span>
+                    In a situation of mechanical difficulties or vehicle breakdown, you must call your car rental Company right away. If you get involved in any accident, you must contact your rental Company and the local police immediately. Disagreements on repair cost/time refer to Independent Car Service Center. Quote is binding. At-fault party pays repair + lost days + fee.</div>
+
+                    <div class="term-p"><span class="term-h">13. TRAFFIC FINES</span>
+                    Lessee is fully responsible for all traffic fines (Speeding, Radar, Parking).</div>
+                    
+                    <div class="term-p"><span class="term-h">14. MECHANICAL ISSUES</span>
+                    Contact us immediately for breakdowns. Company covers technical faults. Lessee covers negligence.</div>
+                </div>
+                <div style="margin-top:auto; padding:15px; border-top:1px solid #000;">
+                    <strong>I have read and accepted all terms.</strong> Signature: __________________________
+                </div>
+            </div>
+        </div>`;
+
+        // PAGE 3 (PICKUP)
+        let inspHtml = `
         <div class="a4-page">
+            <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
             <div class="page-content">
-                <div class="doc-head"><strong>INSPECTION REPORT</strong><span>Page 3/4</span></div>
+                <div class="doc-head"><strong>PICKUP INSPECTION REPORT</strong><span>Page 3/4</span></div>
+                <div style="text-align:center; font-weight:bold; margin-bottom:5px;">Date: ${today}</div>
+                <div class="insp-legend-box">EXTERNAL CONDITION: Missing (M) | Damage (DM) | Dent (D) | Scratch (S) | Light Scratch (L)</div>
                 <div class="insp-img-box"><img src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg"></div>
+                
                 <div class="insp-grid-container">
-                    <div class="insp-col col-pass"><h4>PASSENGER</h4><div class="insp-item"><span>Fender F</span><span class="insp-check">[ ]</span></div></div>
-                    <div class="insp-col col-front"><h4>FRONT</h4><div class="insp-item"><span>Bumper</span><span class="insp-check">[ ]</span></div></div>
-                    <div class="insp-col col-rear"><h4>REAR</h4><div class="insp-item"><span>Bumper</span><span class="insp-check">[ ]</span></div></div>
-                    <div class="insp-col col-driver"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span><span class="insp-check">[ ]</span></div></div>
+                    <div class="insp-col col-pass"><h4>PASSENGER</h4><div class="insp-item"><span>(D) Fender F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(L) Door F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(K) Door R</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(J) Fender R</span><span class="insp-check">[  ]</span></div></div>
+                    <div class="insp-col col-front"><h4>FRONT</h4><div class="insp-item"><span>(E) Bumper</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(F) Hood</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(W) Windsh</span><span class="insp-check">[  ]</span></div></div>
+                    <div class="insp-col col-rear"><h4>REAR</h4><div class="insp-item"><span>(Q) Trunk</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(H) Bumper</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(I) Lights</span><span class="insp-check">[  ]</span></div></div>
+                    <div class="insp-col col-driver"><h4>DRIVER</h4><div class="insp-item"><span>(M) Fender F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(C) Door F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(B) Door R</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(A) Fender R</span><span class="insp-check">[  ]</span></div></div>
                 </div>
                 <div class="sig-block">Client Signature</div>
             </div>
+        </div>
+        
+        <div class="a4-page">
+            <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
+            <div class="page-content">
+                <div class="doc-head"><strong>RETURN INSPECTION</strong><span>Page 4/4</span></div>
+                <div class="insp-img-box"><img src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg"></div>
+                <div class="insp-grid-container">
+                    <div class="insp-col col-pass"><h4>PASSENGER</h4><div class="insp-item"><span>(D) Fender F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(L) Door F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(K) Door R</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(J) Fender R</span><span class="insp-check">[  ]</span></div></div>
+                    <div class="insp-col col-front"><h4>FRONT</h4><div class="insp-item"><span>(E) Bumper</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(F) Hood</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(W) Windsh</span><span class="insp-check">[  ]</span></div></div>
+                    <div class="insp-col col-rear"><h4>REAR</h4><div class="insp-item"><span>(Q) Trunk</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(H) Bumper</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(I) Lights</span><span class="insp-check">[  ]</span></div></div>
+                    <div class="insp-col col-driver"><h4>DRIVER</h4><div class="insp-item"><span>(M) Fender F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(C) Door F</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(B) Door R</span><span class="insp-check">[  ]</span></div><div class="insp-item"><span>(A) Fender R</span><span class="insp-check">[  ]</span></div></div>
+                </div>
+                <div class="box-section" style="margin-top:10px;"><span class="bs-title">FINAL SETTLEMENT</span><table class="pt"><tr><th width="70%">Description</th><th>Cost (EGP)</th></tr><tr><td>Additional Kilometers</td><td></td></tr><tr><td>Late Return Hours</td><td></td></tr><tr><td>Cleaning Fees</td><td></td></tr><tr><td>Fuel Shortage</td><td></td></tr><tr><td>Drop-off Location Fee</td><td></td></tr><tr><td>New Damages</td><td></td></tr><tr><td>Traffic Fines</td><td></td></tr><tr><td align="right"><strong>TOTAL DEDUCTIONS:</strong></td><td></td></tr></table></div>
+                <div class="sig-block">Client Signature</div>
+            </div>
         </div>`;
+        
+        html += inspHtml;
+
+        // RECEIPTS LOOP
+        if(c.mode === 'Monthly' && pDate && dDate && dDate > pDate) {
+            let chunkStart = new Date(pDate);
+            let idx = 1;
+            while(chunkStart < dDate) {
+                let chunkEnd = new Date(chunkStart);
+                chunkEnd.setMonth(chunkEnd.getMonth() + 1);
+                if(chunkEnd > dDate) chunkEnd = new Date(dDate);
+                let recPeriod = `${chunkStart.toLocaleDateString()} ${chunkStart.toLocaleTimeString()} to ${chunkEnd.toLocaleDateString()} ${chunkEnd.toLocaleTimeString()}`;
+                let isFirst = (idx === 1);
+                
+                html += `
+                <div class="a4-page">
+                    <div class="doc-head" style="border:none"><strong>OFFICIAL RECEIPTS - INSTALLMENT #${idx}</strong></div>
+                    <div class="receipts-wrapper">
+                        <div class="receipt">
+                            <div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">SECURITY DEPOSIT RECEIPT (ON-HOLD)</div><span class="r-copy">CLIENT COPY</span></div>
+                            <div class="r-body"><div class="r-row"><span>Date:</span> <span>${today}</span></div><div class="r-row"><span>Received From:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div><div class="r-row"><span>Contract:</span> <span>${cid}</span></div><div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div><div class="r-row" style="margin-top:3px;"><span>Amount:</span> <div style="font-weight:bold;">${depStr}</div></div></div><div class="r-footer"><div class="r-sign">Auth. Sig: __________________</div></div><div class="receipt:after">✂</div>
+                        </div>
+                        <div class="receipt">
+                            <div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">RENTAL PAYMENT RECEIPT (Period ${idx})</div><span class="r-copy">CLIENT COPY</span></div>
+                            <div class="r-body"><div class="r-row"><span>Date Paid:</span> <span>${isFirst ? today : "__________"}</span></div><div class="r-row"><span>Received From:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div><div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div><div class="r-row"><span>Period:</span> <span>${recPeriod}</span></div><div class="r-row" style="margin-top:3px;"><span>Amount:</span> <div style="font-weight:bold;">${isFirst ? rentStr : "____________"}</div></div></div><div class="r-footer"><div class="r-sign">Auth. Sig: __________________</div></div><div class="receipt:after">✂</div>
+                        </div>
+                         <div class="receipt" style="margin-top:20px;">
+                            <div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">RENTAL PAYMENT RECEIPT (Period ${idx})</div><span class="r-copy">COMPANY COPY</span></div>
+                            <div class="r-body"><div class="r-row"><span>Date Paid:</span> <span>${isFirst ? today : "__________"}</span></div><div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div><div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div><div class="r-row"><span>Period:</span> <span>${recPeriod}</span></div><div class="r-row" style="margin-top:3px;"><span>Amount:</span> <div style="font-weight:bold;">${isFirst ? rentStr : "____________"}</div></div></div><div class="r-footer"><div class="r-sign">Client Sig: __________________</div></div>
+                        </div>
+                    </div>
+                </div>`;
+                chunkStart = chunkEnd;
+                idx++;
+            }
+        } else {
+             // Daily
+             let recPeriod = `${safeVal('p_time').replace('T',' ')} to ${safeVal('d_time').replace('T',' ')}`;
+             html += `
+            <div class="a4-page">
+                <div class="doc-head" style="border:none"><strong>OFFICIAL RECEIPTS</strong></div>
+                <div class="receipts-wrapper">
+                     <div class="receipt"><div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">SECURITY DEPOSIT RECEIPT (ON-HOLD)</div><span class="r-copy">CLIENT COPY</span></div><div class="r-body"><div class="r-row"><span>Date Paid:</span> <span>${today}</span></div><div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div><div class="r-row"><span>Amount:</span> <b>${depStr}</b></div></div><div class="r-footer"><div class="r-sign">Auth: ____________</div></div></div>
+                     <div class="receipt"><div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">RENTAL PAYMENT RECEIPT</div><span class="r-copy">CLIENT COPY</span></div><div class="r-body"><div class="r-row"><span>Date Paid:</span> <span>${today}</span></div><div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div><div class="r-row"><span>Period:</span> <span>${recPeriod}</span></div><div class="r-row"><span>Amount:</span> <b>${rentStr}</b></div></div><div class="r-footer"><div class="r-sign">Auth: ____________</div></div></div>
+                     <div class="receipt"><div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">DEPOSIT (ON-HOLD)</div><span class="r-copy">COMPANY COPY</span></div><div class="r-body"><div class="r-row"><span>Date Paid:</span> <span>${today}</span></div><div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div><div class="r-row"><span>Amount:</span> <b>${depStr}</b></div></div><div class="r-footer"><div class="r-sign">Client: ____________</div></div></div>
+                     <div class="receipt"><div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">RENTAL PAYMENT RECEIPT</div><span class="r-copy">COMPANY COPY</span></div><div class="r-body"><div class="r-row"><span>Date Paid:</span> <span>${today}</span></div><div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div><div class="r-row"><span>Period:</span> <span>${recPeriod}</span></div><div class="r-row"><span>Amount:</span> <b>${rentStr}</b></div></div><div class="r-footer"><div class="r-sign">Client: ____________</div></div></div>
+                </div>
+            </div>`;
+        }
 
         document.getElementById('print-container').innerHTML = html;
         window.print();
