@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Brothers EGY - Contract System v72.0 (Final Fix)</title>
+    <title>Brothers EGY - Contract System v73.0 (Perfected)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ================= SCREEN UI ================= */
-        :root { --primary: #04509D; --bg: #eef2f5; --accent: #e67e22; }
+        :root { --primary: #04509D; --secondary: #333; --bg: #eef2f5; --accent: #e67e22; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         
         #print-container { display: none; } /* Hidden on screen */
@@ -28,10 +28,10 @@
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
         
         label { display: block; font-size: 11px; font-weight: 700; color: #555; margin-bottom: 5px; text-transform: uppercase; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
         input:focus, select:focus { border-color: var(--primary); outline:none; }
         
-        .rate-input { width: 90px !important; font-weight: bold; color: #000; padding: 5px; text-align: center; }
+        .rate-input { width: 80px !important; font-weight: bold; color: #000; padding: 5px; text-align: center; }
 
         .payment-box { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
         .balance-box { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; text-align: right; }
@@ -42,8 +42,9 @@
             text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
         }
         .btn-gen:hover { background: #033a75; }
+        .btn-gen:disabled { background: #95a5a6; cursor: wait; }
 
-        .live-badge { background: #27ae60; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+        .live-badge { background: #e74c3c; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; transition:0.3s; }
 
         /* ================= PRINT CSS ================= */
         @media print {
@@ -54,7 +55,7 @@
 
             .a4-page {
                 width: 210mm; height: 296mm; margin: 0 auto; 
-                padding: 10mm 12mm; position: relative; box-sizing: border-box;
+                padding: 10mm 15mm; position: relative; box-sizing: border-box;
                 font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9.5pt; line-height: 1.3; color: #000;
                 display: flex; flex-direction: column; page-break-after: always;
             }
@@ -65,7 +66,7 @@
 
             /* Header */
             .doc-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #04509D; padding-bottom: 8px; margin-bottom: 15px; }
-            .logo { height: 60px; }
+            .logo { height: 65px; }
             .hq-info { text-align: right; font-size: 8pt; color: #333; }
 
             /* Boxes */
@@ -82,14 +83,15 @@
             .term-h { font-weight: 800; text-transform: uppercase; display: block; border-bottom: 1px solid #ccc; color: var(--primary); margin-bottom: 2px; }
             
             /* Insurance Box */
-            .ins-box { border: 2px solid #000; padding: 10px; background: #f9f9f9; font-weight: bold; margin: 10px 0; break-inside: avoid; font-size: 9pt; text-align: center; }
+            .ins-box { border: 2px solid #000; padding: 10px; background: #eef2f5; font-weight: bold; margin: 10px 0; break-inside: avoid; font-size: 9pt; text-align: center; }
 
             /* Inspection */
             .insp-legend-box { font-size: 9pt; text-align: center; background: #f9f9f9; border: 1px solid #000; padding: 5px; margin-bottom: 5px; font-weight: bold; }
-            .insp-img-box { width: 100%; height: 220px; border: 1px solid #ccc; margin: 5px 0; display: flex; align-items: center; justify-content: center; }
+            .insp-img-box { width: 100%; height: 230px; border: 1px solid #ccc; margin: 5px 0; display: flex; align-items: center; justify-content: center; }
             .insp-img-box img { width: 95%; height: 95%; object-fit: contain; }
-            .insp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-bottom: 10px; }
+            .insp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-bottom: 5px; }
             .insp-col { border: 1px solid #ccc; padding: 5px; }
+            .insp-col h4 { margin: 0 0 5px 0; font-size: 8.5pt; border-bottom: 1px solid #000; text-transform: uppercase; }
             .insp-item { display: flex; justify-content: space-between; margin-bottom: 2px; }
             
             /* Receipts */
@@ -101,7 +103,7 @@
             .r-foot { margin-top: 25px; text-align: right; font-weight: bold; }
             .receipt:after { content:"✂"; position:absolute; bottom:-28px; left:50%; background:white; padding:0 5px; font-size:14px; }
 
-            /* Signatures */
+            /* Signatures (Split Wide) */
             .sig-table { width: 100%; margin-top: 40px; border-collapse: separate; border-spacing: 50px 0; }
             .sig-cell { border-top: 2px solid #000; text-align: center; font-weight: bold; padding-top: 5px; width: 40%; vertical-align: top; }
         }
@@ -111,9 +113,10 @@
 
 <div class="control-panel">
     <div class="cp-header">
-        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v72.0</h2>
+        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v73.0</h2>
         <div style="display:flex; gap:15px; align-items:center; font-size:12px;">
             <div id="clock" style="font-family:monospace; font-weight:bold;">--:--:--</div>
+            <div id="status-badge" class="live-badge">LOADING...</div>
             <div>USD: <input type="number" id="ex_usd" value="50.00" class="rate-input" oninput="calc()"></div>
             <div>EUR: <input type="number" id="ex_eur" value="54.00" class="rate-input" oninput="calc()"></div>
         </div>
@@ -225,20 +228,37 @@
             <div id="disp_status" style="font-size:12px;">Pending...</div>
         </div>
 
-        <button class="btn-gen" onclick="generate()">GENERATE CONTRACT</button>
+        <button id="btnGen" class="btn-gen" onclick="generate()" disabled>LOADING RESOURCES...</button>
     </div>
 </div>
 
 <div id="print-container"></div>
 
 <div style="display:none;">
-    <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous">
-    <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
-    <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" crossorigin="anonymous">
+    <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" onload="resourceLoaded()" onerror="resourceError()">
+    <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" onload="resourceLoaded()">
+    <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" onload="resourceLoaded()">
 </div>
 
 <script>
-    // 1. DATA
+    // 1. SYSTEM LOGIC
+    let loadedCount = 0;
+    function resourceLoaded() {
+        loadedCount++;
+        if(loadedCount >= 3) {
+            const btn = document.getElementById('btnGen');
+            const badge = document.getElementById('status-badge');
+            btn.disabled = false;
+            btn.innerText = "GENERATE CONTRACT";
+            badge.style.background = "#27ae60";
+            badge.innerText = "READY";
+        }
+    }
+    function resourceError() {
+        alert("Logo failed to load. Check internet.");
+        resourceLoaded(); // Allow proceed anyway
+    }
+
     const fleet = [
         {code:"33", model:"Haval Jolion", year:"2022", plate:"ب ا ن | 2 6 4 9", vin:"606889", motor:"21499022758"},
         {code:"47", model:"Hyundai Tucson", year:"2022", plate:"ه س ب | 4 2 6 3", vin:"KMHJE81BGN", motor:"G4FPNU539488"},
@@ -251,7 +271,7 @@
     const insPlans = {
         "Basic": { title: "BASIC (CDW)", desc: "Client pays 100% for body/glass/tires. High Excess.", liab: "Liability: 100% Client" },
         "Intermediate": { title: "INTERMEDIATE", desc: "Client 70% / Company 30%. Covers Undercarriage (10k Limit).", liab: "Liability: 70% Client" },
-        "Full": { title: "FULL PROTECTION", desc: "Zero Excess for Body/Glass/Paint. Excludes Interior.", liab: "Liability: 0% (Full)" }
+        "Full": { title: "FULL PROTECTION", desc: "Zero Excess for Body/Glass/Paint. Excludes Interior/Misfueling.", liab: "Liability: 0% (Full)" }
     };
 
     // 2. INIT
@@ -264,12 +284,11 @@
             sel.add(opt);
         });
         setInterval(() => {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+            document.getElementById('clock').innerText = new Date().toLocaleString();
         }, 1000);
     };
 
-    // 3. LOGIC
+    // 3. CALCULATION
     function safeVal(id) { var el = document.getElementById(id); return el ? el.value : ""; }
     function safeNum(id) { var el = document.getElementById(id); if(!el || el.value.trim() === "") return 0; return parseFloat(el.value) || 0; }
 
@@ -316,7 +335,6 @@
 
     function generate() {
         const c = calc();
-        // Smart Contract Number
         const branchMap = {"HRG":"HRG", "ALX":"ALX", "CAI":"CAI", "RSD":"RSD"};
         const bCode = branchMap[safeVal('issuingBranch')] || "HRG";
         const dStr = new Date().getDate().toString().padStart(2,'0') + (new Date().getMonth()+1).toString().padStart(2,'0');
@@ -326,14 +344,14 @@
         const usd = safeNum('ex_usd') || 50;
         const eur = safeNum('ex_eur') || 54;
 
-        // --- PAYMENT STRING BUILDER ---
+        // Payment Strings
         const buildPay = (pfx) => {
             let egp = safeNum(pfx+'_egp'), u = safeNum(pfx+'_usd'), e = safeNum(pfx+'_eur'), card = safeNum(pfx+'_card');
             let total = egp + (u*usd) + (e*eur) + card;
             let parts = [];
             if(egp) parts.push(egp+" Cash"); if(u) parts.push(u+" USD"); if(e) parts.push(e+" EUR"); if(card) parts.push(card+" Card");
             let detail = parts.length > 0 ? `(${parts.join(' + ')})` : "";
-            return { total: total, text: `<strong>${Math.round(total).toLocaleString()} EGP</strong> ${detail}` };
+            return { total: total, text: `${Math.round(total).toLocaleString()} EGP ${detail}` };
         };
 
         let rentInfo = buildPay('pr');
@@ -359,7 +377,7 @@
                 <div style="text-align:center">
                     <h1 style="margin:0; font-size:18pt; color:#04509D">CAR RENTAL AGREEMENT</h1>
                     <div style="font-weight:bold; font-size:12pt;">${cid}</div>
-                    ${safeVal('conType')==='Extension'?'<b>(EXTENSION)</b>':''}
+                    ${safeVal('conType')==='Extension' ? '<b>(EXTENSION)</b>' : ''}
                 </div>
                 <div class="hq-info"><strong>BROTHERS EGY HQ</strong><br>Alexandria<br>Tax: 589-464-418</div>
             </div>
@@ -390,7 +408,7 @@
                     ${safeNum('fee_col')>0 ? `<tr><td>Pickup Fee</td><td>${safeVal('d_loc')}</td><td align="right">${safeVal('fee_col')}</td></tr>` : ''}
                     <tr style="border-top:2px solid #000"><td colspan="2" align="right"><b>TOTAL DUE</b></td><td align="right"><b>${Math.round(c.total).toLocaleString()} EGP</b></td></tr>
                 </table>
-                <div style="background:#f9f9f9; padding:10px; border:1px solid #ccc; text-align:center; margin-top:5px;">
+                <div style="background:#f9f9f9; padding:10px; border:1px solid #ccc; text-align:center; font-size:10pt; margin-top:5px;">
                     <b>PAID NOW:</b> ${rentInfo.text} <br>
                     <b>PENDING:</b> ${pendingHTML}
                 </div>
@@ -403,7 +421,7 @@
             <table class="sig-table"><tr><td class="sig-cell">LESSOR SIGNATURE</td><td style="width:20%"></td><td class="sig-cell">LESSEE SIGNATURE</td></tr></table>
         </div>`;
 
-        // --- PAGE 2: TERMS ---
+        // --- PAGE 2 ---
         html += `
         <div class="a4-page">
             <div class="watermark"><img src="${logos.water}"></div>
@@ -432,7 +450,7 @@
             <table class="sig-table" style="margin-top:auto"><tr><td class="sig-cell" style="width:100%; border:none; border-top:1px solid #000;">I have read and accepted all terms.<br>Signature: __________________________</td></tr></table>
         </div>`;
 
-        // --- PAGE 3: INSPECTION ---
+        // --- PAGE 3 ---
         html += `
         <div class="a4-page">
             <div class="watermark"><img src="${logos.water}"></div>
@@ -445,9 +463,9 @@
                 <div class="insp-col"><h4>REAR</h4><div class="insp-item"><span>Trunk</span>[ ]</div><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Lights</span>[ ]</div></div>
                 <div class="insp-col"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div><div class="insp-item"><span>Door R</span>[ ]</div></div>
             </div>
-            <div style="margin-top:20px; font-weight:bold;">Pickup Signature: __________________________</div>
+            <table class="sig-table" style="margin-top:20px"><tr><td class="sig-cell" style="text-align:left; border:none; border-bottom:1px solid #000; width:50%">Pickup Signature:</td></tr></table>
 
-            <hr style="margin:20px 0; border:1px dashed #ccc;">
+            <hr style="margin:30px 0; border:1px dashed #ccc;">
 
             <div class="doc-head" style="border:none;"><strong>RETURN INSPECTION REPORT</strong><span>(Filled at Drop-off)</span></div>
              <div class="insp-img-box" style="height:150px;"><img src="${logos.car}"></div>
@@ -456,13 +474,12 @@
                 <tr><td>New Damages</td><td></td></tr><tr><td>Fines</td><td></td></tr><tr><td>Fuel</td><td></td></tr>
                 <tr><td align="right"><strong>TOTAL DEDUCT:</strong></td><td></td></tr></table>
             </div>
-            <div style="margin-top:auto; font-weight:bold;">Return Signature: __________________________</div>
+            <table class="sig-table" style="margin-top:auto"><tr><td class="sig-cell" style="text-align:left; border:none; border-bottom:1px solid #000; width:50%">Return Signature:</td></tr></table>
         </div>`;
 
         // --- PAGE 4: RECEIPTS ---
         html += `<div class="a4-page"><div class="doc-head"><strong>OFFICIAL RECEIPTS</strong><span>Page 4/4</span></div><div class="receipts-wrapper">`;
         
-        // Deposit
         html += `
         <div class="receipt">
             <div class="r-head"><span>SECURITY DEPOSIT RECEIPT (ON-HOLD)</span><span>CLIENT COPY</span></div>
@@ -476,7 +493,6 @@
             <div class="r-foot"><div class="r-sign">Auth Sig: __________________</div></div><div class="receipt:after">✂</div>
         </div>`;
 
-        // Rental Loop
         let loopCount = (c.mode==='Monthly') ? c.months : 1;
         let sDate = new Date(safeVal('p_time'));
         
@@ -485,9 +501,6 @@
             if(c.mode==='Monthly') eDate.setMonth(eDate.getMonth()+1);
             else eDate = new Date(safeVal('d_time'));
             
-            // Format dates safely
-            let sStr = sDate.toLocaleDateString('en-GB');
-            let eStr = eDate.toLocaleDateString('en-GB');
             let amt = (i===1) ? rentInfo.text : "PENDING";
 
             html += `
@@ -498,7 +511,7 @@
                     <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
                     <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
                     <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
-                    <div class="r-row"><span>Period:</span> <span>${sStr} to ${eStr}</span></div>
+                    <div class="r-row"><span>Period:</span> <span>${sDate.toLocaleDateString()} to ${eDate.toLocaleDateString()}</span></div>
                     <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${amt}</b></div>
                 </div>
                 <div class="r-foot"><div class="r-sign">Auth Sig: __________________</div></div><div class="receipt:after">✂</div>
@@ -508,7 +521,7 @@
         html += `</div></div>`;
 
         document.getElementById('print-container').innerHTML = html;
-        setTimeout(() => { window.print(); }, 2000);
+        window.print();
     }
 </script>
 </body>
