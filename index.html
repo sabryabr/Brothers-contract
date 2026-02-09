@@ -2,26 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brothers EGY - Contract System v71.0</title>
+    <title>Brothers EGY - Contract System v72.0 (Final Fix)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ================= SCREEN UI ================= */
-        :root { --primary: #04509D; --secondary: #333; --bg: #f4f7f6; --accent: #e67e22; }
+        :root { --primary: #04509D; --bg: #eef2f5; --accent: #e67e22; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
         
         #print-container { display: none; } /* Hidden on screen */
 
         .control-panel {
             max-width: 1280px; margin: 0 auto 40px auto; background: white;
-            border-radius: 12px; border-top: 6px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-radius: 12px; border-top: 6px solid var(--primary); box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        .cp-header { background: var(--primary); color: white; padding: 15px 30px; display:flex; justify-content:space-between; align-items:center; border-radius: 10px 10px 0 0; }
+        .cp-header { background: var(--primary); color: white; padding: 15px 30px; display:flex; justify-content:space-between; align-items:center; }
         .cp-body { padding: 30px; }
         
         .section-head {
-            font-size: 14px; font-weight: 800; color: #444; text-transform: uppercase; letter-spacing: 0.5px;
-            margin: 25px 0 15px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; display:flex; align-items:center; gap:8px;
+            font-size: 14px; font-weight: 800; color: #333; text-transform: uppercase; letter-spacing: 0.5px;
+            margin: 20px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; display:flex; align-items:center; gap:8px;
         }
         
         .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
@@ -29,80 +28,82 @@
         .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
         
         label { display: block; font-size: 11px; font-weight: 700; color: #555; margin-bottom: 5px; text-transform: uppercase; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 13px; transition: 0.2s; }
-        input:focus, select:focus { border-color: var(--primary); outline:none; box-shadow: 0 0 0 3px rgba(4,80,157,0.1); }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
+        input:focus, select:focus { border-color: var(--primary); outline:none; }
         
-        .rate-input { width: 80px !important; font-weight: bold; color: #000; padding: 5px; text-align: center; background: rgba(255,255,255,0.9); border:none; border-radius:4px; }
+        .rate-input { width: 90px !important; font-weight: bold; color: #000; padding: 5px; text-align: center; }
 
-        .payment-box { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; }
-        .balance-box { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; text-align: right; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .payment-box { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
+        .balance-box { background: #2c3e50; color: white; padding: 20px; border-radius: 8px; text-align: right; }
         
         .btn-gen {
-            background: var(--primary); color: white; border: none; padding: 18px; width: 100%;
+            background: var(--primary); color: white; border: none; padding: 20px; width: 100%;
             font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 30px;
             text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
         }
-        .btn-gen:hover { background: #033a75; box-shadow: 0 5px 15px rgba(4,80,157,0.3); }
-        .btn-gen:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-gen:hover { background: #033a75; }
+
+        .live-badge { background: #27ae60; color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
 
         /* ================= PRINT CSS ================= */
         @media print {
             body { background: white; margin: 0; padding: 0; }
             .control-panel { display: none !important; }
             #print-container { display: block !important; }
-            @page { size: A4; margin: 0; }
+            @page { margin: 0; size: A4; }
 
             .a4-page {
-                width: 210mm; min-height: 296mm; margin: 0 auto; 
-                padding: 10mm 15mm; position: relative; box-sizing: border-box;
-                font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9.5pt; line-height: 1.35; color: #000;
+                width: 210mm; height: 296mm; margin: 0 auto; 
+                padding: 10mm 12mm; position: relative; box-sizing: border-box;
+                font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9.5pt; line-height: 1.3; color: #000;
                 display: flex; flex-direction: column; page-break-after: always;
             }
             .a4-page:last-child { page-break-after: auto; }
 
-            .watermark {
-                position: absolute; top: 50%; left: 50%; width: 65%; 
-                transform: translate(-50%, -50%) rotate(-30deg);
-                opacity: 0.05; z-index: -1;
-            }
+            .watermark { position: absolute; top: 50%; left: 50%; width: 60%; transform: translate(-50%, -50%) rotate(-30deg); opacity: 0.05; z-index: -1; }
             .watermark img { width: 100%; height: auto; }
 
             /* Header */
-            .doc-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #04509D; padding-bottom: 10px; margin-bottom: 15px; }
+            .doc-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #04509D; padding-bottom: 8px; margin-bottom: 15px; }
             .logo { height: 60px; }
-            .hq-info { text-align: right; font-size: 8pt; color: #333; line-height: 1.3; }
+            .hq-info { text-align: right; font-size: 8pt; color: #333; }
 
             /* Boxes */
-            .box-section { border: 1px solid #000; padding: 8px; margin-bottom: 15px; position: relative; }
-            .bs-title { background: #000; color: white; padding: 2px 8px; font-weight: bold; font-size: 9pt; position: absolute; top: -11px; left: -1px; text-transform: uppercase; }
+            .box-section { border: 1px solid #000; padding: 8px; margin-bottom: 12px; position: relative; }
+            .bs-title { background: #000; color: white; padding: 2px 8px; font-weight: bold; font-size: 9pt; position: absolute; top: -12px; left: -1px; text-transform: uppercase; }
             
             table.pt { width: 100%; border-collapse: collapse; margin-bottom: 5px; font-size: 9.5pt; }
             table.pt th { background: #f0f0f0; text-align: left; padding: 5px; border: 1px solid #888; font-weight: bold; }
             table.pt td { border: 1px solid #888; padding: 5px; vertical-align: top; }
 
             /* Terms */
-            .terms-grid { font-size: 8pt; text-align: justify; column-count: 2; column-gap: 30px; }
+            .terms-grid { font-size: 8pt; text-align: justify; column-count: 2; column-gap: 25px; line-height: 1.25; }
             .term-p { margin-bottom: 8px; break-inside: avoid; }
-            .term-h { font-weight: 800; text-transform: uppercase; display: block; border-bottom: 1px solid #ccc; color: #04509D; margin-bottom: 3px; }
-            .term-box { border: 2px solid #000; background: #eee; padding: 8px; font-weight: bold; text-align: center; margin: 10px 0; break-inside: avoid; }
+            .term-h { font-weight: 800; text-transform: uppercase; display: block; border-bottom: 1px solid #ccc; color: var(--primary); margin-bottom: 2px; }
+            
+            /* Insurance Box */
+            .ins-box { border: 2px solid #000; padding: 10px; background: #f9f9f9; font-weight: bold; margin: 10px 0; break-inside: avoid; font-size: 9pt; text-align: center; }
 
             /* Inspection */
-            .insp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-top: 10px; }
+            .insp-legend-box { font-size: 9pt; text-align: center; background: #f9f9f9; border: 1px solid #000; padding: 5px; margin-bottom: 5px; font-weight: bold; }
+            .insp-img-box { width: 100%; height: 220px; border: 1px solid #ccc; margin: 5px 0; display: flex; align-items: center; justify-content: center; }
+            .insp-img-box img { width: 95%; height: 95%; object-fit: contain; }
+            .insp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-bottom: 10px; }
             .insp-col { border: 1px solid #ccc; padding: 5px; }
-            .insp-item { display: flex; justify-content: space-between; margin-bottom: 3px; }
+            .insp-item { display: flex; justify-content: space-between; margin-bottom: 2px; }
             
             /* Receipts */
-            .receipts-wrapper { display: flex; flex-direction: column; gap: 30px; margin-top: 10px; }
-            .receipt { border: 2px solid #333; padding: 15px 20px; position: relative; min-height: 240px; break-inside: avoid; }
+            .receipts-wrapper { display: flex; flex-direction: column; gap: 25px; margin-top: 10px; }
+            .receipt { border: 2px solid #333; padding: 15px 20px; background: white; position: relative; min-height: 240px; page-break-inside: avoid; }
             .r-head { border-bottom: 3px double #04509D; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; font-weight: bold; font-size: 11pt; color: #04509D; }
             .r-body { display: flex; flex-direction: column; gap: 6px; font-size: 10pt; }
             .r-row { display: flex; justify-content: space-between; border-bottom: 1px dotted #ccc; padding-bottom: 4px; }
-            .r-foot { margin-top: 30px; text-align: right; font-weight: bold; }
-            .receipt:after { content:"✂"; position:absolute; bottom:-32px; left:50%; background:white; padding:0 10px; font-size:16px; transform: translateX(-50%); }
+            .r-foot { margin-top: 25px; text-align: right; font-weight: bold; }
+            .receipt:after { content:"✂"; position:absolute; bottom:-28px; left:50%; background:white; padding:0 5px; font-size:14px; }
 
             /* Signatures */
-            .sig-container { display: flex; justify-content: space-between; margin-top: 50px; width: 100%; }
-            .sig-box { border-top: 2px solid #000; text-align: center; font-weight: bold; padding-top: 5px; width: 40%; font-size: 10pt; }
+            .sig-table { width: 100%; margin-top: 40px; border-collapse: separate; border-spacing: 50px 0; }
+            .sig-cell { border-top: 2px solid #000; text-align: center; font-weight: bold; padding-top: 5px; width: 40%; vertical-align: top; }
         }
     </style>
 </head>
@@ -110,7 +111,7 @@
 
 <div class="control-panel">
     <div class="cp-header">
-        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v71.0</h2>
+        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v72.0</h2>
         <div style="display:flex; gap:15px; align-items:center; font-size:12px;">
             <div id="clock" style="font-family:monospace; font-weight:bold;">--:--:--</div>
             <div>USD: <input type="number" id="ex_usd" value="50.00" class="rate-input" oninput="calc()"></div>
@@ -121,49 +122,68 @@
         
         <div class="section-head">1. Contract & Branch</div>
         <div class="grid-3">
-            <div><label>Branch</label><select id="branch" onchange="calc()"><option value="HRG">Hurghada</option><option value="ALX">Alexandria</option><option value="CAI">Cairo</option></select></div>
-            <div><label>Mode</label><select id="mode" onchange="toggleMode()"><option value="Daily">Daily</option><option value="Monthly">Monthly</option></select></div>
-            <div><label>Type</label><select id="type"><option value="New">New Contract</option><option value="Ext">Extension</option></select></div>
+            <div><label>Issuing Branch</label>
+                <select id="issuingBranch">
+                    <option value="HRG">Hurghada Branch</option>
+                    <option value="ALX">Alexandria (HQ)</option>
+                    <option value="CAI">Cairo Branch</option>
+                    <option value="RSD">Rashid Branch</option>
+                </select>
+            </div>
+            <div><label>Rental Mode</label>
+                <select id="rentalMode" onchange="toggleMode()">
+                    <option value="Daily">Daily (Short Term)</option>
+                    <option value="Monthly">Monthly (Long Term)</option>
+                </select>
+            </div>
+            <div><label>Agreement Type</label>
+                <select id="conType" onchange="checkType()">
+                    <option value="New">New Agreement</option>
+                    <option value="Extension">Extension</option>
+                </select>
+                <input type="text" id="prevCon" placeholder="Prev. Contract No..." style="display:none; margin-top:5px; border-color:var(--accent);">
+            </div>
         </div>
 
         <div class="section-head">2. Vehicle Details</div>
         <div class="grid-2">
-            <div><label>Select Car</label><select id="carSelect" onchange="loadCar()"><option value="">-- Select --</option></select></div>
-            <div><label>Manual Model</label><input type="text" id="manModel"></div>
+            <div><label>Select From Fleet</label><select id="carSelect" onchange="loadCar()"><option value="">-- Select Car --</option></select></div>
+            <div><label>Manual Model Input</label><input type="text" id="manModel"></div>
         </div>
-        <input type="hidden" id="h_plate"><input type="hidden" id="h_vin"><input type="hidden" id="h_motor"><input type="hidden" id="h_year">
+        <input type="hidden" id="h_plate"><input type="hidden" id="h_vin"><input type="hidden" id="h_motor">
 
         <div class="grid-4">
-            <div><label>KM Out</label><input type="number" id="kmOut" value="0"></div>
-            <div><label>Fuel</label><select id="fuelOut"><option>Full (8/8)</option><option>3/4</option><option>1/2</option><option>1/4</option></select></div>
-            <div><label id="lbl_rate">Daily Rent</label><input type="number" id="rateRent" value="0" oninput="calc()"></div>
-            <div><label>Ins. Fee</label><input type="number" id="rateIns" value="0" oninput="calc()"></div>
+            <div><label>KM Out</label><input type="number" id="kmOut" value="0" oninput="calc()"></div>
+            <div><label>Fuel Level</label><select id="fuelOut"><option>Full (8/8)</option><option>3/4</option><option>1/2</option><option>1/4</option><option>Reserve</option></select></div>
+            <div><label id="lbl_rate">Daily Rent (EGP)</label><input type="number" id="rateRent" value="0" oninput="calc()"></div>
+            <div><label>Ins. Fee (Daily)</label><input type="number" id="rateIns" value="0" oninput="calc()"></div>
         </div>
 
-        <div class="section-head">3. Client Info</div>
+        <div class="section-head">3. Client Information</div>
         <div class="grid-3">
-            <div><label>Full Name</label><input type="text" id="cl_name"></div>
-            <div><label>Passport / ID</label><input type="text" id="cl_id"></div>
-            <div><label>Phone</label><div class="phone-group"><input type="text" id="cl_code" value="+20"><input type="text" id="cl_phone"></div></div>
+            <div><label>First Name</label><input type="text" id="cl_fname"></div>
+            <div><label>Surname</label><input type="text" id="cl_sname"></div>
+            <div><label>ID / Passport</label><input type="text" id="cl_id"></div>
         </div>
-        <div class="grid-2">
+        <div class="grid-3">
+            <div><label>Phone No</label><div class="phone-group"><input type="text" id="cl_ph_code" value="+20"><input type="text" id="cl_phone"></div></div>
             <div><label>Address</label><input type="text" id="cl_addr"></div>
-            <div><label>Nationality</label><input type="text" id="cl_nation"></div>
+            <div><label>Nation</label><input type="text" id="cl_nation"></div>
         </div>
 
-        <div class="section-head">4. Dates & Locations</div>
+        <div class="section-head">4. Period & Location</div>
         <div class="grid-2">
-            <div><label>Pickup Date</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
-            <div><label>Dropoff Date</label><input type="datetime-local" id="d_time" onchange="calc()"></div>
+            <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
+            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="d_time" onchange="calc()"></div>
         </div>
         <div class="grid-2">
-            <div><label>Pickup Location</label><input type="text" id="p_loc" value="Hotel"></div>
-            <div><label>Dropoff Location</label><input type="text" id="d_loc" value="Airport"></div>
+            <div><label>Pickup Location</label><input type="text" id="p_loc" value="Hotel Azur"></div>
+            <div><label>Dropoff Location</label><input type="text" id="d_loc" value="Airport Hurghada (HRG)"></div>
         </div>
 
         <div class="section-head">5. Financials</div>
         <div class="grid-2">
-            <div><label>Insurance</label>
+            <div><label>Insurance Package</label>
                 <select id="insPack" onchange="calc()">
                     <option value="Basic">Basic (100% Client Liability)</option>
                     <option value="Intermediate">Intermediate (70% Client / 30% Co)</option>
@@ -200,12 +220,12 @@
             </div>
         </div>
 
-        <div class="balance-box" style="margin-top:15px;">
+        <div class="balance-box" style="margin-top:10px;">
             <h2 id="disp_total" style="margin:0; color:#e67e22;">0 EGP</h2>
             <div id="disp_status" style="font-size:12px;">Pending...</div>
         </div>
 
-        <button id="btnGen" class="btn-gen" onclick="generate()">GENERATE CONTRACT</button>
+        <button class="btn-gen" onclick="generate()">GENERATE CONTRACT</button>
     </div>
 </div>
 
@@ -224,14 +244,14 @@
         {code:"47", model:"Hyundai Tucson", year:"2022", plate:"ه س ب | 4 2 6 3", vin:"KMHJE81BGN", motor:"G4FPNU539488"},
         {code:"34", model:"MG ZS", year:"2025", plate:"ق ه س | 5 3 6 5", vin:"LSJW74U61SZ027362", motor:"3050131"},
         {code:"40", model:"Nissan Sunny", year:"2023", plate:"ل ه ب | 7 3 5 1", vin:"137137", motor:"798285"},
-        {code:"48", model:"Jetour X90", year:"2026", plate:"ف ص ب | 2 9 1 5", vin:"LVTDB21B5TH013984", motor:"SH02227"},
+        {code:"48", model:"Jetour X90 Plus", year:"2026", plate:"ف ص ب | 2 9 1 5", vin:"LVTDB21B5TH013984", motor:"SH02227"},
         {code:"38", model:"Chevrolet Aveo", year:"2020", plate:"ع د ب | 8 2 6 3", vin:"E009927", motor:"191160037"}
     ];
 
-    const insText = {
-        "Basic": "BASIC (CDW): Includes TPL. Client pays 100% for damage to car body, glass, tires. High Excess.",
-        "Intermediate": "INTERMEDIATE: Client pays 70% of repair cost, Company pays 30%. Covers Undercarriage (10k Limit).",
-        "Full": "FULL PROTECTION: Zero Excess for Body/Glass/Paint. Excludes Interior/Misfueling/Keys."
+    const insPlans = {
+        "Basic": { title: "BASIC (CDW)", desc: "Client pays 100% for body/glass/tires. High Excess.", liab: "Liability: 100% Client" },
+        "Intermediate": { title: "INTERMEDIATE", desc: "Client 70% / Company 30%. Covers Undercarriage (10k Limit).", liab: "Liability: 70% Client" },
+        "Full": { title: "FULL PROTECTION", desc: "Zero Excess for Body/Glass/Paint. Excludes Interior.", liab: "Liability: 0% (Full)" }
     };
 
     // 2. INIT
@@ -243,20 +263,9 @@
             opt.text = `[${c.code}] ${c.model} (${c.year}) - ${c.plate}`;
             sel.add(opt);
         });
-
-        // Try to fetch live rates (Silent fail if offline)
-        fetch('https://api.exchangerate-api.com/v4/latest/USD')
-            .then(r=>r.json()).then(d=>{
-                if(d.rates.EGP) document.getElementById('ex_usd').value = d.rates.EGP.toFixed(2);
-                return fetch('https://api.exchangerate-api.com/v4/latest/EUR');
-            })
-            .then(r=>r.json()).then(d=>{
-                if(d.rates.EGP) document.getElementById('ex_eur').value = d.rates.EGP.toFixed(2);
-                calc();
-            }).catch(e=>{});
-
         setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleString();
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
         }, 1000);
     };
 
@@ -269,16 +278,19 @@
         if(c) {
             document.getElementById('manModel').value = c.model;
             document.getElementById('h_plate').value = c.plate;
-            document.getElementById('h_year').value = c.year;
             document.getElementById('h_vin').value = c.vin;
             document.getElementById('h_motor').value = c.motor;
         }
     }
 
     function toggleMode() {
-        const mode = safeVal('mode');
+        const mode = safeVal('rentalMode');
         document.getElementById('lbl_rate').innerText = (mode === 'Monthly') ? "Monthly Rent (EGP)" : "Daily Rent (EGP)";
         calc();
+    }
+
+    function checkType() {
+        document.getElementById('prevCon').style.display = (safeVal('conType') === 'Extension') ? 'block' : 'none';
     }
 
     function calc() {
@@ -287,7 +299,7 @@
         var days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
         if(isNaN(days) || days < 1) days = 1;
         
-        var mode = safeVal('mode');
+        var mode = safeVal('rentalMode');
         var months = Math.ceil(days/30);
         
         var rent = safeNum('rateRent');
@@ -303,31 +315,31 @@
     }
 
     function generate() {
-        const btn = document.getElementById('btnGen');
-        btn.disabled = true; 
-        btn.innerText = "PREPARING CONTRACT...";
-
         const c = calc();
-        const cid = `BR-${safeVal('branch')}-${new Date().toISOString().slice(0,10).replace(/-/g,"")}-${Math.floor(1000+Math.random()*9000)}`;
+        // Smart Contract Number
+        const branchMap = {"HRG":"HRG", "ALX":"ALX", "CAI":"CAI", "RSD":"RSD"};
+        const bCode = branchMap[safeVal('issuingBranch')] || "HRG";
+        const dStr = new Date().getDate().toString().padStart(2,'0') + (new Date().getMonth()+1).toString().padStart(2,'0');
+        const cid = `BR-${bCode}-${dStr}-${Math.floor(1000 + Math.random() * 9000)}`;
         const today = new Date().toLocaleDateString();
-        const usd = safeNum('ex_usd');
-        const eur = safeNum('ex_eur');
+        
+        const usd = safeNum('ex_usd') || 50;
+        const eur = safeNum('ex_eur') || 54;
 
-        // Pay String
+        // --- PAYMENT STRING BUILDER ---
         const buildPay = (pfx) => {
             let egp = safeNum(pfx+'_egp'), u = safeNum(pfx+'_usd'), e = safeNum(pfx+'_eur'), card = safeNum(pfx+'_card');
             let total = egp + (u*usd) + (e*eur) + card;
             let parts = [];
             if(egp) parts.push(egp+" Cash"); if(u) parts.push(u+" USD"); if(e) parts.push(e+" EUR"); if(card) parts.push(card+" Card");
             let detail = parts.length > 0 ? `(${parts.join(' + ')})` : "";
-            return `<b>${Math.round(total).toLocaleString()} EGP</b> ${detail}`;
+            return { total: total, text: `<strong>${Math.round(total).toLocaleString()} EGP</strong> ${detail}` };
         };
 
-        const rentStr = buildPay('pr');
-        const depStr = buildPay('pd');
+        let rentInfo = buildPay('pr');
+        let depInfo = buildPay('pd');
         
-        const r_val = safeNum('pr_egp') + (safeNum('pr_usd')*usd) + (safeNum('pr_eur')*eur) + safeNum('pr_card');
-        const pending = c.total - r_val;
+        const pending = c.total - rentInfo.total;
         const pendingHTML = pending > 0 
             ? `<span style="color:#c0392b">${Math.round(pending).toLocaleString()} EGP</span>` 
             : `<span style="color:#27ae60">PAID</span>`;
@@ -335,12 +347,10 @@
         let rateTxt = c.mode === 'Monthly' ? `${safeVal('rateRent')} x ${c.months} Months` : `${safeVal('rateRent')} x ${c.days} Days`;
         let base = c.mode === 'Monthly' ? (safeNum('rateRent') * c.months) : (safeNum('rateRent') * c.days);
 
-        const logos = {
-            logo: document.getElementById('img_logo').src,
-            water: document.getElementById('img_water').src,
-            car: document.getElementById('img_car').src
-        };
+        const plan = insPlans[safeVal('insPack')] || insPlans["Basic"];
+        const logos = { logo: document.getElementById('img_logo').src, water: document.getElementById('img_water').src, car: document.getElementById('img_car').src };
 
+        // --- PAGE 1 ---
         let html = `
         <div class="a4-page">
             <div class="watermark"><img src="${logos.water}"></div>
@@ -348,16 +358,16 @@
                 <img src="${logos.logo}" class="logo">
                 <div style="text-align:center">
                     <h1 style="margin:0; font-size:18pt; color:#04509D">CAR RENTAL AGREEMENT</h1>
-                    <div style="font-weight:bold; font-size:11pt;">${cid}</div>
-                    ${safeVal('conType')==='Ext' ? '<b>(EXTENSION)</b>' : ''}
+                    <div style="font-weight:bold; font-size:12pt;">${cid}</div>
+                    ${safeVal('conType')==='Extension'?'<b>(EXTENSION)</b>':''}
                 </div>
                 <div class="hq-info"><strong>BROTHERS EGY HQ</strong><br>Alexandria<br>Tax: 589-464-418</div>
             </div>
 
             <div class="box-section"><span class="bs-title">PARTIES</span>
                 <table class="pt">
-                    <tr><td width="30%"><strong>LESSOR</strong><br>El Alakhua El Mutahidun<br>${safeVal('branch')}</td>
-                    <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_name')}<br>ID: ${safeVal('cl_id')}<br>Phone: ${safeVal('cl_code')} ${safeVal('cl_phone')}</td></tr>
+                    <tr><td width="30%"><strong>LESSOR</strong><br>El Alakhua El Mutahidun<br>${safeVal('issuingBranch')}</td>
+                        <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>ID: ${safeVal('cl_id')}<br>Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')}</td></tr>
                 </table>
             </div>
 
@@ -373,100 +383,132 @@
 
             <div class="box-section"><span class="bs-title">FINANCIAL BREAKDOWN</span>
                 <table class="pt">
-                    <tr><th>Item</th><th>Calc</th><th style="text-align:right">Amount (EGP)</th></tr>
+                    <tr><th>Item Description</th><th>Rate / Calculation</th><th style="text-align:right">Amount (EGP)</th></tr>
                     <tr><td>Base Rent</td><td>${rateTxt}</td><td align="right">${Math.round(base).toLocaleString()}</td></tr>
-                    ${safeNum('rateIns')>0 ? `<tr><td>Insurance</td><td>${safeNum('rateIns')} x ${c.days}</td><td align="right">${(safeNum('rateIns')*c.days).toLocaleString()}</td></tr>` : ''}
-                    ${safeNum('fee_del')>0 ? `<tr><td>Delivery</td><td>Fixed</td><td align="right">${safeVal('fee_del')}</td></tr>` : ''}
-                    ${safeNum('fee_col')>0 ? `<tr><td>Pickup</td><td>Fixed</td><td align="right">${safeVal('fee_col')}</td></tr>` : ''}
-                    <tr style="border-top:2px solid #000"><td colspan="2" align="right"><b>TOTAL DUE</b></td><td align="right"><b>${Math.round(c.total).toLocaleString()}</b></td></tr>
+                    ${safeNum('rateIns')>0 ? `<tr><td>Insurance</td><td>${safeNum('rateIns')} x ${c.days} Days</td><td align="right">${(safeNum('rateIns')*c.days).toLocaleString()}</td></tr>` : ''}
+                    ${safeNum('fee_del')>0 ? `<tr><td>Delivery Fee</td><td>${safeVal('p_loc')}</td><td align="right">${safeVal('fee_del')}</td></tr>` : ''}
+                    ${safeNum('fee_col')>0 ? `<tr><td>Pickup Fee</td><td>${safeVal('d_loc')}</td><td align="right">${safeVal('fee_col')}</td></tr>` : ''}
+                    <tr style="border-top:2px solid #000"><td colspan="2" align="right"><b>TOTAL DUE</b></td><td align="right"><b>${Math.round(c.total).toLocaleString()} EGP</b></td></tr>
                 </table>
-                <div style="background:#f9f9f9; padding:8px; border:1px solid #ccc; text-align:center; font-size:10pt;">
-                    <b>PAID NOW:</b> ${rentStr}<br>
+                <div style="background:#f9f9f9; padding:10px; border:1px solid #ccc; text-align:center; margin-top:5px;">
+                    <b>PAID NOW:</b> ${rentInfo.text} <br>
                     <b>PENDING:</b> ${pendingHTML}
                 </div>
             </div>
 
-            <div style="border:2px solid #e67e22; padding:8px; margin:10px 0; font-size:10pt; font-weight:bold;">
-                DEPOSIT HELD: ${depStr}
+            <div style="border:2px solid #e67e22; padding:10px; margin:15px 0; font-weight:bold; font-size:10pt;">
+                DEPOSIT HELD: ${depInfo.text}
             </div>
 
-            <div class="sig-container">
-                <div class="sig-box">LESSOR SIGNATURE</div>
-                <div class="sig-box">LESSEE SIGNATURE</div>
-            </div>
-        </div>
+            <table class="sig-table"><tr><td class="sig-cell">LESSOR SIGNATURE</td><td style="width:20%"></td><td class="sig-cell">LESSEE SIGNATURE</td></tr></table>
+        </div>`;
 
+        // --- PAGE 2: TERMS ---
+        html += `
         <div class="a4-page">
             <div class="watermark"><img src="${logos.water}"></div>
             <div class="doc-head"><strong>TERMS & CONDITIONS</strong><span>Page 2/4</span></div>
             <div class="terms-grid">
-                <div class="term-p"><span class="term-h">1. INSURANCE</span>${insText[safeVal('insPack')]}</div>
-                <div class="term-p"><span class="term-h">2. THEFT</span> Not covered. Lessee pays full value.</div>
-                <div class="term-p"><span class="term-h">3. ACCIDENTS</span> Police Report mandatory. Fault = Repair + Downtime.</div>
-                <div class="term-p"><span class="term-h">4. RETURN</span> 1hr Grace. Late = Full Day.</div>
-                <div class="term-box">SELECTED PLAN: ${safeVal('insPack')}</div>
-                <div class="term-p"><span class="term-h">5. PENALTIES</span> Key: 20k, License: 12.5k, Smoking: 5k.</div>
-                <div class="term-p"><span class="term-h">6. FINES</span> Lessee pays 100% of traffic fines.</div>
-                <div class="term-p"><span class="term-h">7. DISPUTES</span> Independent Service Center. Quote is binding.</div>
-            </div>
-            <div class="sig-container" style="margin-top:auto"><div class="sig-box" style="width:100%">I have read and accepted all terms.<br>Signature: __________________________</div></div>
-        </div>
-
-        <div class="a4-page">
-            <div class="watermark"><img src="${logos.water}"></div>
-            <div class="doc-head"><strong>INSPECTION</strong><span>Page 3/4</span></div>
-            <div class="insp-img-box"><img src="${logos.car}"></div>
-            <div class="insp-grid">
-                <div class="insp-col"><h4>PASSENGER</h4><div class="insp-item"><span>Fender</span>[]</div><div class="insp-item"><span>Doors</span>[]</div></div>
-                <div class="insp-col"><h4>FRONT</h4><div class="insp-item"><span>Bumper</span>[]</div><div class="insp-item"><span>Hood</span>[]</div></div>
-                <div class="insp-col"><h4>REAR</h4><div class="insp-item"><span>Trunk</span>[]</div><div class="insp-item"><span>Bumper</span>[]</div></div>
-                <div class="insp-col"><h4>DRIVER</h4><div class="insp-item"><span>Fender</span>[]</div><div class="insp-item"><span>Doors</span>[]</div></div>
-            </div>
-            <div class="sig-container"><div class="sig-box">Pickup Signature</div></div>
-            <hr style="margin:20px 0; border:1px dashed #ccc;">
-            <div class="doc-head" style="border:none;"><strong>RETURN CHECK</strong></div>
-            <div class="insp-img-box" style="height:150px;"><img src="${logos.car}"></div>
-            <div class="box-section"><span class="bs-title">SETTLEMENT</span>
-                <table class="pt"><tr><th width="70%">Item</th><th>Cost</th></tr><tr><td>Damages</td><td></td></tr><tr><td>Fines</td><td></td></tr></table>
-            </div>
-            <div class="sig-container" style="margin-top:auto"><div class="sig-box">Return Signature</div></div>
-        </div>
-
-        <div class="a4-page">
-            <div class="doc-head"><strong>OFFICIAL RECEIPTS</strong><span>Page 4/4</span></div>
-            <div class="receipts-wrapper">
-                <div class="receipt">
-                    <div class="r-head"><span>SECURITY DEPOSIT (ON-HOLD)</span><span>CLIENT COPY</span></div>
-                    <div class="r-body">
-                        <div class="r-row"><span>Date:</span> <span>${today}</span></div>
-                        <div class="r-row"><span>Contract:</span> <span>${cid}</span></div>
-                        <div class="r-row"><span>Client:</span> <span>${safeVal('cl_name')}</span></div>
-                        <div class="r-row"><span>Amount:</span> <b>${depStr}</b></div>
+                <div class="term-p"><span class="term-h">1. INSURANCE POLICY</span>
+                    <div class="ins-box">
+                        <div>PLAN: ${plan.title}</div>
+                        <div style="font-weight:normal; margin-top:3px;">${plan.desc}</div>
+                        <div style="margin-top:3px;">${plan.liab}</div>
                     </div>
-                    <div class="r-foot"><div class="r-sign">Auth Sig: ______________</div></div>
-                    <div class="receipt:after">✂</div>
                 </div>
-                
-                <div class="receipt">
-                    <div class="r-head"><span>RENTAL PAYMENT RECEIPT</span><span>CLIENT COPY</span></div>
-                    <div class="r-body">
-                        <div class="r-row"><span>Date:</span> <span>${today}</span></div>
-                        <div class="r-row"><span>Contract:</span> <span>${cid}</span></div>
-                        <div class="r-row"><span>Period:</span> <span>${safeVal('p_time')} to ${safeVal('d_time')}</span></div>
-                        <div class="r-row"><span>Amount:</span> <b>${rentStr}</b></div>
-                    </div>
-                    <div class="r-foot"><div class="r-sign">Auth Sig: ______________</div></div>
-                    <div class="receipt:after">✂</div>
-                </div>
+                <div class="term-p"><span class="term-h">2. THEFT WAIVER</span> Theft is <strong>NOT covered</strong>. Lessee is responsible.</div>
+                <div class="term-p"><span class="term-h">3. DELIVERY</span> Charges apply out of office hours.</div>
+                <div class="term-p"><span class="term-h">4. ACCIDENTS</span> Must provide Police Report. If at fault, pay repair + downtime.</div>
+                <div class="term-p"><span class="term-h">5. DEPOSIT</span> Refunded upon return if no new damage/fines.</div>
+                <div class="term-p"><span class="term-h">6. AGE</span> Min 21 years old.</div>
+                <div class="term-p"><span class="term-h">7. RETURN</span> 1hr grace period. Late return = Full day charge.</div>
+                <div class="term-p"><span class="term-h">8. CANCELLATION</span> 48h notice required for full refund.</div>
+                <div class="term-p"><span class="term-h">9. INCLUSIONS</span> Breakdown assistance, body repair.</div>
+                <div class="term-p"><span class="term-h">10. EXCLUSIONS</span> Interior, Wrong Fuel, Off-road usage.</div>
+                <div class="term-p"><span class="term-h">11. FINES</span> Lessee pays 100% of traffic fines.</div>
+                <div class="term-p"><span class="term-h">12. PENALTIES</span> Key: 20k, License: 12.5k, Tire: 10k, Interior: 5k+.</div>
+                <div class="term-p"><span class="term-h">13. DISPUTES</span> Disputes refer to Independent Car Service Center. Quote is binding.</div>
             </div>
+            <table class="sig-table" style="margin-top:auto"><tr><td class="sig-cell" style="width:100%; border:none; border-top:1px solid #000;">I have read and accepted all terms.<br>Signature: __________________________</td></tr></table>
         </div>`;
 
+        // --- PAGE 3: INSPECTION ---
+        html += `
+        <div class="a4-page">
+            <div class="watermark"><img src="${logos.water}"></div>
+            <div class="doc-head"><strong>PICKUP INSPECTION REPORT</strong><span>Page 3/4</span></div>
+            <div class="insp-legend-box">M: Missing | D: Dent | S: Scratch | L: Light Scratch</div>
+            <div class="insp-img-box"><img src="${logos.car}"></div>
+            <div class="insp-grid">
+                <div class="insp-col"><h4>PASSENGER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div><div class="insp-item"><span>Door R</span>[ ]</div></div>
+                <div class="insp-col"><h4>FRONT</h4><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Hood</span>[ ]</div><div class="insp-item"><span>Windsh</span>[ ]</div></div>
+                <div class="insp-col"><h4>REAR</h4><div class="insp-item"><span>Trunk</span>[ ]</div><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Lights</span>[ ]</div></div>
+                <div class="insp-col"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div><div class="insp-item"><span>Door R</span>[ ]</div></div>
+            </div>
+            <div style="margin-top:20px; font-weight:bold;">Pickup Signature: __________________________</div>
+
+            <hr style="margin:20px 0; border:1px dashed #ccc;">
+
+            <div class="doc-head" style="border:none;"><strong>RETURN INSPECTION REPORT</strong><span>(Filled at Drop-off)</span></div>
+             <div class="insp-img-box" style="height:150px;"><img src="${logos.car}"></div>
+             <div class="box-section"><span class="bs-title">FINAL SETTLEMENT</span>
+                <table class="pt"><tr><th width="70%">Description</th><th>Cost (EGP)</th></tr>
+                <tr><td>New Damages</td><td></td></tr><tr><td>Fines</td><td></td></tr><tr><td>Fuel</td><td></td></tr>
+                <tr><td align="right"><strong>TOTAL DEDUCT:</strong></td><td></td></tr></table>
+            </div>
+            <div style="margin-top:auto; font-weight:bold;">Return Signature: __________________________</div>
+        </div>`;
+
+        // --- PAGE 4: RECEIPTS ---
+        html += `<div class="a4-page"><div class="doc-head"><strong>OFFICIAL RECEIPTS</strong><span>Page 4/4</span></div><div class="receipts-wrapper">`;
+        
+        // Deposit
+        html += `
+        <div class="receipt">
+            <div class="r-head"><span>SECURITY DEPOSIT RECEIPT (ON-HOLD)</span><span>CLIENT COPY</span></div>
+            <div class="r-body">
+                <div class="r-row"><span>Date:</span> <span>${today}</span></div>
+                <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
+                <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
+                <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
+                <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${depInfo.text}</b></div>
+            </div>
+            <div class="r-foot"><div class="r-sign">Auth Sig: __________________</div></div><div class="receipt:after">✂</div>
+        </div>`;
+
+        // Rental Loop
+        let loopCount = (c.mode==='Monthly') ? c.months : 1;
+        let sDate = new Date(safeVal('p_time'));
+        
+        for(let i=1; i<=loopCount; i++) {
+            let eDate = new Date(sDate);
+            if(c.mode==='Monthly') eDate.setMonth(eDate.getMonth()+1);
+            else eDate = new Date(safeVal('d_time'));
+            
+            // Format dates safely
+            let sStr = sDate.toLocaleDateString('en-GB');
+            let eStr = eDate.toLocaleDateString('en-GB');
+            let amt = (i===1) ? rentInfo.text : "PENDING";
+
+            html += `
+            <div class="receipt">
+                <div class="r-head"><span>RENTAL PAYMENT RECEIPT (Period ${i})</span><span>CLIENT COPY</span></div>
+                <div class="r-body">
+                    <div class="r-row"><span>Date:</span> <span>${today}</span></div>
+                    <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
+                    <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
+                    <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
+                    <div class="r-row"><span>Period:</span> <span>${sStr} to ${eStr}</span></div>
+                    <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${amt}</b></div>
+                </div>
+                <div class="r-foot"><div class="r-sign">Auth Sig: __________________</div></div><div class="receipt:after">✂</div>
+            </div>`;
+            sDate = eDate;
+        }
+        html += `</div></div>`;
+
         document.getElementById('print-container').innerHTML = html;
-        setTimeout(() => { 
-            btn.innerHTML = "GENERATE CONTRACT";
-            btn.disabled = false;
-            window.print(); 
-        }, 1500);
+        setTimeout(() => { window.print(); }, 2000);
     }
 </script>
 </body>
