@@ -2,68 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Brothers EGY - Contract System v69.0 (Full Restoration)</title>
+    <title>Brothers EGY - Contract System v60.0 (Golden Stable)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ================= SCREEN UI (The "Heavy" Professional Design) ================= */
-        :root { --primary: #04509D; --secondary: #333; --bg: #eef2f5; --accent: #e67e22; --success: #27ae60; --danger: #c0392b; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; }
+        /* --- SCREEN ONLY CSS --- */
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #eef2f5; margin: 0; padding: 20px; color: #333; }
         
-        #print-container { display: none; } /* Hidden on screen */
-
         .control-panel {
-            max-width: 1280px; margin: 0 auto 40px auto; background: white;
-            border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); border-top: 6px solid var(--primary);
-        }
-        .cp-header { background: var(--primary); color: white; padding: 15px 30px; display:flex; justify-content:space-between; align-items:center; }
-        .cp-body { padding: 30px; }
-        
-        .section-head {
-            font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.5px;
-            margin: 20px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; display:flex; align-items:center; gap:8px;
+            max-width: 1200px; margin: 0 auto; background: white; padding: 25px;
+            border-radius: 10px; border-top: 5px solid #04509D; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-        .grid-pay { display: grid; grid-template-columns: 1fr 1fr 1.3fr; gap: 20px; }
-
-        label { display: block; font-size: 11px; font-weight: 700; color: #555; margin-bottom: 5px; text-transform: uppercase; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 13px; box-sizing: border-box; transition: 0.3s; }
-        input:focus, select:focus { border-color: var(--primary); outline:none; box-shadow: 0 0 0 3px rgba(4,80,157,0.1); }
+        /* Grid Layouts for Inputs */
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; margin-bottom: 15px; }
         
-        .rate-input { width: 90px !important; font-weight: bold; color: #000; padding: 6px; text-align: center; }
-
-        .payment-builder { background: #f8f9fa; border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; height: 100%; box-sizing: border-box; }
-        .pb-row { display: flex; gap: 10px; align-items: center; margin-bottom: 8px; }
-        .pb-label { width: 90px; font-weight: bold; font-size: 12px; color:#444; }
-
-        .balance-box { 
-            background: #2c3e50; color: white; padding: 20px; border-radius: 8px; 
-            display: flex; flex-direction: column; justify-content: space-between; height: 100%; box-sizing: border-box;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        label { display: block; font-size: 11px; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #555; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        .section-head { font-weight: bold; border-bottom: 2px solid #eee; padding-bottom: 5px; margin: 20px 0 10px 0; color: #04509D; }
+        
+        .btn-gen { 
+            background: #04509D; color: white; width: 100%; padding: 15px; 
+            font-size: 18px; font-weight: bold; border: none; cursor: pointer; border-radius: 5px;
+            margin-top: 20px;
         }
-        .bal-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 4px; }
-        
-        .live-clock { font-family: monospace; font-weight: bold; font-size: 14px; background: rgba(0,0,0,0.2); padding: 5px 10px; border-radius: 4px; }
-        
-        .btn-print {
-            background: var(--primary); color: white; border: none; padding: 20px; width: 100%;
-            font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 30px;
-            display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s;
-            text-transform: uppercase; letter-spacing: 1px;
-        }
-        .btn-print:hover { background: #033a75; box-shadow: 0 8px 20px rgba(4, 80, 157, 0.3); transform: translateY(-2px); }
-        
-        .phone-group { display: flex; gap: 5px; }
-        .phone-group input:first-child { width: 70px; text-align: center; }
+        .btn-gen:hover { background: #033a75; }
 
-        /* ================= PRINT CSS (THE FULL LAYOUT) ================= */
+        /* --- PRINT CSS (THE CONTRACT LAYOUT) --- */
+        #print-area { display: none; } /* Hidden on screen */
+
         @media print {
             body { background: white; margin: 0; padding: 0; }
-            .control-panel { display: none !important; }
-            #print-container { display: block !important; }
-            @page { size: A4; margin: 0; }
+            .control-panel { display: none !important; } /* Hide Inputs */
+            #print-area { display: block !important; } /* Show Contract */
+            @page { margin: 0; size: A4; }
 
             .a4-page {
                 width: 210mm; min-height: 296mm; margin: 0 auto; background: white;
@@ -71,17 +45,18 @@
                 font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9.5pt; line-height: 1.35; color: #000;
                 display: flex; flex-direction: column; page-break-after: always;
             }
-            .a4-page:last-child { page-break-after: auto; }
-
+            
             .watermark {
                 position: absolute; top: 50%; left: 50%; width: 70%; 
                 transform: translate(-50%, -50%) rotate(-30deg);
-                opacity: 0.06; pointer-events: none; z-index: -1;
+                opacity: 0.06; pointer-events: none; z-index: 0;
             }
             .watermark img { width: 100%; height: auto; }
 
+            .page-content { position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; }
+
             /* Header */
-            .doc-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); padding-bottom: 8px; margin-bottom: 12px; }
+            .doc-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #04509D; padding-bottom: 8px; margin-bottom: 12px; }
             .logo { height: 60px; }
             .hq-info { text-align: right; font-size: 8pt; color: #333; line-height: 1.3; }
             
@@ -98,498 +73,282 @@
             }
 
             /* Terms */
-            .terms-grid { font-size: 7.5pt; text-align: justify; column-count: 2; column-gap: 25px; line-height: 1.25; flex-grow: 1; }
-            .term-p { margin-bottom: 7px; break-inside: avoid; }
+            .terms-grid { font-size: 8pt; text-align: justify; column-count: 2; column-gap: 25px; line-height: 1.25; flex-grow: 1; }
+            .term-p { margin-bottom: 8px; break-inside: avoid; }
             .term-h { 
-                font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 1px; 
-                border-bottom: 1px solid #ccc; padding-bottom: 1px; font-size: 8.5pt; color: var(--primary); 
+                font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 2px; 
+                border-bottom: 1px solid #ccc; padding-bottom: 1px; font-size: 8.5pt; color: #04509D; 
             }
             
             /* Inspection */
-            .insp-wrapper { display: flex; flex-direction: column; flex-grow: 1; }
-            .insp-legend-box { font-size: 9pt; text-align: center; background: #f9f9f9; border: 1px solid #000; padding: 5px; margin-bottom: 10px; font-weight: bold; }
-            
-            .insp-img-box { 
-                width: 100%; height: 260px; 
-                border: 1px solid #ccc; margin: 5px 0;
-                display: flex; align-items: center; justify-content: center;
-                background: #fff;
-            }
+            .insp-img-box { width: 100%; height: 260px; border: 1px solid #ccc; margin: 5px 0; display: flex; align-items: center; justify-content: center; background: #fff; }
             .insp-img-box img { width: 99%; height: 99%; object-fit: contain; }
             
-            .insp-grid-container {
-                display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
-                font-size: 8pt; margin-bottom: 10px;
-            }
+            .insp-grid-container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; font-size: 8pt; margin-bottom: 10px; }
             .insp-col { display: flex; flex-direction: column; gap: 2px; border: 1px solid #ccc; padding: 5px; }
             .insp-col h4 { margin: 0 0 5px 0; font-size: 8.5pt; text-transform: uppercase; border-bottom: 1px solid; padding-bottom: 2px; }
             .insp-item { display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
             .insp-check { font-family: monospace; font-size: 10pt; border:1px solid #ccc; width: 30px; text-align: center; }
             
-            .col-pass { color: #0f6e14; border-color: #0f6e14; }
-            .col-driver { color: #ef680d; border-color: #ef680d; }
-            .col-front { color: #f90529; border-color: #f90529; }
-            .col-rear { color: #1f16d2; border-color: #1f16d2; }
-
             /* Receipts */
-            .receipts-wrapper { display: flex; flex-direction: column; gap: 25px; height: 100%; margin-top: 10px; justify-content: flex-start; }
-            .receipt { border: 2px solid #333; padding: 15px 20px; display: flex; flex-direction: column; background: white; position: relative; margin-bottom: 10px; page-break-inside: avoid; min-height: 250px; }
-            .r-header { border-bottom: 3px double var(--primary); padding-bottom: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+            .receipts-wrapper { display: flex; flex-direction: column; gap: 20px; height: 100%; margin-top: 10px; justify-content: flex-start; }
+            .receipt { border: 2px solid #333; padding: 15px 20px; display: flex; flex-direction: column; background: white; position: relative; margin-bottom: 15px; page-break-inside: avoid; min-height: 250px; }
+            .r-header { border-bottom: 3px double #04509D; padding-bottom: 10px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
             .r-logo { height: 35px; }
-            .r-title { font-weight: 900; font-size: 11pt; color: var(--primary); text-transform: uppercase; }
-            .r-copy { font-size: 8pt; background: #eee; padding: 4px 8px; border: 1px solid #ccc; font-weight: bold; }
+            .r-title { font-weight: 900; font-size: 12pt; color: #04509D; text-transform: uppercase; }
+            .r-copy { font-size: 9pt; background: #eee; padding: 4px 8px; border: 1px solid #ccc; font-weight: bold; }
             .r-body { flex: 1; display: flex; flex-direction: column; gap: 6px; font-size: 10pt; }
             .r-row { display: flex; justify-content: space-between; border-bottom: 1px dotted #999; padding-bottom: 4px; }
             .r-footer { margin-top: auto; padding-top: 15px; text-align: right; }
             .r-sign { margin-top: 5px; font-size: 9pt; text-align: left; font-weight: bold; }
-            .receipt:after { content:"✂"; position:absolute; bottom:-27px; left:50%; background:white; padding:0 5px; font-size:14px; }
+            .receipt:after { content:"✂"; position:absolute; bottom:-25px; left:50%; background:white; padding:0 5px; font-size:14px; }
             
-            .sig-block { margin-top: 40px; border-top: 1px solid #000; padding-top: 5px; width: 45%; text-align: center; font-weight: bold;}
-            .sig-container { display: flex; justify-content: space-between; width: 100%; margin-top: 40px; }
+            .sig-block { margin-top: 40px; border-top: 1px solid #000; padding-top: 5px; width: 40%; text-align: center; font-weight: bold; }
         }
     </style>
 </head>
 <body>
 
 <div class="control-panel">
-    <div class="cp-header">
-        <h2 style="margin:0;"><i class="fa-solid fa-file-contract"></i> Smart Contract v69.0</h2>
-        <div style="display:flex; gap:15px; align-items:center; font-size:12px;">
-            <div id="clock" class="live-clock">--:--:--</div>
-            <div>USD: <input type="number" id="ex_usd" value="50.00" class="rate-input" oninput="calc()"></div>
-            <div>EUR: <input type="number" id="ex_eur" value="54.00" class="rate-input" oninput="calc()"></div>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2 style="margin:0; color:#04509D;">CONTRACT GENERATOR v60.0</h2>
+        <div>
+            <b>USD:</b> <input type="number" id="ex_usd" value="50.00" style="width:70px">
+            <b>EUR:</b> <input type="number" id="ex_eur" value="54.00" style="width:70px">
         </div>
     </div>
-    <div class="cp-body">
-        
-        <div class="section-head">1. Contract & Branch</div>
-        <div class="grid-3">
-            <div><label>Issuing Branch</label>
-                <select id="issuingBranch">
-                    <option value="HRG">Hurghada Branch</option>
-                    <option value="ALX">Alexandria (HQ)</option>
-                    <option value="CAI">Cairo Branch</option>
-                    <option value="RSD">Rashid Branch</option>
-                </select>
-            </div>
-            <div><label>Rental Mode</label>
-                <select id="rentalMode" onchange="toggleMode()">
-                    <option value="Daily">Daily (Short Term)</option>
-                    <option value="Monthly">Monthly (Long Term)</option>
-                </select>
-            </div>
-            <div><label>Agreement Type</label>
-                <select id="conType" onchange="checkType()">
-                    <option value="New">New Agreement</option>
-                    <option value="Extension">Extension</option>
-                </select>
-                <input type="text" id="prevCon" placeholder="Prev. Contract No..." style="display:none; margin-top:5px; border-color:var(--accent);">
-            </div>
-        </div>
 
-        <div class="section-head">2. Vehicle Details</div>
-        <div class="grid-2">
-            <div><label>Select From Fleet</label><select id="carSelect" onchange="loadCar()"><option value="">-- Select Car --</option></select></div>
-            <div><label>Manual Model Input</label><input type="text" id="manModel"></div>
-        </div>
-        <input type="hidden" id="h_plate"><input type="hidden" id="h_color">
-        <input type="hidden" id="h_year"><input type="hidden" id="h_vin"><input type="hidden" id="h_motor">
+    <div class="section-head">1. Contract Details</div>
+    <div class="grid-3">
+        <div><label>Branch</label><select id="branch"><option>Hurghada</option><option>Alexandria (HQ)</option><option>Cairo</option></select></div>
+        <div><label>Mode</label><select id="mode"><option value="Daily">Daily (Short Term)</option><option value="Monthly">Monthly (Long Term)</option></select></div>
+        <div><label>Type</label><select id="type"><option>New</option><option>Extension</option></select></div>
+    </div>
 
+    <div class="section-head">2. Vehicle (Guaranteed List)</div>
+    <div class="grid-2">
+        <div><label>Select Car</label>
+            <select id="car_select" onchange="fillCar()">
+                <option value="">-- Select Car --</option>
+                <option value="Haval Jolion" data-p="ب ا ن | 2 6 4 9" data-v="606889" data-m="21499022758">33 - Haval Jolion (2022)</option>
+                <option value="Chevrolet Aveo" data-p="ع د ب | 8 2 6 3" data-v="E009927" data-m="191160037">38 - Chevrolet Aveo (2020)</option>
+                <option value="Hyundai Tucson" data-p="ه س ب | 4 2 6 3" data-v="KMHJE81BGN" data-m="G4FPNU539488">47 - Hyundai Tucson (2022)</option>
+                <option value="Jetour X90" data-p="ف ص ب | 2 9 1 5" data-v="LVTDB21B5TH013984" data-m="SH02227">48 - Jetour X90 Plus (2026)</option>
+                <option value="MG ZS" data-p="ق ه س | 5 3 6 5" data-v="LSJW74U61SZ027362" data-m="3050131">34 - MG ZS (2025)</option>
+                <option value="Nissan Sunny" data-p="ل ه ب | 7 3 5 1" data-v="137137" data-m="798285">40 - Nissan Sunny (2023)</option>
+                <option value="Renault Duster" data-p="د ع ص | 5 9 4 9" data-v="VFIHJD208SA107071" data-m="50063">43 - Renault Duster (2025)</option>
+            </select>
+        </div>
+        <div><label>Manual Model</label><input type="text" id="c_model"></div>
+    </div>
+    <input type="hidden" id="c_plate"><input type="hidden" id="c_vin"><input type="hidden" id="c_motor">
+
+    <div class="grid-4">
+        <div><label>KM Out</label><input type="number" id="c_km" value="0"></div>
+        <div><label>Fuel</label><select id="c_fuel"><option>Full</option><option>3/4</option><option>1/2</option><option>1/4</option></select></div>
+        <div><label>Rent Rate (EGP)</label><input type="number" id="rate_rent" value="0"></div>
+        <div><label>Ins Rate (EGP)</label><input type="number" id="rate_ins" value="0"></div>
+    </div>
+
+    <div class="section-head">3. Client & Dates</div>
+    <div class="grid-3">
+        <div><label>Client Name</label><input type="text" id="cl_name"></div>
+        <div><label>Passport / ID</label><input type="text" id="cl_id"></div>
+        <div><label>Phone</label><input type="text" id="cl_phone" value="+20"></div>
+    </div>
+    <div class="grid-2">
+        <div><label>Pickup Date</label><input type="datetime-local" id="d_start"></div>
+        <div><label>Dropoff Date</label><input type="datetime-local" id="d_end"></div>
+    </div>
+    <div class="grid-2">
+        <div><label>Pickup Location</label><input type="text" id="l_start" value="Hotel Azur"></div>
+        <div><label>Dropoff Location</label><input type="text" id="l_end" value="Airport Hurghada"></div>
+    </div>
+
+    <div class="section-head">4. Money & Payments</div>
+    <div class="grid-3">
+        <div><label>Delivery Fee</label><input type="number" id="fee_del" value="0"></div>
+        <div><label>Pickup Fee</label><input type="number" id="fee_pick" value="0"></div>
+        <div><label>Required Deposit</label><input type="number" id="req_dep" value="5000"></div>
+    </div>
+    
+    <div style="background:#f0f0f0; padding:15px; border-radius:8px; margin-bottom:15px;">
+        <label>RENT PAID (NOW)</label>
         <div class="grid-4">
-            <div><label>KM Out</label><input type="number" id="kmOut" value="0" oninput="calc()"></div>
-            <div><label>Fuel Level</label><select id="fuelOut"><option>Full (8/8)</option><option>3/4</option><option>1/2</option><option>1/4</option><option>Reserve</option></select></div>
-            <div><label id="lbl_rate">Daily Rent (EGP)</label><input type="number" id="rateRent" value="0" oninput="calc()"></div>
-            <div><label>Ins. Fee (Daily)</label><input type="number" id="rateIns" value="0" oninput="calc()"></div>
+            <input type="number" id="p_r_egp" placeholder="EGP">
+            <input type="number" id="p_r_usd" placeholder="USD">
+            <input type="number" id="p_r_eur" placeholder="EUR">
+            <input type="number" id="p_r_card" placeholder="Card">
         </div>
+        <label style="margin-top:10px;">DEPOSIT HELD</label>
+        <div class="grid-4">
+            <input type="number" id="p_d_egp" placeholder="EGP">
+            <input type="number" id="p_d_usd" placeholder="USD">
+            <input type="number" id="p_d_eur" placeholder="EUR">
+            <input type="number" id="p_d_card" placeholder="Card">
+        </div>
+    </div>
 
-        <div class="section-head">3. Client Information</div>
-        <div class="grid-3">
-            <div><label>First Name</label><input type="text" id="cl_fname"></div>
-            <div><label>Surname</label><input type="text" id="cl_sname"></div>
-            <div><label>Date of Birth</label><input type="date" id="cl_dob"></div>
-        </div>
-        <div class="grid-3">
-            <div><label>Nationality</label><input type="text" id="cl_nation"></div>
-            <div><label>Passport / ID No</label><input type="text" id="cl_pass"></div>
-            <div><label>Driving License No</label><input type="text" id="cl_lic"></div>
-        </div>
-        <div class="grid-3">
-            <div><label>Phone No</label>
-                <div class="phone-group">
-                    <input type="text" id="cl_ph_code" placeholder="+20" value="+20">
-                    <input type="text" id="cl_phone" placeholder="Number">
-                </div>
-            </div>
-            <div><label>Email</label><input type="email" id="cl_email"></div>
-            <div><label>Local Address</label><input type="text" id="cl_addr"></div>
-        </div>
-
-        <div class="section-head">4. Period & Location</div>
-        <div class="grid-2">
-            <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
-            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="d_time" onchange="calc()"></div>
-        </div>
-        <div class="grid-2">
-            <div><label>Pickup Location</label><select id="p_loc" onchange="calc()"><option value="Office Alex">Office: Alexandria</option><option value="Office Cairo">Office: Cairo</option><option value="Office Hurghada">Office: Hurghada</option><option value="Airport Alex (HBE)">Airport: Alexandria</option><option value="Airport Cairo (CAI)">Airport: Cairo</option><option value="Airport Hurghada (HRG)">Airport: Hurghada</option><option value="Hotel">Hotel</option></select><input type="text" id="p_addr" placeholder="Specific Location..." style="margin-top:5px;" oninput="calc()"></div>
-            <div><label>Dropoff Location</label><select id="d_loc" onchange="calc()"><option value="Same">Same as Pickup</option><option value="Office Alex">Office: Alexandria</option><option value="Office Cairo">Office: Cairo</option><option value="Office Hurghada">Office: Hurghada</option><option value="Airport Alex (HBE)">Airport: Alexandria</option><option value="Airport Cairo (CAI)">Airport: Cairo</option><option value="Airport Hurghada (HRG)">Airport: Hurghada</option><option value="Hotel">Hotel</option></select><input type="text" id="d_addr" placeholder="Specific Location..." style="margin-top:5px;" oninput="calc()"></div>
-        </div>
-
-        <div class="section-head">5. Financials</div>
-        <div class="grid-2">
-            <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
+    <div class="grid-2">
+        <div><label>Insurance</label>
+            <select id="ins_type">
                 <option value="Basic">Basic (100% Client Liability)</option>
                 <option value="Intermediate">Intermediate (70% Client / 30% Co)</option>
-                <option value="Full Protection">Full Protection (Zero Liability)</option>
-            </select></div>
-            <div><label>Daily Add-ons</label><div style="font-size:12px; display:flex; gap:15px; margin-top:5px;"><span><input type="checkbox" id="add_km" onchange="calc()"> Unl. KM (500)</span><span><input type="checkbox" id="add_dr" onchange="calc()"> Driver (250)</span><span><input type="checkbox" id="add_st" onchange="calc()"> Seat (250)</span></div></div>
+                <option value="Full">Full Protection (Zero Liability)</option>
+            </select>
         </div>
-
-        <div class="grid-2" style="margin-top:10px;">
-            <div class="payment-builder">
-                <div style="font-weight:bold; margin-bottom:10px; border-bottom:1px solid #ccc; color:var(--primary);">FEES & TARGETS</div>
-                <div class="pb-row"><div class="pb-label">Delivery Fee:</div><input type="number" id="fee_del" placeholder="Dropoff" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label">Pickup Fee:</div><input type="number" id="fee_col" placeholder="Collection" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label" style="color:var(--accent);">Req. Deposit:</div><input type="number" id="req_deposit" placeholder="Required Amt" oninput="calc()"></div>
-            </div>
-            <div class="balance-box">
-                <div style="text-align:center; font-size:14px; opacity:0.8; margin-bottom:5px;">ESTIMATED TOTAL</div>
-                <div class="bal-row"><span>Base Rent:</span> <strong id="c_rent">0</strong></div>
-                <div class="bal-row"><span>Logistics Fees:</span> <strong id="c_fees">0</strong></div>
-                <div style="text-align:right; font-size:24px; font-weight:bold; margin-top:10px; color:#e67e22;" id="c_total_preview">0 EGP</div>
+        <div><label>Extras</label>
+            <div style="font-size:12px;">
+                <input type="checkbox" id="add_km"> Unlimited KM (500)<br>
+                <input type="checkbox" id="add_dr"> Extra Driver (250)
             </div>
         </div>
-
-        <div class="grid-pay" style="margin-top:15px;">
-            <div class="payment-builder">
-                <div style="font-weight:bold; margin-bottom:10px; color:var(--primary);">RENT COLLECTED (NOW)</div>
-                <div class="pb-row"><div class="pb-label">Cash EGP:</div><input type="number" id="pay_rent_egp" placeholder="0" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label">Cash USD:</div><input type="number" id="pay_rent_usd" placeholder="0" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label">Cash EUR:</div><input type="number" id="pay_rent_eur" placeholder="0" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label">Card/Online:</div><input type="number" id="pay_rent_card" placeholder="0" oninput="calc()"></div>
-            </div>
-            <div class="payment-builder">
-                <div style="font-weight:bold; margin-bottom:10px; color:var(--accent);">DEPOSIT HELD</div>
-                <div class="pb-row"><div class="pb-label">Cash EGP:</div><input type="number" id="pay_dep_egp" placeholder="0" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label">Cash USD:</div><input type="number" id="pay_dep_usd" placeholder="0" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label">Cash EUR:</div><input type="number" id="pay_dep_eur" placeholder="0" oninput="calc()"></div>
-                <div class="pb-row"><div class="pb-label">Card Hold:</div><input type="number" id="pay_dep_card" placeholder="0" oninput="calc()"></div>
-            </div>
-            <div class="balance-box">
-                <div class="bal-row"><span>Rent Total:</span> <strong id="val_total_due">0</strong></div>
-                <div class="bal-row"><span>Paid Now:</span> <strong id="val_total_paid" style="color:var(--success);">0</strong></div>
-                <div class="bal-row"><span>Rent Pending:</span> <strong id="val_rent_pending" style="color:var(--danger);">0</strong></div>
-                <div style="border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;"></div>
-                <div class="bal-row"><span>Dep. Target:</span> <strong id="val_dep_req">0</strong></div>
-                <div class="bal-row"><span>Held:</span> <strong id="val_dep_paid" style="color:var(--accent);">0</strong></div>
-                <div class="bal-row"><span>Dep Pending:</span> <strong id="val_dep_pending" style="color:#e74c3c;">0</strong></div>
-            </div>
-        </div>
-        <button class="btn-print" onclick="generate()">GENERATE CONTRACT</button>
     </div>
+
+    <button class="btn-gen" onclick="generate()">GENERATE PDF</button>
 </div>
 
-<div id="print-container"></div>
+<div id="print-area"></div>
 
 <script>
-    // 1. DATA
-    const fleet = [
-        {code:"33", model:"Haval Jolion", year:"2022", plate:"ب ا ن | 2 6 4 9", vin:"606889", motor:"21499022758"},
-        {code:"38", model:"Chevrolet Aveo", year:"2020", plate:"ع د ب | 8 2 6 3", vin:"E009927", motor:"191160037"},
-        {code:"47", model:"Hyundai Tucson", year:"2022", plate:"ه س ب | 4 2 6 3", vin:"KMHJE81BGN", motor:"G4FPNU539488"},
-        {code:"48", model:"Jetour x90 plus", year:"2026", plate:"ف ص ب | 2 9 1 5", vin:"LVTDB21B5TH013984", motor:"SH02227"},
-        {code:"34", model:"MG ZS", year:"2025", plate:"ق ه س | 5 3 6 5", vin:"LSJW74U61SZ027362", motor:"3050131"},
-        {code:"35", model:"MG ZS", year:"2022", plate:"و ن س | 5 8 5 4", vin:"15665", motor:"130301"},
-        {code:"36", model:"MG ZS", year:"2022", plate:"م ج ب | 1 6 8 9", vin:"90006", motor:"71197"},
-        {code:"37", model:"MG ZS", year:"2023", plate:"ر ص ي | 1 4 9 5", vin:"LSJW74U35P113013", motor:"15823"},
-        {code:"42", model:"MG 5", year:"2026", plate:"ه م س | 7 3 7 8", vin:"LSJA36E95TZ504743", motor:"5130253"},
-        {code:"44", model:"MG ZS", year:"2025", plate:"ع و ل | 9 4 1 3", vin:"Lsjw74u69sz012480", motor:"130809"},
-        {code:"46", model:"MG 5", year:"2026", plate:"ف ص ب | 9 5 6 8", vin:"Lsja36e91tz511494", motor:"7290206"},
-        {code:"40", model:"Nissan Sunny", year:"2023", plate:"ل ه ب | 7 3 5 1", vin:"137137", motor:"798285"},
-        {code:"41", model:"Nissan Sunny", year:"2023", plate:"ق ج ل | 5 7 3 9", vin:"P0150253", motor:"751752"},
-        {code:"49", model:"Nissan Sunny", year:"2026", plate:"ص س ل | 3 5 2 1", vin:"DA1BBAN17T0195715", motor:"799562N"},
-        {code:"43", model:"Renualt Duster", year:"2025", plate:"د ع ص | 5 9 4 9", vin:"VFIHJD208SA107071", motor:"50063"}
-    ];
-
-    const insuranceTexts = {
-        Basic: `<strong>BASIC (CDW):</strong> Includes TPL. You pay 100% for damage to car, glass, tires.`,
-        Intermediate: `<strong>INTERMEDIATE:</strong> Client pays 70% of repair cost, Company pays 30%. Covers Undercarriage (10k Limit).`,
-        "Full Protection": `<strong>FULL PROTECTION:</strong> Zero Excess for Body/Glass. Excludes Interior/Misfueling.`
-    };
-
-    // 2. INIT
-    window.onload = function() {
-        const sel = document.getElementById('carSelect');
-        fleet.forEach(c => {
-            let opt = document.createElement('option');
-            opt.value = c.code;
-            opt.text = `[${c.code}] ${c.model} (${c.year}) - ${c.plate}`;
-            sel.add(opt);
-        });
-
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
-        }, 1000);
-    };
-
-    // 3. HELPERS
-    function safeVal(id) { var el = document.getElementById(id); return el ? el.value : ""; }
-    function safeNum(id) { var el = document.getElementById(id); if(!el || el.value.trim() === "") return 0; return parseFloat(el.value) || 0; }
-
-    function loadCar() {
-        const c = fleet.find(x => x.code === safeVal('carSelect'));
-        if(c) {
-            document.getElementById('manModel').value = c.model;
-            document.getElementById('h_plate').value = c.plate;
-            document.getElementById('h_color').value = c.year;
-            document.getElementById('h_year').value = c.year;
-            document.getElementById('h_vin').value = c.vin;
-            document.getElementById('h_motor').value = c.motor;
+    function fillCar() {
+        var sel = document.getElementById('car_select');
+        var opt = sel.options[sel.selectedIndex];
+        if(opt.value !== "") {
+            document.getElementById('c_model').value = opt.value;
+            document.getElementById('c_plate').value = opt.getAttribute('data-p');
+            document.getElementById('c_vin').value = opt.getAttribute('data-v');
+            document.getElementById('c_motor').value = opt.getAttribute('data-m');
         }
     }
 
-    function checkType() {
-        document.getElementById('prevCon').style.display = (safeVal('conType') === 'Extension') ? 'block' : 'none';
-    }
-    
-    function toggleMode() {
-        const mode = safeVal('rentalMode');
-        document.getElementById('lbl_rate').innerText = (mode === 'Monthly') ? "Monthly Rent (EGP)" : "Daily Rent (EGP)";
-        calc();
-    }
-
-    function calc() {
-        const rateUsd = safeNum('ex_usd') || 50;
-        const rateEur = safeNum('ex_eur') || 54;
-        const pStr = safeVal('p_time');
-        const dStr = safeVal('d_time');
-        const mode = safeVal('rentalMode');
-        
-        let days = 0;
-        if(pStr && dStr) {
-            const p = new Date(pStr);
-            const d = new Date(dStr);
-            if(d > p) {
-                const diffTime = Math.abs(d - p);
-                days = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-                if(days < 1) days = 1;
-            }
-        }
-        if(!days || days < 1) days = 1;
-
-        let mult = days;
-        if(mode === "Monthly") {
-            let m = (days / 30).toFixed(1);
-            mult = (m < 1) ? 1 : m;
-        }
-
-        const r = safeNum('rateRent');
-        const i = safeNum('rateIns');
-        const fee_d = safeNum('fee_del');
-        const fee_c = safeNum('fee_col');
-        
-        let adds = 0;
-        if(document.getElementById('add_km').checked) adds += 500;
-        if(document.getElementById('add_dr').checked) adds += 250;
-        if(document.getElementById('add_st').checked) adds += 250;
-        
-        let totalRentOnly = 0;
-        if(mode === "Monthly") {
-             totalRentOnly = (r * mult) + (i * days) + (adds * days);
-        } else {
-             totalRentOnly = ((r + i + adds) * mult);
-        }
-        
-        let totalDue = totalRentOnly + fee_d + fee_c;
-
-        let totalRentPaid = safeNum('pay_rent_egp') + (safeNum('pay_rent_usd') * rateUsd) + (safeNum('pay_rent_eur') * rateEur) + safeNum('pay_rent_card');
-        let rentPending = totalDue - totalRentPaid;
-        
-        let reqDep = safeNum('req_deposit');
-        let totalDepPaid = safeNum('pay_dep_egp') + (safeNum('pay_dep_usd') * rateUsd) + (safeNum('pay_dep_eur') * rateEur) + safeNum('pay_dep_card');
-        let depPending = reqDep - totalDepPaid;
-
-        document.getElementById('c_rent').innerText = Math.round(totalRentOnly).toLocaleString();
-        document.getElementById('c_fees').innerText = Math.round(fee_d + fee_c).toLocaleString();
-        document.getElementById('c_total_preview').innerText = Math.round(totalDue).toLocaleString() + " EGP";
-        
-        document.getElementById('val_total_due').innerText = Math.round(totalDue).toLocaleString();
-        document.getElementById('val_total_paid').innerText = Math.round(totalRentPaid).toLocaleString();
-        
-        let rPenEl = document.getElementById('val_rent_pending');
-        if(rentPending > 0) { rPenEl.innerHTML = `<span style="color:#e74c3c">${Math.round(rentPending).toLocaleString()}</span>`; }
-        else if(rentPending < 0) { rPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(Math.round(rentPending)).toLocaleString()}</span>`; }
-        else { rPenEl.innerHTML = `<span style="color:white">0</span>`; }
-
-        document.getElementById('val_dep_req').innerText = Math.round(reqDep).toLocaleString();
-        document.getElementById('val_dep_paid').innerText = Math.round(totalDepPaid).toLocaleString();
-        
-        let dPenEl = document.getElementById('val_dep_pending');
-        if(depPending > 0) { dPenEl.innerHTML = `<span style="color:#e74c3c">${Math.round(depPending).toLocaleString()}</span>`; }
-        else if(depPending < 0) { dPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(Math.round(depPending)).toLocaleString()}</span>`; }
-        else { dPenEl.innerHTML = `<span style="color:white">0</span>`; }
-
-        return {days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending};
-    }
+    function getVal(id) { return document.getElementById(id).value; }
+    function getNum(id) { return parseFloat(document.getElementById(id).value) || 0; }
 
     function generate() {
-        const c = calc();
-        // Smart Contract ID: BR-[Branch]-[Date]-[Random]
-        const branchMap = {"Hurghada":"HRG", "Alexandria (HQ)":"ALX", "Cairo":"CAI", "Rashid":"RSD"};
-        const bCode = branchMap[safeVal('issuingBranch')] || "GEN";
-        const dStr = new Date().getDate().toString().padStart(2,'0') + (new Date().getMonth()+1).toString().padStart(2,'0');
-        const cid = `BR-${bCode}-${dStr}-${Math.floor(1000 + Math.random() * 9000)}`;
-        const today = new Date().toLocaleDateString();
+        var cid = "BE-" + new Date().getFullYear().toString().substr(-2) + "-" + Math.floor(Math.random()*9000);
+        var today = new Date().toLocaleDateString();
         
-        // Rates
-        const usd = safeNum('ex_usd') || 50;
-        const eur = safeNum('ex_eur') || 54;
-
-        // Payment String Builder
-        const buildPayStr = (pfx) => {
-            let egp = safeNum(pfx + '_egp'), u = safeNum(pfx + '_usd'), e = safeNum(pfx + '_eur'), card = safeNum(pfx + '_card');
-            let total = egp + (u * usd) + (e * eur) + card;
-            let parts = [];
-            if(egp > 0) parts.push(egp + " Cash");
-            if(u > 0) parts.push(u + " USD");
-            if(e > 0) parts.push(e + " EUR");
-            if(card > 0) parts.push(card + " Card");
-            let detail = parts.length > 0 ? `(${parts.join(' + ')})` : "";
-            return { total: total, text: `${Math.round(total).toLocaleString()} EGP ${detail}` };
-        };
-
-        let rentInfo = buildPayStr('pay_rent');
-        let depInfo = buildPayStr('pay_dep');
+        var ex_usd = getNum('ex_usd');
+        var ex_eur = getNum('ex_eur');
+        var mode = getVal('mode');
         
-        let rateTxt = c.mode === 'Monthly' ? `${c.r} x ${Math.ceil(c.days/30)} Months` : `${c.r} x ${c.days} Days`;
-        let base = c.mode === 'Monthly' ? (c.r * Math.ceil(c.days/30)) : (c.r * c.days);
+        var d1 = new Date(getVal('d_start'));
+        var d2 = new Date(getVal('d_end'));
+        var days = Math.ceil((d2 - d1) / (1000 * 60 * 60 * 24));
+        if(isNaN(days) || days < 1) days = 1;
         
-        let pText = safeVal('p_loc') + (safeVal('p_addr') ? " (" + safeVal('p_addr') + ")" : "");
-        let dText = safeVal('d_loc') + (safeVal('d_addr') ? " (" + safeVal('d_addr') + ")" : "");
+        var months = 1;
+        if(mode === 'Monthly') months = Math.ceil(days / 30);
 
-        const pending = c.totalDue - rentInfo.total;
-        const pendingHTML = pending > 0 
-            ? `<span style="color:#c0392b">${Math.round(pending).toLocaleString()} EGP</span>` 
-            : `<span style="color:#27ae60">PAID</span>`;
+        var r_rate = getNum('rate_rent');
+        var i_rate = getNum('rate_ins');
+        var fee_d = getNum('fee_del');
+        var fee_p = getNum('fee_pick');
+        
+        // Add-ons
+        var adds = 0;
+        if(document.getElementById('add_km').checked) adds += 500;
+        if(document.getElementById('add_dr').checked) adds += 250;
 
-        // --- HTML GENERATION ---
-        let html = `
+        var baseRent = (mode === 'Monthly') ? (r_rate * months) : ((r_rate + adds) * days);
+        var totalIns = (mode === 'Monthly') ? (i_rate * days) : (i_rate * days);
+        var totalDue = baseRent + totalIns + fee_d + fee_p;
+
+        // Payments
+        var r_paid_val = getNum('p_r_egp') + (getNum('p_r_usd') * ex_usd) + (getNum('p_r_eur') * ex_eur) + getNum('p_r_card');
+        var d_paid_val = getNum('p_d_egp') + (getNum('p_d_usd') * ex_usd) + (getNum('p_d_eur') * ex_eur) + getNum('p_d_card');
+        
+        var r_str = "";
+        if(getNum('p_r_egp')>0) r_str += getVal('p_r_egp') + " EGP ";
+        if(getNum('p_r_usd')>0) r_str += getVal('p_r_usd') + " USD ";
+        if(getNum('p_r_eur')>0) r_str += getVal('p_r_eur') + " EUR ";
+        if(getNum('p_r_card')>0) r_str += getVal('p_r_card') + " Card ";
+        if(r_str === "") r_str = "0";
+
+        var d_str = "";
+        if(getNum('p_d_egp')>0) d_str += getVal('p_d_egp') + " EGP ";
+        if(getNum('p_d_usd')>0) d_str += getVal('p_d_usd') + " USD ";
+        if(getNum('p_d_eur')>0) d_str += getVal('p_d_eur') + " EUR ";
+        if(getNum('p_d_card')>0) d_str += getVal('p_d_card') + " Card ";
+        if(d_str === "") d_str = "0";
+
+        var pending = totalDue - r_paid_val;
+
+        // BUILD HTML
+        var html = '';
+
+        // PAGE 1
+        html += `
         <div class="a4-page">
             <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
             <div class="page-content">
                 <div class="doc-head">
                     <img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="logo">
-                    <div style="text-align:center">
-                        <h1 style="margin:0; font-size:18pt; color:#04509D">CAR RENTAL AGREEMENT</h1>
-                        <div style="font-weight:bold; font-size:12pt;">${cid}</div>
-                        ${safeVal('conType')==='Extension' ? '<b>(EXTENSION)</b>' : ''}
-                    </div>
-                    <div class="hq-info"><strong>BROTHERS EGY HQ</strong><br>Alexandria<br>Tax: 589-464-418</div>
+                    <div style="text-align:center"><h2>CAR RENTAL AGREEMENT</h2><b>${cid}</b><br>${getVal('type') === 'Extension' ? '(EXTENSION)' : ''}</div>
+                    <div class="hq-info"><b>BROTHERS EGY HQ</b><br>Alexandria<br>Tax: 589-464-418</div>
                 </div>
 
                 <div class="box-section"><span class="bs-title">PARTIES</span>
                     <table class="pt" style="margin:0">
-                        <tr><td width="30%"><strong>LESSOR</strong><br>El Alakhua El Mutahidun<br>${safeVal('issuingBranch')}</td>
-                            <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>
-                            Passport: ${safeVal('cl_pass')} | Nation: ${safeVal('cl_nation')}<br>
-                            Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | Addr: ${safeVal('cl_addr')}</td></tr>
+                        <tr><td width="30%"><b>LESSOR</b><br>El Alakhua El Mutahidun<br>${getVal('branch')}</td>
+                        <td><b>LESSEE</b><br>Name: ${getVal('cl_name')}<br>ID: ${getVal('cl_id')}<br>Phone: ${getVal('cl_phone')}</td></tr>
                     </table>
                 </div>
 
-                <div class="box-section"><span class="bs-title">VEHICLE & PERIOD</span>
+                <div class="box-section"><span class="bs-title">VEHICLE</span>
                     <table class="pt">
-                        <tr><th>Model</th><td>${safeVal('manModel')}</td><th>Plate</th><td><b>${safeVal('h_plate')}</b></td><th>KM Out</th><td>${safeVal('kmOut')}</td></tr>
-                        <tr><th>VIN</th><td>${safeVal('h_vin')}</td><th>Motor</th><td>${safeVal('h_motor')}</td><th>Fuel</th><td>${safeVal('fuelOut')}</td></tr>
-                        <tr><th>Pickup</th><td>${safeVal('p_time').replace('T',' ')}<br>${pText}</td>
-                            <th>Dropoff</th><td>${safeVal('d_time').replace('T',' ')}<br>${dText}</td>
-                            <th>Duration</th><td>${c.days} Days</td></tr>
+                        <tr><th>Model</th><td>${getVal('c_model')}</td><th>Plate</th><td><b>${getVal('c_plate')}</b></td><th>KM Out</th><td>${getVal('c_km')}</td></tr>
+                        <tr><th>VIN</th><td>${getVal('c_vin')}</td><th>Motor</th><td>${getVal('c_motor')}</td><th>Fuel</th><td>${getVal('c_fuel')}</td></tr>
+                        <tr><th>Pickup</th><td>${getVal('d_start').replace('T',' ')}<br>${getVal('l_start')}</td><th>Dropoff</th><td>${getVal('d_end').replace('T',' ')}<br>${getVal('l_end')}</td><th>Duration</th><td>${days} Days</td></tr>
                     </table>
                 </div>
 
                 <div class="box-section"><span class="bs-title">FINANCIAL BREAKDOWN</span>
                     <table class="pt">
-                        <tr><th>Item Description</th><th>Rate / Calculation</th><th style="text-align:right">Amount (EGP)</th></tr>
-                        <tr><td>Base Rent</td><td>${rateTxt}</td><td align="right">${Math.round(base).toLocaleString()}</td></tr>
-                        ${c.i > 0 ? `<tr><td>Insurance Fees</td><td>${c.i} x ${c.days} Days</td><td align="right">${(c.i*c.days).toLocaleString()}</td></tr>` : ''}
-                        ${c.adds > 0 ? `<tr><td>Add-ons</td><td>${c.adds} x ${c.days} Days</td><td align="right">${(c.adds*c.days).toLocaleString()}</td></tr>` : ''}
-                        ${c.fee_d > 0 ? `<tr><td>Delivery Fee</td><td>${pText}</td><td align="right">${c.fee_d}</td></tr>` : ''}
-                        ${c.fee_c > 0 ? `<tr><td>Pickup Fee</td><td>${dText}</td><td align="right">${c.fee_c}</td></tr>` : ''}
-                        <tr style="border-top:2px solid #000"><td colspan="2" align="right"><b>TOTAL CONTRACT VALUE</b></td><td align="right"><b>${Math.round(c.totalDue).toLocaleString()} EGP</b></td></tr>
+                        <tr><th>Description</th><th>Calculation</th><th>Amount (EGP)</th></tr>
+                        <tr><td>Base Rent</td><td>${getVal('rate_rent')} x ${mode==='Monthly' ? months + ' Mo' : days + ' Days'}</td><td>${baseRent}</td></tr>
+                        ${i_rate > 0 ? `<tr><td>Insurance</td><td>${i_rate} x ${days} Days</td><td>${totalIns}</td></tr>` : ''}
+                        ${fee_d > 0 ? `<tr><td>Delivery Fee</td><td>${getVal('l_start')}</td><td>${fee_d}</td></tr>` : ''}
+                        ${fee_p > 0 ? `<tr><td>Pickup Fee</td><td>${getVal('l_end')}</td><td>${fee_p}</td></tr>` : ''}
+                        <tr><td colspan="2" align="right"><b>TOTAL CONTRACT VALUE</b></td><td><b>${totalDue} EGP</b></td></tr>
                     </table>
-                    <div style="background:#f0f0f0; padding:10px; border:1px solid #ccc; text-align:center; font-size:10pt; margin-top:5px;">
-                        <b>PAID NOW:</b> ${rentInfo.text} <br>
-                        <b>PENDING:</b> ${pendingHTML}
+                    <div style="background:#eee; padding:5px; border:1px solid #000; text-align:center;">
+                        <b>PAID NOW:</b> ${r_str} <br>
+                        <b>PENDING:</b> <span style="color:${pending>0?'red':'green'}">${pending} EGP</span>
                     </div>
                 </div>
 
-                <div style="border:2px solid #e67e22; padding:10px; margin:15px 0; font-weight:bold; font-size:10pt;">
-                    DEPOSIT HELD: ${depInfo.text}
+                <div style="border:2px solid orange; padding:5px; margin:10px 0; font-weight:bold;">
+                    DEPOSIT HELD: ${d_str} (${Math.round(d_paid_val)} EGP Value)
                 </div>
 
-                <div class="sig-container">
-                    <div class="sig-box">LESSOR SIGNATURE</div>
-                    <div class="sig-box">LESSEE SIGNATURE</div>
-                </div>
+                <table class="sig-block" style="width:100%"><tr><td>LESSOR SIGNATURE</td><td>LESSEE SIGNATURE</td></tr></table>
             </div>
         </div>`;
 
-               // PAGE 2 (TERMS)
+        // PAGE 2
         html += `
         <div class="a4-page">
             <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
             <div class="page-content">
-                <div class="doc-head"><strong>TERMS & CONDITIONS</strong><span>Page 2/6</span></div>
+                <div class="doc-head"><strong>TERMS & CONDITIONS</strong><span>Page 2/4</span></div>
                 <div class="terms-grid">
-                    <div class="term-p"><span class="term-h">1. COLLISION DAMAGE WAIVER (CDW)</span>
-                    Collision Damage Waiver or CDW reduces your legal responsibility from the total damage cost to a surplus amount applicable except if the damage caused by you is intentional and under the influence of drugs/alcohol; or if you use the car in a negligent way, such as renting it to other parties or driving off main roads. Collision Damage Waiver also covers charge for damage to the rented vehicle or its accessories. In some destinations windscreens, under carriage, replacement keys, tyres, towing charges and replacement locks are not covered by the insurance policy.</div>
-                    
-                    <div class="term-p"><span class="term-h">2. THEFT WAIVER</span>
-                    Theft is <strong>NOT covered</strong> by insurance. The vehicle is the Lessee's sole responsibility and must be parked in secure locations/garages.</div>
-
-                    <div class="term-p"><span class="term-h">3. DELIVERY & COLLECTION CHARGES</span>
-                    Delivery and collection charges will be applied by the car rental Company out of normal office hours, even when late collection vehicle is a result of a flight delay. In the majority of locations, the car rental Company will provide delivery and collection to and from accommodation, though a charge might apply in such case. Complete address details along with a vehicle delivery time must be provided during the time of rental booking. Please make a note that vehicle deliveries are not provided for private accommodation.</div>
-
-                    <div class="term-p"><span class="term-h">4. PERSONAL ACCIDENT INSURANCE</span>
-                    Our insurance system is optional to ensure transparency for a safe drive. Buying PAI is recommended for a trouble-free trip.</div>
-
-                    <div class="term-p"><span class="term-h">5. LOCAL DEPOSITS & PETROL</span>
-                    Usually, a car rental Company block a security amount at the rental desk which will be released as soon as the car is returned back at the drop-off location in same condition as per your rental agreement. This is to cover liability excess, petrol and other charges incurred during the rental. This deposit is refundable provided the car and its accessories are returned in the original condition and in accordance with fuel policy. Please check for these policies with the rental supplier, before you book a car.</div>
-
-                    <div class="term-p"><span class="term-h">6. AGE LIMITATIONS</span>
-                    Generally, the minimum age limitation for car hiring is 21 years.</div>
-
-                    <div class="term-p"><span class="term-h">7. RENTAL PERIOD & RETURN</span>
-                    A rental period is usually calculated and charged on the basis of a 24 hour time cycle. Once you have collected your vehicle, the rental period extension and late returns are charged at local tariff, by the Company. Time of your car rental starts and ends in accordance to pick-up and drop-off information. Late returns (Grace period: 1 Hour) are charged extra. Early return does not result in a refund (Non-Refundable).</div>
-
-                    <div class="term-p"><span class="term-h">8. CANCELLATION</span>
-                    * Cancel > 48h: 100% Refund.<br>* Cancel < 48h: 30% Deducted.<br>* No Show: No Refund.</div>
-
-                    <div class="term-p"><span class="term-h">9. EXTRA COVER INCLUSIONS</span>
-                    Roadside assistance, Body repair, Tires, Wheels, Undercarriage, Windows, Mirrors, Locks, Key loss, Admin fees.</div>
-
-                    <div class="term-p"><span class="term-h">10. EXTRA COVER EXCLUSIONS</span>
-                    Personal possessions, Rental Extras (Child Seat/GPS), Hotel charges, Interior damage, Cleaning costs, Third party damages, Force Majeure, DUI/Off-road/Wrong Fuel.</div>
-                    
-                    <div class="term-p"><span class="term-h">11. SCHEDULE OF PENALTIES (Negligence)</span>
-                    * Car Key: <strong>20,000 EGP</strong><br>
-                    * License Loss: <strong>12,500 EGP</strong><br>
-                    * Tire Damage: <strong>10,000 EGP</strong><br>
-                    * Fire Extinguisher: <strong>10,000 EGP</strong><br>
-                    * Interior Damage: <strong>5,000 - 50,000 EGP</strong><br>
-                    * Dirty Return: <strong>350 EGP</strong></div>
-
-                    <div class="term-p"><span class="term-h">12. DISPUTE RESOLUTION</span>
-                    In a situation of mechanical difficulties or vehicle breakdown, you must call your car rental Company right away. If you get involved in any accident, you must contact your rental Company and the local police immediately. Disagreements on repair cost/time refer to Independent Car Service Center. Quote is binding. At-fault party pays repair + lost days + fee.</div>
-
-                    <div class="term-p"><span class="term-h">13. TRAFFIC FINES</span>
-                    Lessee is fully responsible for all traffic fines (Speeding, Radar, Parking).</div>
-                    
-                    <div class="term-p"><span class="term-h">14. MECHANICAL ISSUES</span>
-                    Contact us immediately for breakdowns. Company covers technical faults. Lessee covers negligence.</div>
+                    <div class="term-p"><span class="term-h">1. CDW INSURANCE</span> Reduces liability. Does NOT cover tires, glass, interior, keys.</div>
+                    <div class="term-p"><span class="term-h">2. THEFT</span> Theft is NOT covered. Lessee is responsible.</div>
+                    <div class="term-p"><span class="term-h">3. DELIVERY</span> Charges apply out of office hours.</div>
+                    <div class="term-p"><span class="term-h">4. ACCIDENTS</span> Must provide Police Report. If at fault, pay repair + downtime.</div>
+                    <div class="term-p"><span class="term-h">5. DEPOSIT</span> Refunded upon return if no new damage/fines.</div>
+                    <div class="term-p"><span class="term-h">6. AGE</span> Min 21 years old.</div>
+                    <div class="term-p"><span class="term-h">7. RETURN</span> 1hr grace period. Late return = Full day charge.</div>
+                    <div class="term-p"><span class="term-h">8. CANCELLATION</span> 48h notice required for full refund.</div>
+                    <div class="term-p"><span class="term-h">9. INCLUSIONS</span> Breakdown assistance, body repair.</div>
+                    <div class="term-p"><span class="term-h">10. EXCLUSIONS</span> Interior, Wrong Fuel, Off-road usage.</div>
+                    <div class="term-p"><span class="term-h">11. FINES</span> Lessee pays 100% of traffic fines.</div>
+                    <div style="border:1px solid black; padding:3px; font-weight:bold; background:#eee; margin:5px 0;">SELECTED PLAN: ${getVal('ins_type')}</div>
+                    <div class="term-p"><span class="term-h">12. PENALTIES</span> Key: 20k, License: 12.5k, Tire: 10k, Interior: 5k+.</div>
                 </div>
-                <div style="margin-top:auto; padding:15px; border-top:1px solid #000;">
-                    <strong>I have read and accepted all terms.</strong> Signature: __________________________
-                </div>
+                <div class="sig-block">I have read and accepted all terms: ________________</div>
             </div>
         </div>`;
 
@@ -597,77 +356,68 @@
         html += `
         <div class="a4-page">
             <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
-            <div class="doc-head"><strong>PICKUP INSPECTION REPORT</strong><span>Page 3/4</span></div>
-            <div class="insp-legend-box">M: Missing | D: Dent | S: Scratch | L: Light Scratch</div>
-            <div class="insp-img-box"><img src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg"></div>
-            <div class="insp-grid-container">
-                <div class="insp-col col-pass"><h4>PASSENGER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div><div class="insp-item"><span>Door R</span>[ ]</div></div>
-                <div class="insp-col col-front"><h4>FRONT</h4><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Hood</span>[ ]</div><div class="insp-item"><span>Windsh</span>[ ]</div></div>
-                <div class="insp-col col-rear"><h4>REAR</h4><div class="insp-item"><span>Trunk</span>[ ]</div><div class="insp-item"><span>Bumper</span>[ ]</div><div class="insp-item"><span>Lights</span>[ ]</div></div>
-                <div class="insp-col col-driver"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span>[ ]</div><div class="insp-item"><span>Door F</span>[ ]</div><div class="insp-item"><span>Door R</span>[ ]</div></div>
+            <div class="page-content">
+                <div class="doc-head"><strong>INSPECTION REPORT</strong><span>Page 3/4</span></div>
+                <div class="insp-legend-box">M: Missing | D: Dent | S: Scratch</div>
+                <div class="insp-img-box"><img src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg"></div>
+                
+                <div class="insp-grid-container">
+                    <div class="insp-col col-pass"><h4>PASSENGER</h4><div class="insp-item"><span>Fender F</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Door F</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Door R</span><span class="insp-check">[ ]</span></div></div>
+                    <div class="insp-col col-front"><h4>FRONT</h4><div class="insp-item"><span>Bumper</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Hood</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Windsh</span><span class="insp-check">[ ]</span></div></div>
+                    <div class="insp-col col-rear"><h4>REAR</h4><div class="insp-item"><span>Trunk</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Bumper</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Lights</span><span class="insp-check">[ ]</span></div></div>
+                    <div class="insp-col col-driver"><h4>DRIVER</h4><div class="insp-item"><span>Fender F</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Door F</span><span class="insp-check">[ ]</span></div><div class="insp-item"><span>Door R</span><span class="insp-check">[ ]</span></div></div>
+                </div>
+                <div class="sig-block">Pickup Signature</div>
+                <hr>
+                <div class="box-section"><span class="bs-title">RETURN SETTLEMENT</span>
+                    <table class="pt"><tr><th>Description</th><th>Cost</th></tr><tr><td>New Damage</td><td></td></tr><tr><td>Fines</td><td></td></tr><tr><td>Total</td><td></td></tr></table>
+                </div>
+                <div class="sig-block">Return Signature</div>
             </div>
-            <div class="sig-container"><div class="sig-box">Pickup Signature</div></div>
-
-            <hr style="margin:20px 0; border:1px dashed #ccc;">
-
-            <div class="doc-head" style="border:none"><strong>RETURN INSPECTION REPORT</strong><span>(Filled at Drop-off)</span></div>
-             <div class="insp-img-box" style="height:150px;"><img src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg"></div>
-             <div class="box-section"><span class="bs-title">FINAL SETTLEMENT</span>
-                <table class="pt"><tr><th width="70%">Description</th><th>Cost (EGP)</th></tr>
-                <tr><td>New Damages</td><td></td></tr><tr><td>Fines</td><td></td></tr><tr><td>Fuel</td><td></td></tr>
-                <tr><td align="right"><strong>TOTAL DEDUCT:</strong></td><td></td></tr></table>
-            </div>
-            <div class="sig-container sig-block"><div class="sig-box">Return Signature</div></div>
         </div>`;
 
         // PAGE 4 (RECEIPTS)
-        html += `<div class="a4-page"><div class="doc-head"><strong>OFFICIAL RECEIPTS</strong><span>Page 4/4</span></div><div class="receipts-wrapper">`;
+        html += '<div class="a4-page"><div class="doc-head"><strong>OFFICIAL RECEIPTS</strong></div><div class="receipts-wrapper">';
         
         // Deposit
         html += `
         <div class="receipt">
-            <div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">SECURITY DEPOSIT RECEIPT (ON-HOLD)</div><span class="r-copy">CLIENT COPY</span></div>
+            <div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">SECURITY DEPOSIT (ON-HOLD)</div><span class="r-copy">CLIENT COPY</span></div>
             <div class="r-body">
                 <div class="r-row"><span>Date:</span> <span>${today}</span></div>
-                <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
-                <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
-                <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
-                <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${depInfo.text}</b></div>
+                <div class="r-row"><span>Client:</span> <span>${getVal('cl_name')}</span></div>
+                <div class="r-row"><span>Car:</span> <span>${getVal('c_model')} | ${getVal('c_plate')}</span></div>
+                <div class="r-row"><span>Amount:</span> <b>${d_str}</b></div>
             </div>
-            <div class="r-footer"><div class="r-sign">Auth Sig: __________________</div></div><div class="receipt:after">✂</div>
+            <div class="r-footer"><div class="r-sign">Auth Sig: ______________</div></div>
         </div>`;
 
-        // Rental Loop
-        let loopCount = (c.mode==='Monthly') ? Math.ceil(c.days/30) : 1;
-        let sDate = new Date(safeVal('p_time'));
+        // Rent Loop
+        var loop = (mode === 'Monthly') ? months : 1;
+        var loopStart = new Date(d1);
         
-        for(let i=1; i<=loopCount; i++) {
-            let eDate = new Date(sDate);
-            if(c.mode==='Monthly') eDate.setMonth(eDate.getMonth()+1);
-            else eDate = new Date(safeVal('d_time'));
-            
-            let amt = (i===1) ? rentInfo.text : "PENDING";
+        for(var i=1; i<=loop; i++) {
+            var loopEnd = new Date(loopStart);
+            if(mode === 'Monthly') loopEnd.setMonth(loopEnd.getMonth()+1);
+            else loopEnd = d2;
 
             html += `
             <div class="receipt">
-                <div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">RENTAL PAYMENT RECEIPT (Period ${i})</div><span class="r-copy">CLIENT COPY</span></div>
+                <div class="r-header"><img src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" class="r-logo"><div class="r-title">RENTAL PAYMENT RECEIPT</div><span class="r-copy">CLIENT COPY</span></div>
                 <div class="r-body">
                     <div class="r-row"><span>Date:</span> <span>${today}</span></div>
-                    <div class="r-row"><span>Contract No:</span> <span>${cid}</span></div>
-                    <div class="r-row"><span>Client:</span> <span>${safeVal('cl_fname')} ${safeVal('cl_sname')}</span></div>
-                    <div class="r-row"><span>Car:</span> <span>${safeVal('manModel')} | ${safeVal('h_plate')}</span></div>
-                    <div class="r-row"><span>Period:</span> <span>${sDate.toLocaleDateString()} to ${eDate.toLocaleDateString()}</span></div>
-                    <div class="r-row" style="margin-top:10px;"><span>Amount:</span> <b>${amt}</b></div>
+                    <div class="r-row"><span>Period:</span> <span>${loopStart.toLocaleDateString()} to ${loopEnd.toLocaleDateString()}</span></div>
+                    <div class="r-row"><span>Amount:</span> <b>${i===1 ? r_str : "PENDING"}</b></div>
                 </div>
-                <div class="r-footer"><div class="r-sign">Auth Sig: __________________</div></div><div class="receipt:after">✂</div>
+                <div class="r-footer"><div class="r-sign">Auth Sig: ______________</div></div>
             </div>`;
-            sDate = eDate;
+            loopStart = loopEnd;
         }
         
-        html += `</div></div>`;
+        html += '</div></div>';
 
-        document.getElementById('print-container').innerHTML = html;
-        setTimeout(() => { window.print(); }, 1500); // 1.5s delay to load images
+        document.getElementById('print-area').innerHTML = html;
+        window.print();
     }
 </script>
 </body>
