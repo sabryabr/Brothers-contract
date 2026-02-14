@@ -529,6 +529,28 @@
             color: #555;
         }
 
+        /* TABLE STYLES (Restored) */
+        .pt {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10pt;
+            margin-bottom: 5px;
+        }
+
+        .pt th,
+        .pt td {
+            border: 1px solid #000;
+            padding: 4px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .pt th {
+            background: #f0f0f0;
+            text-align: center;
+            font-weight: bold;
+        }
+
         .rec-val {
             font-weight: bold;
         }
@@ -644,8 +666,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             width: 80%;
-            opacity: 0.04;
-            /* Very subtle */
+            opacity: 0.08;
+            /* Increased from 0.04 */
             z-index: 0;
             pointer-events: none;
         }
@@ -1163,14 +1185,15 @@
     </div>
     </div>
 
-    <!-- PREVIEW CONTAINER (Was Missing) -->
-    <div id="contractOutput">
-        <!-- Contract Pages will be rendered here -->
-    </div>
-
+    <!-- PRINT BUTTON SECTION -->
     <div class="control-panel" style="background:none; box-shadow:none; border:none; margin-top:0;">
         <button onclick="printContract()" class="btn-print"><i class="fa-solid fa-print"></i> Print Contract / Save
             PDF</button>
+    </div>
+
+    <!-- PREVIEW CONTAINER (Now After Button) -->
+    <div id="contractOutput">
+        <!-- Contract Pages will be rendered here -->
     </div>
 
     <!-- PRINT CONTAINER (Hidden on Screen, visible on Print) -->
@@ -1184,7 +1207,7 @@
             { code: "47", model: "Hyundai Tucson", year: "2022", plate: "ه س ب | 4 2 6 3", vin: "KMHJE81BGN", motor: "G4FPNU539488" },
             { code: "48", model: "Jetour x90 plus", year: "2026", plate: "ف ص ب | 2 9 1 5", vin: "LVTDB21B5TH013984", motor: "SH02227" },
             { code: "34", model: "MG ZS", year: "2025", plate: "ق ه س | 5 3 6 5", vin: "LSJW74U61SZ027362", motor: "3050131" },
-            { code: "35", model: "MG ZS", year: "2022", plate: "و ن س | 5 8 5 4", vin: "15665", motor: "130301" },
+            { code: "35", model: "MG ZS", year: "2022", plate: "و n س | 5 8 5 4", vin: "15665", motor: "130301" },
             { code: "36", model: "MG ZS", year: "2022", plate: "م ج ب | 1 6 8 9", vin: "90006", motor: "71197" },
             { code: "37", model: "MG ZS", year: "2023", plate: "ر ص ي | 1 4 9 5", vin: "LSJW74U35P113013", motor: "15823" },
             { code: "42", model: "MG 5", year: "2026", plate: "ه م س | 7 3 7 8", vin: "LSJA36E95TZ504743", motor: "5130253" },
@@ -1350,7 +1373,7 @@
             document.getElementById('c_days').innerText = days + " Days";
 
             // Logic Data Packet
-            const mData = { days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending, reqDep };
+            const mData = { days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending, reqDep, totalRentOnly };
 
             // Trigger Render
             render(mData);
@@ -1387,6 +1410,9 @@
             let rentInfo = buildPayStr('pay_rent');
             let depInfo = buildPayStr('pay_dep');
 
+            // Calculate Total Deposit Paid (Early for Page 1 usage)
+            let totalDepPaid = safeNum('pay_dep_egp') + (safeNum('pay_dep_usd') * usd) + (safeNum('pay_dep_eur') * eur) + safeNum('pay_dep_card');
+
             let rateTxt = c.mode === 'Monthly' ? `${c.r} x ${c.mult} Mo` : `${c.r} x ${c.days} Days`;
             let base = c.mode === 'Monthly' ? (c.r * c.mult) : (c.r * c.days);
 
@@ -1412,13 +1438,13 @@
             const bMap = { "HRG": "Hurghada", "ALX": "Alexandria", "CAI": "Cairo", "RSD": "Rashid" };
             const brName = bMap[safeVal('issuingBranch')] || safeVal('issuingBranch');
 
-            // PAGE 1: SCHEDULE
+            // Box Style Page 1 (Restored)
             let html = `
     <div class="a4-page">
-        <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
+        <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" loading="eager"></div>
         <div class="page-content">
             <div class="doc-head">
-                <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="logo">
+                <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="logo" loading="eager">
                 <div style="text-align:center">
                     <h1 style="margin:0; font-size:18pt; color:#04509D">CAR RENTAL AGREEMENT</h1>
                     <div style="font-weight:bold; font-size:12pt;">${cid}</div>
@@ -1446,8 +1472,7 @@
                     <tr><th>Model</th><td>${safeVal('manModel')}</td><th>Plate</th><td><b>${safeVal('h_plate')}</b></td><th>KM Out</th><td>${safeVal('kmOut')}</td></tr>
                     <tr><th>VIN</th><td>${safeVal('h_vin')}</td><th>Motor</th><td>${safeVal('h_motor')}</td><th>Allow</th><td>${document.getElementById('add_km').checked ? "Unlimited" : (120 * c.days) + " KM"}</td></tr>
                     <tr><th>Pickup</th><td>${safeVal('p_time').replace('T', ' ')}<br>${pText}</td>
-                        <th>Dropoff</th><td>${safeVal('d_time').replace('T', ' ')}<br>${dText}</td>
-                        <th>Duration</th><td>${c.days} Days</td></tr>
+                        <th>Dropoff</th><td>${safeVal('d_time').replace('T', ' ')}<br>${dText}</td></tr>
                 </table>
             </div>
 
@@ -1469,19 +1494,27 @@
                 </div>
             </div>
 
-            ${c.reqDep > 0 ? `
+            ${(c.reqDep > 0 || totalDepPaid > 0) ? `
             <div style="border:2px solid orange; padding:5px; margin-bottom:10px; font-size:9pt;">
                 <strong>DEPOSIT HELD:</strong> ${depInfo.text} 
                 <span style="float:right; font-weight:bold; color:${c.depPending > 0 ? '#c0392b' : '#27ae60'}">${c.depPending > 0 ? Math.round(c.depPending) + ' EGP PENDING' : 'FULLY HELD'}</span>
             </div>` : ''}
             
-             <div style="text-align:center; border:2px dashed #000; padding:10px; font-size:9pt;">
+             <div style="text-align:center; border:2px dashed #000; padding:10px; font-size:9pt; margin-top:10px;">
                 <strong>IMPORTANT:</strong> Contract is void for any period NOT covered by an official payment receipt.
             </div>
 
-            <div style="margin-top:80px; display:flex; justify-content:space-between; font-weight:bold; font-size:10pt;">
-                <div style="text-align:left; width:40%; border-top:1px solid #000; padding-top:5px;">LESSOR SIGNATURE</div>
-                <div style="text-align:right; width:40%; border-top:1px solid #000; padding-top:5px;">LESSEE SIGNATURE</div>
+            <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px; margin-bottom: 50px;">
+                <div style="display:flex; justify-content:space-between; text-align:center; font-weight:bold; font-size:10pt;">
+                    <div style="width:40%;">
+                         LESSOR SIGNATURE
+                         <br><br><br>____________________
+                    </div>
+                     <div style="width:40%;">
+                         LESSEE SIGNATURE
+                         <br><br><br>____________________
+                    </div>
+                </div>
             </div>
         </div>
     </div>`;
@@ -1544,111 +1577,79 @@
     </div>`;
 
             // PAGE 3: VISUAL INSPECTION (GROUPED & FULL SETTLEMENT)
-            const pickupHtml = `
-                <div class="insp-left-col">
-                    <div class="insp-section-head">PICKUP CHECK (Start of Rental)</div>
-                    
-                    <div class="box-section" style="padding:2px; margin-bottom:5px;">
-                         <table class="pt" style="font-size:7pt;">
-                            <tr><th>KM OUT</th><td><strong>${safeVal('kmOut')}</strong></td>
-                                <th>FUEL OUT</th><td><strong>${safeVal('fuelOut')}</strong></td></tr>
-                            <tr><th>Damage Check</th><td>Existing Marked</td><th>Cleanliness</th><td>[ ] Clean [ ] Dirty</td></tr>
-                         </table>
+            // Checklist groups for inspection
+            const checklistGroups = `
+                <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:5px;">
+                    <!-- PASSENGER -->
+                    <div style="width:48%;">
+                        <div class="insp-group-head">PASSENGER</div>
+                        <div class="v-insp-row"><span class="v-label">(D) FEND F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(L) DOOR F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(K) DOOR R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(J) FEND R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
                     </div>
-
-                    <!-- IMAGES (scaled) -->
-                    <div style="text-align:center; font-size:7pt; font-weight:bold;">MARK EXISTING DAMAGES:</div>
-                    <div class="car-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png"></div>
-                    <div class="tire-img-wrapper">
-                        <div class="tire-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/wheel-tyre-illustration-png.png"></div>
-                        <div style="font-size:7pt;"><strong>TIRE:</strong> _________________</div>
+                    <!-- FRONT -->
+                    <div style="width:48%;">
+                        <div class="insp-group-head">FRONT</div>
+                        <div class="v-insp-row"><span class="v-label">(E) BUMPER</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(F) HOOD</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(W) WINDSH</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
                     </div>
-
-                    <!-- GROUPS -->
-                    <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:5px;">
-                        <!-- PASSENGER -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">PASSENGER</div>
-                            <div class="v-insp-row"><span class="v-label">(D) FEND F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(L) DOOR F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(K) DOOR R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(J) FEND R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
-                        <!-- FRONT -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">FRONT</div>
-                            <div class="v-insp-row"><span class="v-label">(E) BUMPER</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(F) HOOD</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(W) WINDSH</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
-                        <!-- REAR -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">REAR</div>
-                            <div class="v-insp-row"><span class="v-label">(Q) TRUNK</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(H) BUMPER</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(I) LIGHTS</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
-                        <!-- DRIVER -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">DRIVER</div>
-                            <div class="v-insp-row"><span class="v-label">(M) FEND F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(C) DOOR F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(B) DOOR R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(A) FEND R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
+                    <!-- REAR -->
+                    <div style="width:48%;">
+                        <div class="insp-group-head">REAR</div>
+                        <div class="v-insp-row"><span class="v-label">(Q) TRUNK</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(H) BUMPER</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(I) LIGHTS</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                    </div>
+                    <!-- DRIVER -->
+                    <div style="width:48%;">
+                        <div class="insp-group-head">DRIVER</div>
+                        <div class="v-insp-row"><span class="v-label">(M) FEND F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(C) DOOR F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(B) DOOR R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
+                        <div class="v-insp-row"><span class="v-label">(A) FEND R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
                     </div>
                 </div>`;
 
-            // Calculate Allowed KM
             let allowedKm = document.getElementById('add_km').checked ? "Unlimited" : (120 * c.days);
-            let allowedKmVal = document.getElementById('add_km').checked ? 999999 : (120 * c.days);
+            let kmOut = parseInt(safeVal('kmOut')) || 0;
+            let kmAllowedTotal = document.getElementById('add_km').checked ? "Unlimited" : (kmOut + (120 * c.days));
 
-            // Reused Checklist Group HTML
-            const checklistGroups = `
-                    <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:5px;">
-                        <!-- PASSENGER -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">PASSENGER</div>
-                            <div class="v-insp-row"><span class="v-label">(D) FEND F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(L) DOOR F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(K) DOOR R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(J) FEND R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
-                        <!-- FRONT -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">FRONT</div>
-                            <div class="v-insp-row"><span class="v-label">(E) BUMPER</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(F) HOOD</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(W) WINDSH</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
-                        <!-- REAR -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">REAR</div>
-                            <div class="v-insp-row"><span class="v-label">(Q) TRUNK</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(H) BUMPER</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(I) LIGHTS</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
-                        <!-- DRIVER -->
-                        <div style="width:48%;">
-                            <div class="insp-group-head">DRIVER</div>
-                            <div class="v-insp-row"><span class="v-label">(M) FEND F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(C) DOOR F</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(B) DOOR R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                            <div class="v-insp-row"><span class="v-label">(A) FEND R</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>
-                        </div>
-                    </div>`;
-
-            // Append group to pickup
-            const pickupHtmlValid = pickupHtml.replace('<!-- GROUPS -->', '<!-- GROUPS -->' + checklistGroups);
+            let pickupHtmlClean = `
+                <div class="insp-left-col" style="justify-content:flex-start;">
+                    <div class="insp-section-head">PICKUP CHECK (Start of Rental)</div>
+                     <!-- KM / Fuel Table -->
+                    <div class="box-section" style="padding:2px; margin-bottom:5px;">
+                        <table class="pt" style="font-size:7pt;">
+                            <tr style="background:#eee;"><th>KM OUT</th><td>${safeVal('kmOut')}</td></tr>
+                            <tr style="background:#eee;"><th>FUEL LEVEL</th><td>${safeVal('fuelOut')}</td></tr>
+                        </table>
+                    </div>
+                     <!-- IMAGES -->
+                    <div style="text-align:center; font-size:7pt; font-weight:bold;">EXISTING DAMAGES:</div>
+                    <div class="car-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png" loading="eager"></div>
+                    <div class="tire-img-wrapper">
+                        <div class="tire-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/wheel-tyre-illustration-png.png" loading="eager"></div>
+                        <div style="font-size:7pt;"><strong>TIRE:</strong> _________________</div>
+                    </div>
+                    <!-- CHECKLIST -->
+                    ${checklistGroups}
+                    
+                    <div style="margin-top:5px; border:1px solid #ccc; padding:2px; min-height:50px;">
+                        <div style="font-size:7pt; font-weight:bold;">NOTES / ACCESSORIES:</div>
+                        <div style="font-size:7pt;">Spare Tire [ ] Jack [ ] Fire Ext [ ] Triangle [ ]</div>
+                    </div>
+                </div>`;
 
             const returnHtml = `
-                <div class="insp-right-col">
+                <div class="insp-right-col" style="justify-content:flex-start;">
                     <div class="insp-section-head">RETURN CHECK (End of Rental)</div>
                     
                     <div class="box-section" style="padding:2px; margin-bottom:5px;">
                          <table class="pt" style="font-size:7pt;">
                             <tr style="background:#eee;">
-                                <th>KM IN (${allowedKm} Allowed)</th>
+                                <th>KM IN (${kmAllowedTotal} Max)</th>
                                 <td><br>__________________</td>
                             </tr>
                             <tr style="background:#eee;">
@@ -1664,39 +1665,39 @@
 
                     <!-- IMAGES (scaled) -->
                     <div style="text-align:center; font-size:7pt; font-weight:bold;">MARK NEW DAMAGES:</div>
-                    <div class="car-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png"></div>
+                    <div class="car-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png" loading="eager"></div>
                     <div class="tire-img-wrapper">
-                        <div class="tire-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/wheel-tyre-illustration-png.png"></div>
+                        <div class="tire-img-container"><img src="https://brothersegy.com/wp-content/uploads/2026/02/wheel-tyre-illustration-png.png" loading="eager"></div>
                         <div style="font-size:7pt;"><strong>TIRE:</strong> _________________</div>
                     </div>
                     
-                    <!-- RETURN CHECKLIST DUPLICATION -->
+                    <!-- RETURN CHECKLIST -->
                     ${checklistGroups}
 
                    <!-- SETTLEMENT TABLE -->
                     <div class="box-section" style="margin-top:5px; margin-bottom:2px; padding:2px;"><span class="bs-title" style="font-size:7pt;">FINAL SETTLEMENT</span>
                         <table class="pt" style="font-size:8pt;">
-                            <tr><th width="60%">Item Description</th><th width="20%">Cost (EGP)</th></tr> 
-                            <tr><td>Excess KM</td><td align="right">__________________</td></tr>
-                            <tr><td>Late Return</td><td align="right">__________________</td></tr>
-                            <tr><td>Cleaning Fees</td><td align="right">__________________</td></tr>
-                            <tr><td>Fuel Shortage</td><td align="right">__________________</td></tr>
-                            <tr><td>Traffic Fines</td><td align="right">__________________</td></tr>
-                            <tr><td>New Damages</td><td align="right">__________________</td></tr>
-                            <tr style="font-weight:bold; background:#eee;"><td align="right">TOTAL DEDUCTIONS:</td><td align="right">__________________ EGP</td></tr>
+                            <tr><th width="50%">Item Description</th><th width="30%">Rate x Qty</th><th width="20%">Total (EGP)</th></tr> 
+                            <tr><td>Excess KM</td><td>_______ x _______</td><td align="right">___________</td></tr>
+                            <tr><td>Late Return</td><td>_______ x _______</td><td align="right">___________</td></tr>
+                            <tr><td>Cleaning Fees</td><td>-</td><td align="right">___________</td></tr>
+                            <tr><td>Fuel Shortage</td><td>-</td><td align="right">___________</td></tr>
+                            <tr><td>Traffic Fines</td><td>-</td><td align="right">___________</td></tr>
+                            <tr><td>New Damages</td><td>-</td><td align="right">___________</td></tr>
+                            <tr style="font-weight:bold; background:#eee;"><td align="right" colspan="2">TOTAL DEDUCTIONS:</td><td align="right">___________ EGP</td></tr>
                         </table>
                     </div>
                 </div>`;
 
             let inspHtml = `
     <div class="a4-page">
-        <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
+        <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" loading="eager"></div>
         <div class="page-content">
             <div class="doc-head"><strong>VISUAL INSPECTION REPORT</strong><span>Page 3/4</span></div>
             <div style="font-size:8pt; text-align:center; font-weight:bold; margin-bottom:5px;">Contract: ${cid} | Date: ${today}</div>
             
             <div class="insp-two-col">
-                ${pickupHtmlValid}
+                ${pickupHtmlClean}
                 ${returnHtml}
             </div>
 
@@ -1737,7 +1738,7 @@
             };
 
             const genReceipt = (type, amount, methodText, isCompany) => {
-                if (amount <= 0 && type !== 'RENTAL') return "";
+                if (amount <= 0 && type !== 'RENTAL - CLIENT COPY' && type !== 'RENTAL - COMPANY COPY') return "";
 
                 return `
                 <div class="a4-page">
@@ -1793,13 +1794,20 @@
                 </div>`;
             };
 
-            // RENTAL RECEIPT
-            html += genReceipt("RENTAL", c.totalRentPaid, rentInfo.text, false);
+            // 1. RENTAL RECEIPT (CLIENT COPY)
+            html += genReceipt("RENTAL - CLIENT COPY", c.totalRentPaid, rentInfo.text, false);
+            // 2. RENTAL RECEIPT (COMPANY COPY)
+            html += genReceipt("RENTAL - COMPANY COPY", c.totalRentPaid, rentInfo.text, true);
 
-            // DEPOSIT RECEIPT (Only if paid > 0)
-            let totalDepPaid = safeNum('pay_dep_egp') + (safeNum('pay_dep_usd') * usd) + (safeNum('pay_dep_eur') * eur) + safeNum('pay_dep_card');
-            if (totalDepPaid > 0) {
-                html += genReceipt("SECURITY DEPOSIT", totalDepPaid, depInfo.text, false);
+            // 3. DEPOSIT RECEIPT (If Applicable OR if Required)
+            if (totalDepPaid > 0 || c.reqDep > 0) {
+                // Use totalDepPaid if > 0, otherwise use 0 (Empty receipt? or show Pending?)
+                // We passed "depInfo.text" which shows pending amount anyway.
+
+                // CLIENT COPY
+                html += genReceipt("SECURITY DEPOSIT - CLIENT COPY", (totalDepPaid > 0 ? totalDepPaid : c.reqDep), depInfo.text || "Pending / To be Filled", false);
+                // COMPANY COPY
+                html += genReceipt("SECURITY DEPOSIT - COMPANY COPY", (totalDepPaid > 0 ? totalDepPaid : c.reqDep), depInfo.text || "Pending / To be Filled", true);
             }
 
             document.getElementById('contractOutput').innerHTML = html;
