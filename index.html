@@ -958,51 +958,64 @@
 
         /* ================= MEDIA QUERIES ================= */
         @media screen {
-            #contractOutput {
-                display: flex !important;
-                flex-direction: column;
-                align-items: center;
-                gap: 20px;
-                padding: 40px;
-                background: #525659;
-                border-top: 5px solid #333;
-                min-height: 500px;
-                /* Ensure visibility */
-            }
-
             .a4-page {
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
                 margin-bottom: 20px;
             }
         }
 
+        /* PRINT SETTINGS (MOVED TO END FOR SPECIFICITY) */
         @media print {
-            .control-panel {
-                display: none !important;
+            @page {
+                margin: 0;
+                size: auto;
             }
 
-            #print-container {
-                display: block !important;
+            body {
+                visibility: hidden;
                 margin: 0;
                 padding: 0;
                 background: white;
             }
 
+            /* Hide everything by default via visibility, but also display:none the known UI elements */
+            .control-panel,
+            .btn-print {
+                display: none !important;
+            }
+
+            /* Show only the contract output */
+            #contractOutput {
+                visibility: visible;
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #contractOutput * {
+                visibility: visible;
+            }
+
             .a4-page {
-                box-shadow: none;
+                width: 100%;
+                max-width: 210mm;
                 margin: 0 auto;
+                break-after: page;
                 page-break-after: always;
+                box-shadow: none;
+                border: none;
+                overflow: hidden;
             }
 
             .a4-page:last-child {
                 page-break-after: auto;
             }
 
-            body,
-            html {
-                margin: 0;
-                padding: 0;
-                background: white;
+            #print-container {
+                display: none;
             }
         }
     </style>
