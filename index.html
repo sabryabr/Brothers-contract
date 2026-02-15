@@ -1142,66 +1142,103 @@
 
         <div class="section-head">4. Money & Payments</div>
 
-        <div class="grid-3">
-            <div><label>Delivery Fee</label><input type="number" id="fee_del" placeholder="Dropoff" oninput="calc()">
+        <div style="display:flex; gap:15px; align-items:stretch;">
+            <!-- LEFT: INPUTS (75%) -->
+            <div style="flex:3;">
+                <div class="grid-3" style="margin-bottom:10px;">
+                    <div><label>Delivery Fee</label><input type="number" id="fee_del" placeholder="Dropoff"
+                            oninput="calc()"></div>
+                    <div><label>Pickup Fee</label><input type="number" id="fee_col" placeholder="Collection"
+                            oninput="calc()"></div>
+                    <div><label style="color:var(--accent);">Req. Deposit</label><input type="number" id="req_deposit"
+                            placeholder="Amount" oninput="calc()"></div>
+                </div>
+
+                <!-- RENT ROW -->
+                <div style="background:#f8f9fa; padding:5px; border-radius:4px; margin-bottom:5px;">
+                    <div style="font-weight:bold; font-size:11px; margin-bottom:2px;">RENT PAID (NOW)</div>
+                    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:5px;">
+                        <div><label>EGP</label><input type="number" id="pay_rent_egp" placeholder="0" oninput="calc()">
+                        </div>
+                        <div><label>USD</label><input type="number" id="pay_rent_usd" placeholder="0" oninput="calc()">
+                        </div>
+                        <div><label>EUR</label><input type="number" id="pay_rent_eur" placeholder="0" oninput="calc()">
+                        </div>
+                        <div><label>Card</label><input type="number" id="pay_rent_card" placeholder="0"
+                                oninput="calc()"></div>
+                    </div>
+                </div>
+
+                <!-- DEPOSIT ROW -->
+                <div style="background:#f8f9fa; padding:5px; border-radius:4px; margin-bottom:5px;">
+                    <div style="font-weight:bold; font-size:11px; margin-bottom:2px; color:var(--accent);">DEPOSIT HELD
+                    </div>
+                    <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:5px;">
+                        <div><label>EGP</label><input type="number" id="pay_dep_egp" placeholder="0" oninput="calc()">
+                        </div>
+                        <div><label>USD</label><input type="number" id="pay_dep_usd" placeholder="0" oninput="calc()">
+                        </div>
+                        <div><label>EUR</label><input type="number" id="pay_dep_eur" placeholder="0" oninput="calc()">
+                        </div>
+                        <div><label>Card</label><input type="number" id="pay_dep_card" placeholder="0" oninput="calc()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-top:5px;">
+                    <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
+                            <option value="Basic">Basic (100% Client Liability)</option>
+                            <option value="Intermediate">Intermediate (70% / 30%)</option>
+                            <option value="Full Protection">Full Protection (Zero Liability)</option>
+                        </select></div>
+                    <div><label>Add-ons</label>
+                        <div style="font-size:12px; display:flex; gap:10px; margin-top:5px;">
+                            <span><input type="checkbox" id="add_km" onchange="calc()"> Unl. KM</span>
+                            <span><input type="checkbox" id="add_dr" onchange="calc()"> Driver</span>
+                            <span><input type="checkbox" id="add_st" onchange="calc()"> Seat</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div><label>Pickup Fee</label><input type="number" id="fee_col" placeholder="Collection" oninput="calc()">
-            </div>
-            <div><label style="color:var(--accent);">Req. Deposit</label><input type="number" id="req_deposit"
-                    placeholder="Amount" oninput="calc()"></div>
-        </div>
 
-        <div class="grid-5">
-            <div style="font-weight:bold; font-size:11px; padding-top:15px;">RENT PAID (NOW)</div>
-            <div><label>EGP</label><input type="number" id="pay_rent_egp" placeholder="0" oninput="calc()"></div>
-            <div><label>USD</label><input type="number" id="pay_rent_usd" placeholder="0" oninput="calc()"></div>
-            <div><label>EUR</label><input type="number" id="pay_rent_eur" placeholder="0" oninput="calc()"></div>
-            <div><label>Card</label><input type="number" id="pay_rent_card" placeholder="0" oninput="calc()"></div>
-        </div>
+            <!-- RIGHT: CALCULATOR (25%) - Vertical Box "Not like before" fix -->
+            <div class="balance-box"
+                style="flex:1; display:flex; flex-direction:column; justify-content:space-between; margin-top:0;">
+                <div
+                    style="text-align:center; border-bottom:1px solid rgba(255,255,255,0.2); padding-bottom:5px; margin-bottom:10px;">
+                    <strong>ESTIMATE</strong>
+                </div>
 
-        <div class="grid-5">
-            <div style="font-weight:bold; font-size:11px; padding-top:15px; color:var(--accent);">DEPOSIT HELD</div>
-            <div><label>EGP</label><input type="number" id="pay_dep_egp" placeholder="0" oninput="calc()"></div>
-            <div><label>USD</label><input type="number" id="pay_dep_usd" placeholder="0" oninput="calc()"></div>
-            <div><label>EUR</label><input type="number" id="pay_dep_eur" placeholder="0" oninput="calc()"></div>
-            <div><label>Card</label><input type="number" id="pay_dep_card" placeholder="0" oninput="calc()"></div>
-        </div>
+                <div class="bal-row"><span>Base Rent:</span> <strong id="c_rent">0</strong></div>
+                <div class="bal-row"><span>Days/Mo:</span> <strong id="c_days">0</strong></div>
+                <div class="bal-row"><span>Fees:</span> <strong id="c_fees">0</strong></div>
 
-        <div class="grid-2">
-            <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
-                    <option value="Basic">Basic (100% Client Liability)</option>
-                    <option value="Intermediate">Intermediate (70% / 30%)</option>
-                    <option value="Full Protection">Full Protection (Zero Liability)</option>
-                </select></div>
-            <div><label>Add-ons</label>
-                <div style="font-size:12px; display:flex; gap:10px; margin-top:5px;">
-                    <span><input type="checkbox" id="add_km" onchange="calc()"> Unl. KM</span>
-                    <span><input type="checkbox" id="add_dr" onchange="calc()"> Driver</span>
-                    <span><input type="checkbox" id="add_st" onchange="calc()"> Seat</span>
+                <div style="text-align:center; padding:10px 0;">
+                    <div style="font-size:10px; opacity:0.8;">TOTAL CONTRACT</div>
+                    <div style="font-size:18px; font-weight:bold; color:#e67e22;" id="c_total_preview">0 EGP</div>
+                </div>
+
+                <div style="border-top:1px solid rgba(255,255,255,0.2); padding-top:5px; margin-top:auto;">
+                    <div class="bal-row" style="font-size:11px;"><span>Due:</span> <strong id="val_total_due">0</strong>
+                    </div>
+                    <div class="bal-row" style="font-size:11px;"><span>Paid:</span> <strong id="val_total_paid"
+                            style="color:var(--success);">0</strong></div>
+                    <div
+                        style="background:rgba(0,0,0,0.2); padding:5px; border-radius:4px; text-align:center; margin-top:5px;">
+                        <div style="font-size:10px;">PENDING</div>
+                        <div id="val_rent_pending" style="font-size:16px; font-weight:bold; color:var(--danger);">0
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HIDDEN FIELDS -->
+                <div style="display:none;">
+                    <span id="val_dep_req">0</span>
+                    <span id="val_dep_paid">0</span>
+                    <span id="val_dep_pending">0</span>
                 </div>
             </div>
         </div>
-
-        <div class="balance-box" style="padding:5px; font-size:11px; margin-top:5px;">
-            <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;">
-                <span>Rent: <strong id="c_rent">0</strong></span>
-                <span>Days: <strong id="c_days">0</strong></span>
-                <span>Fees: <strong id="c_fees">0</strong></span>
-                <span style="color:#e67e22; font-weight:bold;">Total: <strong id="c_total_preview">0 EGP</strong></span>
-                <span style="border-left:1px solid #ccc; padding-left:10px; color:var(--danger);">Pending: <strong <span
-                        style="border-left:1px solid #ccc; padding-left:10px; color:var(--danger);">Pending: <strong
-                            id="val_rent_pending">0</strong></span>
-            </div>
-            <!-- HIDDEN FIELDS TO SATISFY CALC() -->
-            <div style="display:none;">
-                <span id="val_total_due">0</span>
-                <span id="val_total_paid">0</span>
-                <span id="val_dep_req">0</span>
-                <span id="val_dep_paid">0</span>
-                <span id="val_dep_pending">0</span>
-            </div>
-        </div>
-    </div>
     </div>
 
     <!-- PRINT BUTTON SECTION -->
