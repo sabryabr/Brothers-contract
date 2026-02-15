@@ -115,25 +115,29 @@
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .grid-3 {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .grid-4 {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .grid-pay {
             display: grid;
-            grid-template-columns: 1fr 1fr 1.3fr;
-            gap: 20px;
+            grid-template-columns: 1fr 1fr 1fr 1.5fr;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         /* RESPONSIVE DESIGN - DISABLED AS REQUESTED */
@@ -1082,157 +1086,141 @@
         </div>
 
         <div class="section-head">3. Client Information</div>
-        <div class="grid-3">
+        <div class="grid-4">
             <div><label>First Name</label><input type="text" id="cl_fname"></div>
             <div><label>Surname</label><input type="text" id="cl_sname"></div>
+            <div><label>Phone (+20)</label><input type="text" id="cl_phone" placeholder="1XXXXXXXXX"></div>
+            <div><label>Email</label><input type="email" id="cl_email"></div>
+        </div>
+        <div class="grid-4">
+            <div><label>Nationality</label><input type="text" id="cl_nation"></div>
+            <div><label>Passport / ID</label><input type="text" id="cl_pass"></div>
+            <div><label>License No</label><input type="text" id="cl_lic"></div>
             <div><label>Date of Birth</label><input type="date" id="cl_dob"></div>
         </div>
         <div class="grid-3">
-            <div><label>Nationality</label><input type="text" id="cl_nation"></div>
-            <div><label>Passport / ID No</label><input type="text" id="cl_pass"></div>
-            <div><label>Driving License No</label><input type="text" id="cl_lic"></div>
-        </div>
-        <div class="grid-3">
             <div><label>Add. Driver Name</label><input type="text" id="cl_add_driver"></div>
-            <div><label>Add. Driver License</label><input type="text" id="cl_add_lic"></div>
-            <div class="grid-3">
-                <div><label>Phone No</label>
-                    <div class="phone-group">
-                        <input type="text" id="cl_ph_code" placeholder="+20" value="+20">
-                        <input type="text" id="cl_phone" placeholder="Number">
-                    </div>
-                </div>
-                <div><label>Email</label><input type="email" id="cl_email"></div>
-                <div><label>Local Address</label><input type="text" id="cl_addr"></div>
-            </div>
+            <div><label>Add. Driver Lic.</label><input type="text" id="cl_add_lic"></div>
+            <div><label>Local Address</label><input type="text" id="cl_addr"></div>
+        </div>
+        <!-- Hidden fields for phone code if needed, simplified above -->
+        <input type="hidden" id="cl_ph_code" value="+20">
 
-            <div class="section-head">4. Period & Location</div>
-            <div class="grid-2">
-                <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
-                <div><label>Dropoff Date/Time</label><input type="datetime-local" id="d_time" onchange="calc()"></div>
-            </div>
-            <div class="grid-2">
-                <div><label>Pickup Location</label><select id="p_loc" onchange="calc()">
-                        <option value="Office Alex">Office: Alexandria</option>
-                        <option value="Office Cairo">Office: Cairo</option>
-                        <option value="Office Hurghada">Office: Hurghada</option>
-                        <option value="Airport Alex (HBE)">Airport: Alexandria</option>
-                        <option value="Airport Cairo (CAI)">Airport: Cairo</option>
-                        <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
-                        <option value="Hotel">Hotel</option>
-                    </select><input type="text" id="p_addr" placeholder="Specific Location..." style="margin-top:5px;"
-                        oninput="calc()"></div>
-                <div><label>Dropoff Location</label><select id="d_loc" onchange="calc()">
-                        <option value="Same">Same as Pickup</option>
-                        <option value="Office Alex">Office: Alexandria</option>
-                        <option value="Office Cairo">Office: Cairo</option>
-                        <option value="Office Hurghada">Office: Hurghada</option>
-                        <option value="Airport Alex (HBE)">Airport: Alexandria</option>
-                        <option value="Airport Cairo (CAI)">Airport: Cairo</option>
-                        <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
-                        <option value="Hotel">Hotel</option>
-                    </select><input type="text" id="d_addr" placeholder="Specific Location..." style="margin-top:5px;"
-                        oninput="calc()"></div>
-            </div>
+        <div class="section-head">4. Period & Location</div>
+        <div class="grid-4">
+            <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
+            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="d_time" onchange="calc()"></div>
+            <div><label>Pickup Location</label><select id="p_loc" onchange="calc()">
+                    <option value="Office Alex">Office: Alexandria</option>
+                    <option value="Office Cairo">Office: Cairo</option>
+                    <option value="Office Hurghada">Office: Hurghada</option>
+                    <option value="Airport Alex (HBE)">Airport: Alexandria</option>
+                    <option value="Airport Cairo (CAI)">Airport: Cairo</option>
+                    <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
+                    <option value="Hotel">Hotel</option>
+                </select><input type="text" id="p_addr" placeholder="Specific Location..." style="margin-top:2px;"
+                    oninput="calc()"></div>
+            <div><label>Dropoff Location</label><select id="d_loc" onchange="calc()">
+                    <option value="Same">Same as Pickup</option>
+                    <option value="Office Alex">Office: Alexandria</option>
+                    <option value="Office Cairo">Office: Cairo</option>
+                    <option value="Office Hurghada">Office: Hurghada</option>
+                    <option value="Airport Alex (HBE)">Airport: Alexandria</option>
+                    <option value="Airport Cairo (CAI)">Airport: Cairo</option>
+                    <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
+                    <option value="Hotel">Hotel</option>
+                </select><input type="text" id="d_addr" placeholder="Specific Location..." style="margin-top:2px;"
+                    oninput="calc()"></div>
+        </div>
 
-            <div class="section-head">5. Financials</div>
-            <div class="grid-2">
-                <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
-                        <option value="Basic">Basic (100% Client Liability)</option>
-                        <option value="Intermediate">Intermediate (70% Client / 30% Co)</option>
-                        <option value="Full Protection">Full Protection (Zero Liability)</option>
-                    </select></div>
-                <div><label>Daily Add-ons</label>
-                    <div style="font-size:12px; display:flex; gap:15px; margin-top:5px;"><span><input type="checkbox"
-                                id="add_km" onchange="calc()"> Unlimited KM</span><span><input type="checkbox"
-                                id="add_dr" onchange="calc()"> Driver (250)</span><span><input type="checkbox"
-                                id="add_st" onchange="calc()"> Seat (250)</span></div>
-                </div>
-            </div>
-
-            <div class="grid-2" style="margin-top:10px;">
-                <div class="payment-builder">
-                    <div
-                        style="font-weight:bold; margin-bottom:10px; border-bottom:1px solid #ccc; color:var(--primary);">
-                        FEES & TARGETS</div>
-                    <div class="pb-row">
-                        <div class="pb-label">Delivery Fee:</div><input type="number" id="fee_del" placeholder="Dropoff"
-                            oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label">Pickup Fee:</div><input type="number" id="fee_col"
-                            placeholder="Collection" oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label" style="color:var(--accent);">Req. Deposit:</div><input type="number"
-                            id="req_deposit" placeholder="Required Amt" oninput="calc()">
-                    </div>
-                </div>
-                <div class="balance-box">
-                    <div style="text-align:center; font-size:14px; opacity:0.8; margin-bottom:5px;">ESTIMATED TOTAL
-                    </div>
-                    <div class="bal-row"><span>Base Rent:</span> <strong id="c_rent">0</strong></div>
-                    <div class="bal-row"><span>Duration:</span> <strong id="c_days">0 Days</strong></div>
-                    <div class="bal-row"><span>Logistics Fees:</span> <strong id="c_fees">0</strong></div>
-                    <div style="text-align:right; font-size:24px; font-weight:bold; margin-top:10px; color:#e67e22;"
-                        id="c_total_preview">0 EGP</div>
-                </div>
-            </div>
-
-            <div class="grid-pay" style="margin-top:15px;">
-                <div class="payment-builder">
-                    <div style="font-weight:bold; margin-bottom:10px; color:var(--primary);">RENT COLLECTED (NOW)</div>
-                    <div class="pb-row">
-                        <div class="pb-label">Cash EGP:</div><input type="number" id="pay_rent_egp" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label">Cash USD:</div><input type="number" id="pay_rent_usd" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label">Cash EUR:</div><input type="number" id="pay_rent_eur" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label">Card/Online:</div><input type="number" id="pay_rent_card" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                </div>
-                <div class="payment-builder">
-                    <div style="font-weight:bold; margin-bottom:10px; color:var(--accent);">DEPOSIT HELD</div>
-                    <div class="pb-row">
-                        <div class="pb-label">Cash EGP:</div><input type="number" id="pay_dep_egp" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label">Cash USD:</div><input type="number" id="pay_dep_usd" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label">Cash EUR:</div><input type="number" id="pay_dep_eur" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                    <div class="pb-row">
-                        <div class="pb-label">Card Hold:</div><input type="number" id="pay_dep_card" placeholder="0"
-                            oninput="calc()">
-                    </div>
-                </div>
-                <div class="balance-box">
-                    <div class="bal-row"><span>Rent Total:</span> <strong id="val_total_due">0</strong></div>
-                    <div class="bal-row"><span>Paid Now:</span> <strong id="val_total_paid"
-                            style="color:var(--success);">0</strong></div>
-                    <div class="bal-row"><span>Rent Pending:</span> <strong id="val_rent_pending"
-                            style="color:var(--danger);">0</strong></div>
-                    <div style="border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;"></div>
-                    <div class="bal-row"><span>Dep. Target:</span> <strong id="val_dep_req">0</strong></div>
-                    <div class="bal-row"><span>Held:</span> <strong id="val_dep_paid"
-                            style="color:var(--accent);">0</strong></div>
-                    <div class="bal-row"><span>Dep Pending:</span> <strong id="val_dep_pending"
-                            style="color:#e74c3c;">0</strong></div>
-                </div>
+        <div class="section-head">5. Financials</div>
+        <div class="grid-2">
+            <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
+                    <option value="Basic">Basic (100% Client Liability)</option>
+                    <option value="Intermediate">Intermediate (70% Client / 30% Co)</option>
+                    <option value="Full Protection">Full Protection (Zero Liability)</option>
+                </select></div>
+            <div><label>Daily Add-ons</label>
+                <div style="font-size:12px; display:flex; gap:15px; margin-top:5px;"><span><input type="checkbox"
+                            id="add_km" onchange="calc()"> Unlimited KM</span><span><input type="checkbox" id="add_dr"
+                            onchange="calc()"> Driver (250)</span><span><input type="checkbox" id="add_st"
+                            onchange="calc()"> Seat (250)</span></div>
             </div>
         </div>
+
+        <div class="grid-4" style="margin-top:10px;">
+            <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
+                    <option value="Basic">Basic (100% Client Liability)</option>
+                    <option value="Intermediate">Intermediate (70% Client / 30% Co)</option>
+                    <option value="Full Protection">Full Protection (Zero Liability)</option>
+                </select></div>
+            <div style="grid-column: span 3;"><label>Daily Add-ons</label>
+                <div style="font-size:12px; display:flex; gap:15px; margin-top:5px;"><span><input type="checkbox"
+                            id="add_km" onchange="calc()"> Unlimited KM</span><span><input type="checkbox" id="add_dr"
+                            onchange="calc()"> Driver (250)</span><span><input type="checkbox" id="add_st"
+                            onchange="calc()"> Seat (250)</span></div>
+            </div>
+        </div>
+
+        <div class="grid-4" style="margin-top:10px; align-items:start;">
+            <div><label>Delivery Fee</label><input type="number" id="fee_del" placeholder="Dropoff" oninput="calc()">
+            </div>
+            <div><label>Pickup Fee</label><input type="number" id="fee_col" placeholder="Collection" oninput="calc()">
+            </div>
+            <div><label style="color:var(--accent);">Req. Deposit</label><input type="number" id="req_deposit"
+                    placeholder="Required Amt" oninput="calc()"></div>
+
+            <div class="balance-box" style="padding:5px; font-size:11px;">
+                <div style="display:flex; justify-content:space-between;"><span>Rent:</span> <strong
+                        id="c_rent">0</strong></div>
+                <div style="display:flex; justify-content:space-between;"><span>Days:</span> <strong
+                        id="c_days">0</strong></div>
+                <div style="display:flex; justify-content:space-between;"><span>Fees:</span> <strong
+                        id="c_fees">0</strong></div>
+                <div style="text-align:right; font-weight:bold; color:#e67e22; margin-top:2px;" id="c_total_preview">0
+                    EGP</div>
+            </div>
+        </div>
+
+        <div class="grid-pay" style="margin-top:10px;">
+            <div class="payment-builder">
+                <div style="font-weight:bold; margin-bottom:5px; color:var(--primary); font-size:12px;">RENT (NOW)</div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                    <div><label>EGP</label><input type="number" id="pay_rent_egp" placeholder="0" oninput="calc()">
+                    </div>
+                    <div><label>USD</label><input type="number" id="pay_rent_usd" placeholder="0" oninput="calc()">
+                    </div>
+                    <div><label>EUR</label><input type="number" id="pay_rent_eur" placeholder="0" oninput="calc()">
+                    </div>
+                    <div><label>Card</label><input type="number" id="pay_rent_card" placeholder="0" oninput="calc()">
+                    </div>
+                </div>
+            </div>
+            <div class="payment-builder">
+                <div style="font-weight:bold; margin-bottom:5px; color:var(--accent); font-size:12px;">DEPOSIT</div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:5px;">
+                    <div><label>EGP</label><input type="number" id="pay_dep_egp" placeholder="0" oninput="calc()"></div>
+                    <div><label>USD</label><input type="number" id="pay_dep_usd" placeholder="0" oninput="calc()"></div>
+                    <div><label>EUR</label><input type="number" id="pay_dep_eur" placeholder="0" oninput="calc()"></div>
+                    <div><label>Card</label><input type="number" id="pay_dep_card" placeholder="0" oninput="calc()">
+                    </div>
+                </div>
+            </div>
+            <div class="balance-box" style="font-size:11px;">
+                <div class="bal-row"><span>Due:</span> <strong id="val_total_due">0</strong></div>
+                <div class="bal-row"><span>Paid:</span> <strong id="val_total_paid"
+                        style="color:var(--success);">0</strong></div>
+                <div class="bal-row"><span>Pending:</span> <strong id="val_rent_pending"
+                        style="color:var(--danger);">0</strong></div>
+                <div style="border-top:1px solid rgba(255,255,255,0.2); margin:5px 0;"></div>
+                <div class="bal-row"><span>Dep Req:</span> <strong id="val_dep_req">0</strong></div>
+                <div class="bal-row"><span>Held:</span> <strong id="val_dep_paid"
+                        style="color:var(--accent);">0</strong></div>
+                <div class="bal-row"><span>Pending:</span> <strong id="val_dep_pending"
+                        style="color:#e74c3c;">0</strong></div>
+            </div>
+        </div>
+    </div>
     </div>
 
     <!-- PRINT BUTTON SECTION -->
