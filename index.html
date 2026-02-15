@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brothers EGY - Contract System v81.0</title>
+    <title>Brothers EGY - Contract System v82.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ================= SCREEN UI ================= */
@@ -133,7 +133,6 @@
         .insp-section-head { background: #eee; font-weight: bold; padding: 5px; text-align: center; font-size: 9pt; border-bottom: 1px solid #000; margin-bottom: 5px; text-transform: uppercase; }
         .insp-group-head { background: #000; color: #fff; font-weight: bold; font-size: 7.5pt; padding: 2px 4px; margin-top: 5px; margin-bottom: 3px; text-transform: uppercase; border-radius: 2px; }
         
-        /* ALIGNED CHECKBOXES CSS */
         .v-insp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; font-size: 7pt; border-bottom: 1px dotted #ccc; padding-bottom: 2px; }
         .v-label { font-weight: bold; font-size: 6.5pt; text-transform: uppercase; flex-grow: 1; }
         .v-check-group { display: flex; gap: 3px; }
@@ -166,7 +165,7 @@
             #contractOutput { visibility: visible; display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; }
             #contractOutput * { visibility: visible; }
             
-            .a4-page { box-shadow: none !important; margin: 0 !important; border: none !important; page-break-after: always; page-break-inside: avoid; height: 296mm; width: 210mm; overflow: hidden; }
+            .a4-page { box-shadow: none !important; margin: 0 !important; border: none !important; page-break-after: always; page-break-inside: avoid; height: 297mm; width: 210mm; overflow: hidden; }
             .a4-page:last-child { page-break-after: avoid; }
         }
     </style>
@@ -176,8 +175,8 @@
 
     <div class="floating-header">
         <div style="display:flex; align-items:center; gap:15px;">
-            <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;">
-            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v81.0</h2>
+            <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;" alt="Logo">
+            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v82.0</h2>
         </div>
         <div style="display:flex; gap:20px; align-items:center;">
             <div class="rate-group">
@@ -376,7 +375,7 @@
     <div id="contractOutput"></div>
 
     <div style="display:none;">
-        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
+        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous">
         <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
         <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" crossorigin="anonymous">
     </div>
@@ -475,7 +474,7 @@
                 if (d > p) { days = Math.ceil(Math.abs(d - p) / (1000 * 60 * 60 * 24)); if (days < 1) days = 1; }
             }
 
-            let mult = (mode === "Monthly") ? ((days / 30).toFixed(1) < 1 ? 1 : (days / 30).toFixed(1)) : days;
+            let mult = (mode === "Monthly") ? ((days / 30).toFixed(1) < 1 ? 1 : parseFloat((days / 30).toFixed(1))) : days;
 
             const r = safeNum('rateRent'), i = safeNum('rateIns'), fee_d = safeNum('fee_del'), fee_c = safeNum('fee_col');
 
@@ -566,9 +565,10 @@
             const prevCon = safeVal('prevCon');
             const extHtml = safeVal('conType') === 'Extension' ? `<div style="font-size:10pt; font-weight:bold; margin-top:3px;">(EXTENSION TO ${prevCon})</div>` : '';
 
-            const logoSrc = document.getElementById('img_logo').src;
-            const waterSrc = document.getElementById('img_water').src;
-            const carSrc = document.getElementById('img_car').src;
+            // Safe fallback images if network is down
+            const logoSrc = "https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg";
+            const waterSrc = "https://brothersegy.com/wp-content/uploads/2026/02/12345.png";
+            const carSrc = "https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg";
 
             let html = ``;
 
@@ -826,11 +826,11 @@
                     <div class="rec-amount-box">
                         <div class="rec-amount-row">
                             <span class="rec-amount-lbl">AMOUNT RECEIVED</span>
-                            <span class="rec-amount-val">${amountStr}</span>
+                            <span class="rec-amount-val">${isBlankDate ? "____________ EGP" : amountStr}</span>
                         </div>
                         <div class="rec-amount-row" style="margin-bottom:0;">
                             <span class="rec-amount-lbl" style="font-size:8pt;">PAYMENT DETAILS</span>
-                            <span class="rec-val" style="font-size:8pt; font-weight:normal;">${details}</span>
+                            <span class="rec-val" style="font-size:8pt; font-weight:normal;">${isBlankDate ? "________________________" : details}</span>
                         </div>
                     </div>
                     
@@ -847,14 +847,16 @@
                 </div>`;
 
             // DYNAMIC RENTAL RECEIPTS LOOP
-            let loopCount = (c.mode === 'Monthly') ? c.months : 1;
+            let loopCount = (c.mode === 'Monthly') ? Math.ceil(c.days / 30) : 1;
             let sDate = new Date(safeVal('p_time'));
-            let finalDropoffDate = new Date(safeVal('d_time'));
+            if (isNaN(sDate)) sDate = new Date();
             
-            // Calculate approximate monthly amount if Monthly mode is selected
-            let monthlyAmount = Math.round(c.totalRentOnly / c.mult);
+            let finalDropoffDate = new Date(safeVal('d_time'));
+            if (isNaN(finalDropoffDate)) finalDropoffDate = new Date(sDate.getTime() + (c.days * 24 * 60 * 60 * 1000));
+            
+            let monthlyAmount = c.mult > 0 ? Math.round(c.totalRentOnly / c.mult) : c.totalRentOnly;
 
-            for(let i=1; i<=loopCount; i++) {
+            for(let j=1; j<=loopCount; j++) {
                 let eDate = new Date(sDate);
                 if(c.mode === 'Monthly') {
                     eDate.setMonth(eDate.getMonth() + 1);
@@ -867,13 +869,13 @@
                 let eStr = eDate.toLocaleDateString('en-GB');
                 let pStr = `${sStr} to ${eStr}`;
 
-                let isFirst = (i === 1);
+                let isFirst = (j === 1);
                 
-                let amtStr = isFirst ? (Math.round(c.totalRentPaid).toLocaleString() + " EGP") : (monthlyAmount.toLocaleString() + " EGP");
+                let amtStr = isFirst ? (Math.round(c.totalRentPaid).toLocaleString() + " EGP") : (Math.round(monthlyAmount).toLocaleString() + " EGP");
                 let detStr = isFirst ? rentInfo.breakdownDetails : "________________________";
                 let isBlankDate = !isFirst;
 
-                let loopTitle = (c.mode === 'Monthly') ? `RENTAL PAYMENT (Month ${i})` : `RENTAL PAYMENT`;
+                let loopTitle = (c.mode === 'Monthly') ? `RENTAL PAYMENT (Month ${j})` : `RENTAL PAYMENT`;
 
                 html += `
                 <div class="a4-page">
