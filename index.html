@@ -56,15 +56,104 @@
 
         /* Hidden on screen */
 
+        /* Hidden on screen */
+
         .control-panel {
-            max-width: 98%;
-            /* Maximized width for bigger fields */
-            margin: 0 auto 40px auto;
+            max-width: 1150px;
+            /* Constrained width for readable, professional look */
+            margin: 20px auto 40px auto;
             background: white;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             border-top: 6px solid var(--primary);
-            width: 98%;
+            width: 96%;
+        }
+
+        .cp-head {
+            background: white;
+            color: var(--primary);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        /* ... existing styles ... */
+
+        /* Ensure inputs fit in grids */
+        /* Ensure inputs fit in grids */
+        .grid-3 input,
+        .grid-4 input,
+        .grid-5 input,
+        .grid-2 input,
+        select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            padding: 0 15px;
+            /* Comfortable horizontal padding */
+            height: 48px;
+            /* TALLER HEIGHT as requested */
+            font-size: 15px;
+            /* Clear legible font */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            /* line-height: 46px; REMOVED to let browser center text naturally */
+        }
+
+        select {
+            padding: 0 12px !important;
+            /* Consistent padding */
+            height: 48px !important;
+            line-height: 48px !important;
+            /* Force text to center vertically */
+            cursor: pointer;
+        }
+
+        .grid-4 div,
+        .grid-3 div,
+        .grid-2 div,
+        .grid-5 div {
+            min-width: 0;
+        }
+
+        .grid-4 div[style*="display:flex"] {
+            width: 100%;
+        }
+
+        /* Standard Spacing */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            /* Standard gap */
+            margin-bottom: 12px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: 0.8fr repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 8px;
+            align-items: center;
         }
 
         .cp-head {
