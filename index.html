@@ -483,11 +483,19 @@
 
         /* Receipt Styles (Professional) */
         .receipt-container {
+            display: none;
+        }
+
+        .receipt-half {
+            height: 46%;
             border: 2px solid #000;
-            padding: 20px;
-            margin-top: 20px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
             position: relative;
-            min-height: 400px;
+            box-sizing: border-box;
+            background: white;
+            margin-bottom: 0;
         }
 
         .rec-header {
@@ -643,6 +651,8 @@
                 box-shadow: none;
                 margin: 0;
                 page-break-after: always;
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
             }
         }
 
@@ -1047,142 +1057,146 @@
             <div><label>Driving License No</label><input type="text" id="cl_lic"></div>
         </div>
         <div class="grid-3">
-            <div><label>Phone No</label>
-                <div class="phone-group">
-                    <input type="text" id="cl_ph_code" placeholder="+20" value="+20">
-                    <input type="text" id="cl_phone" placeholder="Number">
+            <div><label>Add. Driver Name</label><input type="text" id="cl_add_driver"></div>
+            <div><label>Add. Driver License</label><input type="text" id="cl_add_lic"></div>
+            <div class="grid-3">
+                <div><label>Phone No</label>
+                    <div class="phone-group">
+                        <input type="text" id="cl_ph_code" placeholder="+20" value="+20">
+                        <input type="text" id="cl_phone" placeholder="Number">
+                    </div>
                 </div>
+                <div><label>Email</label><input type="email" id="cl_email"></div>
+                <div><label>Local Address</label><input type="text" id="cl_addr"></div>
             </div>
-            <div><label>Email</label><input type="email" id="cl_email"></div>
-            <div><label>Local Address</label><input type="text" id="cl_addr"></div>
-        </div>
 
-        <div class="section-head">4. Period & Location</div>
-        <div class="grid-2">
-            <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
-            <div><label>Dropoff Date/Time</label><input type="datetime-local" id="d_time" onchange="calc()"></div>
-        </div>
-        <div class="grid-2">
-            <div><label>Pickup Location</label><select id="p_loc" onchange="calc()">
-                    <option value="Office Alex">Office: Alexandria</option>
-                    <option value="Office Cairo">Office: Cairo</option>
-                    <option value="Office Hurghada">Office: Hurghada</option>
-                    <option value="Airport Alex (HBE)">Airport: Alexandria</option>
-                    <option value="Airport Cairo (CAI)">Airport: Cairo</option>
-                    <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
-                    <option value="Hotel">Hotel</option>
-                </select><input type="text" id="p_addr" placeholder="Specific Location..." style="margin-top:5px;"
-                    oninput="calc()"></div>
-            <div><label>Dropoff Location</label><select id="d_loc" onchange="calc()">
-                    <option value="Same">Same as Pickup</option>
-                    <option value="Office Alex">Office: Alexandria</option>
-                    <option value="Office Cairo">Office: Cairo</option>
-                    <option value="Office Hurghada">Office: Hurghada</option>
-                    <option value="Airport Alex (HBE)">Airport: Alexandria</option>
-                    <option value="Airport Cairo (CAI)">Airport: Cairo</option>
-                    <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
-                    <option value="Hotel">Hotel</option>
-                </select><input type="text" id="d_addr" placeholder="Specific Location..." style="margin-top:5px;"
-                    oninput="calc()"></div>
-        </div>
+            <div class="section-head">4. Period & Location</div>
+            <div class="grid-2">
+                <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
+                <div><label>Dropoff Date/Time</label><input type="datetime-local" id="d_time" onchange="calc()"></div>
+            </div>
+            <div class="grid-2">
+                <div><label>Pickup Location</label><select id="p_loc" onchange="calc()">
+                        <option value="Office Alex">Office: Alexandria</option>
+                        <option value="Office Cairo">Office: Cairo</option>
+                        <option value="Office Hurghada">Office: Hurghada</option>
+                        <option value="Airport Alex (HBE)">Airport: Alexandria</option>
+                        <option value="Airport Cairo (CAI)">Airport: Cairo</option>
+                        <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
+                        <option value="Hotel">Hotel</option>
+                    </select><input type="text" id="p_addr" placeholder="Specific Location..." style="margin-top:5px;"
+                        oninput="calc()"></div>
+                <div><label>Dropoff Location</label><select id="d_loc" onchange="calc()">
+                        <option value="Same">Same as Pickup</option>
+                        <option value="Office Alex">Office: Alexandria</option>
+                        <option value="Office Cairo">Office: Cairo</option>
+                        <option value="Office Hurghada">Office: Hurghada</option>
+                        <option value="Airport Alex (HBE)">Airport: Alexandria</option>
+                        <option value="Airport Cairo (CAI)">Airport: Cairo</option>
+                        <option value="Airport Hurghada (HRG)">Airport: Hurghada</option>
+                        <option value="Hotel">Hotel</option>
+                    </select><input type="text" id="d_addr" placeholder="Specific Location..." style="margin-top:5px;"
+                        oninput="calc()"></div>
+            </div>
 
-        <div class="section-head">5. Financials</div>
-        <div class="grid-2">
-            <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
-                    <option value="Basic">Basic (100% Client Liability)</option>
-                    <option value="Intermediate">Intermediate (70% Client / 30% Co)</option>
-                    <option value="Full Protection">Full Protection (Zero Liability)</option>
-                </select></div>
-            <div><label>Daily Add-ons</label>
-                <div style="font-size:12px; display:flex; gap:15px; margin-top:5px;"><span><input type="checkbox"
-                            id="add_km" onchange="calc()"> Unl. KM (500)</span><span><input type="checkbox" id="add_dr"
-                            onchange="calc()"> Driver (250)</span><span><input type="checkbox" id="add_st"
-                            onchange="calc()"> Seat (250)</span></div>
+            <div class="section-head">5. Financials</div>
+            <div class="grid-2">
+                <div><label>Insurance Package</label><select id="insPack" onchange="calc()">
+                        <option value="Basic">Basic (100% Client Liability)</option>
+                        <option value="Intermediate">Intermediate (70% Client / 30% Co)</option>
+                        <option value="Full Protection">Full Protection (Zero Liability)</option>
+                    </select></div>
+                <div><label>Daily Add-ons</label>
+                    <div style="font-size:12px; display:flex; gap:15px; margin-top:5px;"><span><input type="checkbox"
+                                id="add_km" onchange="calc()"> Unl. KM (500)</span><span><input type="checkbox"
+                                id="add_dr" onchange="calc()"> Driver (250)</span><span><input type="checkbox"
+                                id="add_st" onchange="calc()"> Seat (250)</span></div>
+                </div>
             </div>
-        </div>
 
-        <div class="grid-2" style="margin-top:10px;">
-            <div class="payment-builder">
-                <div style="font-weight:bold; margin-bottom:10px; border-bottom:1px solid #ccc; color:var(--primary);">
-                    FEES & TARGETS</div>
-                <div class="pb-row">
-                    <div class="pb-label">Delivery Fee:</div><input type="number" id="fee_del" placeholder="Dropoff"
-                        oninput="calc()">
+            <div class="grid-2" style="margin-top:10px;">
+                <div class="payment-builder">
+                    <div
+                        style="font-weight:bold; margin-bottom:10px; border-bottom:1px solid #ccc; color:var(--primary);">
+                        FEES & TARGETS</div>
+                    <div class="pb-row">
+                        <div class="pb-label">Delivery Fee:</div><input type="number" id="fee_del" placeholder="Dropoff"
+                            oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label">Pickup Fee:</div><input type="number" id="fee_col"
+                            placeholder="Collection" oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label" style="color:var(--accent);">Req. Deposit:</div><input type="number"
+                            id="req_deposit" placeholder="Required Amt" oninput="calc()">
+                    </div>
                 </div>
-                <div class="pb-row">
-                    <div class="pb-label">Pickup Fee:</div><input type="number" id="fee_col" placeholder="Collection"
-                        oninput="calc()">
-                </div>
-                <div class="pb-row">
-                    <div class="pb-label" style="color:var(--accent);">Req. Deposit:</div><input type="number"
-                        id="req_deposit" placeholder="Required Amt" oninput="calc()">
+                <div class="balance-box">
+                    <div style="text-align:center; font-size:14px; opacity:0.8; margin-bottom:5px;">ESTIMATED TOTAL
+                    </div>
+                    <div class="bal-row"><span>Base Rent:</span> <strong id="c_rent">0</strong></div>
+                    <div class="bal-row"><span>Duration:</span> <strong id="c_days">0 Days</strong></div>
+                    <div class="bal-row"><span>Logistics Fees:</span> <strong id="c_fees">0</strong></div>
+                    <div style="text-align:right; font-size:24px; font-weight:bold; margin-top:10px; color:#e67e22;"
+                        id="c_total_preview">0 EGP</div>
                 </div>
             </div>
-            <div class="balance-box">
-                <div style="text-align:center; font-size:14px; opacity:0.8; margin-bottom:5px;">ESTIMATED TOTAL
-                </div>
-                <div class="bal-row"><span>Base Rent:</span> <strong id="c_rent">0</strong></div>
-                <div class="bal-row"><span>Duration:</span> <strong id="c_days">0 Days</strong></div>
-                <div class="bal-row"><span>Logistics Fees:</span> <strong id="c_fees">0</strong></div>
-                <div style="text-align:right; font-size:24px; font-weight:bold; margin-top:10px; color:#e67e22;"
-                    id="c_total_preview">0 EGP</div>
-            </div>
-        </div>
 
-        <div class="grid-pay" style="margin-top:15px;">
-            <div class="payment-builder">
-                <div style="font-weight:bold; margin-bottom:10px; color:var(--primary);">RENT COLLECTED (NOW)</div>
-                <div class="pb-row">
-                    <div class="pb-label">Cash EGP:</div><input type="number" id="pay_rent_egp" placeholder="0"
-                        oninput="calc()">
+            <div class="grid-pay" style="margin-top:15px;">
+                <div class="payment-builder">
+                    <div style="font-weight:bold; margin-bottom:10px; color:var(--primary);">RENT COLLECTED (NOW)</div>
+                    <div class="pb-row">
+                        <div class="pb-label">Cash EGP:</div><input type="number" id="pay_rent_egp" placeholder="0"
+                            oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label">Cash USD:</div><input type="number" id="pay_rent_usd" placeholder="0"
+                            oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label">Cash EUR:</div><input type="number" id="pay_rent_eur" placeholder="0"
+                            oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label">Card/Online:</div><input type="number" id="pay_rent_card" placeholder="0"
+                            oninput="calc()">
+                    </div>
                 </div>
-                <div class="pb-row">
-                    <div class="pb-label">Cash USD:</div><input type="number" id="pay_rent_usd" placeholder="0"
-                        oninput="calc()">
+                <div class="payment-builder">
+                    <div style="font-weight:bold; margin-bottom:10px; color:var(--accent);">DEPOSIT HELD</div>
+                    <div class="pb-row">
+                        <div class="pb-label">Cash EGP:</div><input type="number" id="pay_dep_egp" placeholder="0"
+                            oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label">Cash USD:</div><input type="number" id="pay_dep_usd" placeholder="0"
+                            oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label">Cash EUR:</div><input type="number" id="pay_dep_eur" placeholder="0"
+                            oninput="calc()">
+                    </div>
+                    <div class="pb-row">
+                        <div class="pb-label">Card Hold:</div><input type="number" id="pay_dep_card" placeholder="0"
+                            oninput="calc()">
+                    </div>
                 </div>
-                <div class="pb-row">
-                    <div class="pb-label">Cash EUR:</div><input type="number" id="pay_rent_eur" placeholder="0"
-                        oninput="calc()">
+                <div class="balance-box">
+                    <div class="bal-row"><span>Rent Total:</span> <strong id="val_total_due">0</strong></div>
+                    <div class="bal-row"><span>Paid Now:</span> <strong id="val_total_paid"
+                            style="color:var(--success);">0</strong></div>
+                    <div class="bal-row"><span>Rent Pending:</span> <strong id="val_rent_pending"
+                            style="color:var(--danger);">0</strong></div>
+                    <div style="border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;"></div>
+                    <div class="bal-row"><span>Dep. Target:</span> <strong id="val_dep_req">0</strong></div>
+                    <div class="bal-row"><span>Held:</span> <strong id="val_dep_paid"
+                            style="color:var(--accent);">0</strong></div>
+                    <div class="bal-row"><span>Dep Pending:</span> <strong id="val_dep_pending"
+                            style="color:#e74c3c;">0</strong></div>
                 </div>
-                <div class="pb-row">
-                    <div class="pb-label">Card/Online:</div><input type="number" id="pay_rent_card" placeholder="0"
-                        oninput="calc()">
-                </div>
-            </div>
-            <div class="payment-builder">
-                <div style="font-weight:bold; margin-bottom:10px; color:var(--accent);">DEPOSIT HELD</div>
-                <div class="pb-row">
-                    <div class="pb-label">Cash EGP:</div><input type="number" id="pay_dep_egp" placeholder="0"
-                        oninput="calc()">
-                </div>
-                <div class="pb-row">
-                    <div class="pb-label">Cash USD:</div><input type="number" id="pay_dep_usd" placeholder="0"
-                        oninput="calc()">
-                </div>
-                <div class="pb-row">
-                    <div class="pb-label">Cash EUR:</div><input type="number" id="pay_dep_eur" placeholder="0"
-                        oninput="calc()">
-                </div>
-                <div class="pb-row">
-                    <div class="pb-label">Card Hold:</div><input type="number" id="pay_dep_card" placeholder="0"
-                        oninput="calc()">
-                </div>
-            </div>
-            <div class="balance-box">
-                <div class="bal-row"><span>Rent Total:</span> <strong id="val_total_due">0</strong></div>
-                <div class="bal-row"><span>Paid Now:</span> <strong id="val_total_paid"
-                        style="color:var(--success);">0</strong></div>
-                <div class="bal-row"><span>Rent Pending:</span> <strong id="val_rent_pending"
-                        style="color:var(--danger);">0</strong></div>
-                <div style="border-top:1px solid rgba(255,255,255,0.2); margin:10px 0;"></div>
-                <div class="bal-row"><span>Dep. Target:</span> <strong id="val_dep_req">0</strong></div>
-                <div class="bal-row"><span>Held:</span> <strong id="val_dep_paid"
-                        style="color:var(--accent);">0</strong></div>
-                <div class="bal-row"><span>Dep Pending:</span> <strong id="val_dep_pending"
-                        style="color:#e74c3c;">0</strong></div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- PRINT BUTTON SECTION -->
@@ -1463,7 +1477,8 @@
                     <tr><td width="30%"><strong>LESSOR</strong><br>El Alakhua El Mutahidun<br>${safeVal('issuingBranch')} Branch</td>
                         <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>
                         Passport: ${safeVal('cl_pass')} | License: ${safeVal('cl_lic')} | Nation: ${safeVal('cl_nation')}<br>
-                        Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | Addr: ${safeVal('cl_addr')}</td></tr>
+                        Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | Addr: ${safeVal('cl_addr')}<br>
+                        ${safeVal('cl_add_driver') ? '<b>Add. Driver:</b> ' + safeVal('cl_add_driver') + ' | <b>Lic:</b> ' + safeVal('cl_add_lic') : ''}</td></tr>
                 </table>
             </div>
 
@@ -1505,14 +1520,16 @@
             </div>
 
             <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px; margin-bottom: 50px;">
-                <div style="display:flex; justify-content:space-between; text-align:center; font-weight:bold; font-size:10pt;">
+        <div style="display:flex; justify-content:space-between; text-align:center; font-weight:bold; font-size:10pt;">
                     <div style="width:40%;">
                          LESSOR SIGNATURE
                          <br><br><br>____________________
+                         <div style="font-size:9pt; margin-top:5px;">${new Date().toLocaleString('sv-SE')}</div>
                     </div>
                      <div style="width:40%;">
                          LESSEE SIGNATURE
                          <br><br><br>____________________
+                         <div style="font-size:9pt; margin-top:5px;">${new Date().toLocaleString('sv-SE')}</div>
                     </div>
                 </div>
             </div>
@@ -1572,6 +1589,7 @@
             </div>
             <div style="margin-top:auto; padding:15px; border-top:1px solid #000; margin-bottom: 50px;">
                 <strong>I have read and accepted all terms.</strong> <br><br><br> Signature: __________________________
+                <div style="font-size:9pt; margin-top:5px;">${new Date().toLocaleString('sv-SE')}</div>
             </div>
         </div>
     </div>`;
@@ -1687,6 +1705,9 @@
                             <tr style="font-weight:bold; background:#eee;"><td align="right" colspan="2">TOTAL DEDUCTIONS:</td><td align="right">___________ EGP</td></tr>
                         </table>
                     </div>
+                    <div style="font-size:8pt; font-weight:bold; margin-top:5px; border:1px solid #000; padding:3px; background:#fff3e0;">
+                        IMPORTANT: If the RETURN CHECK is not closed/signed, the Lessee retains full liability for the vehicle until official closure.
+                    </div>
                 </div>`;
 
             let inspHtml = `
@@ -1737,77 +1758,70 @@
                 days: c.days
             };
 
-            const genReceipt = (type, amount, methodText, isCompany) => {
-                if (amount <= 0 && type !== 'RENTAL - CLIENT COPY' && type !== 'RENTAL - COMPANY COPY') return "";
+            const genDualReceipt = (title, amount, details) => {
+                // Always generate if amount > 0 OR if it's a deposit (since deposit might be held)
+                // detailed check inside
 
-                return `
-                <div class="a4-page">
-                    <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
-                    <div class="page-content">
-                        <div class="receipt-container">
-                            <div class="rec-header">
-                                <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="rec-logo">
-                                <div style="text-align:right">
-                                    <div class="rec-title">OFFICIAL RECEIPT</div>
-                                    <div style="font-size:10pt;">DATE: ${today}</div>
-                                    <div style="font-size:10pt; font-weight:bold;">${type} PAYMENT</div>
-                                    <div style="font-size:8pt; color:#555;">${isCompany ? 'COMPANY COPY' : 'CLIENT COPY'}</div>
-                                </div>
+                const singleRecHtml = (copyType) => `
+                    <div class="receipt-half">
+                        <div class="rec-header">
+                            <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="rec-logo">
+                            <div style="text-align:right">
+                                <div class="rec-title">OFFICIAL RECEIPT</div>
+                                <div style="font-size:10pt;">DATE: ${today}</div>
+                                <div style="font-size:10pt; font-weight:bold;">${title}</div>
+                                <div style="font-size:8pt; color:#555;">${copyType}</div>
                             </div>
-
-                            <div class="rec-grid">
-                                <div>
-                                    <div class="rec-row"><span class="rec-label">RECEIVED FROM</span><span class="rec-val">${recData.client}</span></div>
-                                    <div class="rec-row"><span class="rec-label">LICENSE NO</span><span class="rec-val">${recData.lic}</span></div>
-                                    <div class="rec-row"><span class="rec-label">PHONE</span><span class="rec-val">${recData.phone}</span></div>
-                                </div>
-                                <div>
-                                    <div class="rec-row"><span class="rec-label">CONTRACT NO</span><span class="rec-val">${recData.con}</span></div>
-                                    <div class="rec-row"><span class="rec-label">VEHICLE</span><span class="rec-val">${recData.car}</span></div>
-                                    <div class="rec-row"><span class="rec-label">PERIOD</span><span class="rec-val">${recData.period} (${recData.days} Days)</span></div>
-                                </div>
+                        </div>
+                        <div class="rec-grid">
+                            <div>
+                                <div class="rec-row"><span class="rec-label">RECEIVED FROM</span><span class="rec-val">${recData.client}</span></div>
+                                <div class="rec-row"><span class="rec-label">LICENSE NO</span><span class="rec-val">${recData.lic}</span></div>
+                                <div class="rec-row"><span class="rec-label">PHONE</span><span class="rec-val">${recData.phone}</span></div>
                             </div>
-
-                            <div style="margin-top:20px; border:2px solid #ccc; padding:15px; background:#f9f9f9;">
-                                <div class="rec-row" style="border-bottom:none; font-size:12pt;">
-                                    <span class="rec-label">AMOUNT RECEIVED</span>
-                                    <span class="rec-val" style="font-size:14pt;">${Math.round(amount).toLocaleString()} EGP</span>
-                                </div>
-                                <div class="rec-row" style="border-bottom:none; font-size:10pt; color:#666; margin-top:5px;">
-                                    <span class="rec-label">PAYMENT DETAILS</span>
-                                    <span class="rec-val">${methodText}</span>
-                                </div>
+                            <div>
+                                <div class="rec-row"><span class="rec-label">CONTRACT NO</span><span class="rec-val">${recData.con}</span></div>
+                                <div class="rec-row"><span class="rec-label">VEHICLE</span><span class="rec-val">${recData.car}</span></div>
+                                <div class="rec-row"><span class="rec-label">PERIOD</span><span class="rec-val">${recData.period} (${recData.days} Days)</span></div>
                             </div>
-
-                            <div class="rec-footer">
-                                <div class="rec-sig-line">AUTHORIZED SIGNATURE</div>
-                                <div style="font-size:8pt; text-align:right;">
-                                    <strong>BROTHERS EGY RENT A CAR</strong><br>
-                                    50 Abd Al Latef Al Soufani, Sidi Gabir, Alexandria<br>
-                                    Tax ID: 589-464-418 | CR: 10770
+                        </div>
+                        <div style="margin-top:auto; border:2px solid #ccc; padding:10px; background:#f9f9f9; flex-grow:0; min-height:80px;">
+                            <div class="rec-row" style="border-bottom:none; font-size:12pt;">
+                                <span class="rec-label">AMOUNT RECEIVED</span>
+                                <span class="rec-val" style="font-size:14pt;">${Math.round(amount).toLocaleString()} EGP</span>
+                            </div>
+                            <div class="rec-row" style="border-bottom:none; font-size:10pt; color:#666; margin-top:5px;">
+                                <span class="rec-label">PAYMENT DETAILS</span>
+                                <span class="rec-val">${details}</span>
+                            </div>
+                        </div>
+                        <div class="rec-footer" style="padding-top:10px;">
+                             <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                                <div class="rec-sig-line">
+                                    AUTHORIZED SIGNATURE
+                                    <div style="font-size:8pt; margin-top:2px;">${new Date().toLocaleString('sv-SE')}</div>
                                 </div>
                             </div>
                         </div>
-                         <!-- Duplicate for logical backup or physical cut if needed -->
-                         <div style="text-align:center; border-top:1px dashed #999; margin-top:40px; padding-top:10px; color:#999;">- - - - - DETACH HERE - - - - -</div>
+                    </div>`;
+
+                return `
+                <div class="a4-page" style="display:flex; flex-direction:column; justify-content:space-between; padding:10mm; height:297mm;">
+                    <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
+                    <div class="page-content" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                        ${singleRecHtml('CLIENT COPY')}
+                        <div style="text-align:center; border-top:1px dashed #999; color:#999;">- - - - - DETACH HERE - - - - -</div>
+                        ${singleRecHtml('COMPANY COPY')}
                     </div>
                 </div>`;
             };
 
-            // 1. RENTAL RECEIPT (CLIENT COPY)
-            html += genReceipt("RENTAL - CLIENT COPY", c.totalRentPaid, rentInfo.text, false);
-            // 2. RENTAL RECEIPT (COMPANY COPY)
-            html += genReceipt("RENTAL - COMPANY COPY", c.totalRentPaid, rentInfo.text, true);
+            // 1. RENTAL RECEIPT (Dual)
+            html += genDualReceipt("RENTAL PAYMENT", c.totalRentPaid, rentInfo.text);
 
-            // 3. DEPOSIT RECEIPT (If Applicable OR if Required)
+            // 2. DEPOSIT RECEIPT (Dual)
             if (totalDepPaid > 0 || c.reqDep > 0) {
-                // Use totalDepPaid if > 0, otherwise use 0 (Empty receipt? or show Pending?)
-                // We passed "depInfo.text" which shows pending amount anyway.
-
-                // CLIENT COPY
-                html += genReceipt("SECURITY DEPOSIT - CLIENT COPY", (totalDepPaid > 0 ? totalDepPaid : c.reqDep), depInfo.text || "Pending / To be Filled", false);
-                // COMPANY COPY
-                html += genReceipt("SECURITY DEPOSIT - COMPANY COPY", (totalDepPaid > 0 ? totalDepPaid : c.reqDep), depInfo.text || "Pending / To be Filled", true);
+                html += genDualReceipt("SECURITY DEPOSIT", (totalDepPaid > 0 ? totalDepPaid : c.reqDep), depInfo.text || "Pending");
             }
 
             document.getElementById('contractOutput').innerHTML = html;
