@@ -156,7 +156,27 @@
             .grid-3,
             .grid-4,
             .grid-pay {
-                grid-template-columns: 1fr;
+                display: grid;
+                gap: 15px;
+                margin-bottom: 20px;
+                align-items: end;
+                /* Aligns inputs to bottom */
+            }
+
+            .grid-2 {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+
+            .grid-3 {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+
+            .grid-4 {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .grid-pay {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             }
 
             .payment-builder,
@@ -1098,6 +1118,8 @@
             <div><label id="lbl_rate">Daily Rent (EGP)</label><input type="number" id="rateRent" value="0"
                     oninput="calc()"></div>
             <div><label>Ins. Fee (Daily)</label><input type="number" id="rateIns" value="0" oninput="calc()"></div>
+            <div><label>Unl. KM Daily</label><input type="number" id="rateUnl" value="0" placeholder="If Unl. KM"
+                    oninput="calc()"></div>
         </div>
 
         <div class="section-head">3. Client Information</div>
@@ -1398,7 +1420,7 @@
             const fee_c = safeNum('fee_col');
 
             let adds = 0;
-            if (document.getElementById('add_km').checked) adds += 500;
+            if (document.getElementById('add_km').checked) adds += safeNum('rateUnl');
             if (document.getElementById('add_dr').checked) adds += 250;
             if (document.getElementById('add_st').checked) adds += 250;
 
@@ -1473,7 +1495,13 @@
                 if (e > 0) parts.push(e + " EUR");
                 if (card > 0) parts.push(card + " Card");
                 let detail = parts.length > 0 ? `(${parts.join(' + ')})` : "";
-                return { total: total, text: `${Math.round(total).toLocaleString()} EGP ${detail}` };
+
+                // Return structured data for receipt breakdown
+                return {
+                    total: total,
+                    text: `${Math.round(total).toLocaleString()} EGP ${detail}`,
+                    breakdownDetails: detail
+                };
             };
 
             let rentInfo = buildPayStr('pay_rent');
@@ -1579,12 +1607,12 @@
                     <div style="width:40%;">
                          LESSOR SIGNATURE
                          <br><br><br>____________________
-                         <div style="font-size:9pt; margin-top:5px;">${new Date().toLocaleString('sv-SE')}</div>
+                         <div style="font-size:9pt; margin-top:5px;">Date: ........................</div>
                     </div>
                      <div style="width:40%;">
                          LESSEE SIGNATURE
                          <br><br><br>____________________
-                         <div style="font-size:9pt; margin-top:5px;">${new Date().toLocaleString('sv-SE')}</div>
+                         <div style="font-size:9pt; margin-top:5px;">Date: ........................</div>
                     </div>
                 </div>
             </div>
@@ -1603,7 +1631,8 @@
                 9: `* <strong>Deposit Block:</strong> A security amount is blocked/paid at pickup to cover excess liability, fuel, and fines.<br>* <strong>Refund Policy:</strong> Deposit is 100% refundable upon safe return of the vehicle in original condition.<br>* <strong>Refund Method:</strong> Deposit is returned in the same currency mix as received. If paid by Card, it is refunded in EGP CASH to avoid bank delays.<br>* <strong>Release Time:</strong> Released only after the Handover Inspection Report is signed and closed.`,
                 10: `If there is a disagreement regarding the COST or TIME of repair, we follow this strict protocol:<br><strong>Step 1: Independent Evaluation.</strong> The vehicle will be assessed by an authorized, independent Car Service Center. Their quotation is final.<br><strong>Step 2: Liability.</strong> The at-fault party pays the Repair Cost + Lost Rental Days + Inspection Fee.<br><strong>Step 3: Legal.</strong> Unresolved disputes are referred to the Competent Court under Egyptian Law.`,
                 11: `The Lessee is fully responsible for any traffic violations (Speeding, Parking, Radar). The Company reserves the right to charge these costs effectively + administrative fees (Up to 0 EGP admin fee currently).`,
-                12: `In case of breakdown, call the Company immediately. Do not attempt unauthorized repairs. If the breakdown is due to Company fault (Battery/Engine), you pay nothing. If due to negligence (e.g., wrong fuel), Lessee pays all costs.`
+                12: `In case of breakdown, call the Company immediately. Do not attempt unauthorized repairs. If the breakdown is due to Company fault (Battery/Engine), you pay nothing. If due to negligence (e.g., wrong fuel), Lessee pays all costs.`,
+                13: `* <strong>Interior Negligence:</strong> Insurance does NOT cover negligence inside the vehicle (e.g., cigarette burns, stained seats, broken handles).<br>* <strong>Minor Damages:</strong> For small scratches, tire, or glass damage where a Police Report is impractical, the Lessee agrees to pay the repair cost directly to save time.<br>* <strong>Police Report:</strong> If Lessee refuses to settle damages, a Police Report from the accident scene is MANDATORY. Failure to provide it renders the Lessee 100% liable for all costs and downtime, regardless of insurance coverage.`
             };
 
             const insDetails = {
@@ -1630,7 +1659,7 @@
 
                 <!-- DYNAMIC INSURANCE -->
                 <div class="term-p" style="border:2px solid #e67e22; padding:5px; background:#fff8e1; break-inside:avoid;">
-                    <span class="term-h" style="color:#e67e22; border-bottom-color:#e67e22;">5. YOUR INSURANCE PACKAGE: ${selIns.toUpperCase()}</span>
+<span class="term-h" style="color:#e67e22; border-bottom-color:#e67e22;">5. YOUR INSURANCE PACKAGE: ${selIns.toUpperCase()}</span>
                     ${insContent}
                 </div>
                 
@@ -1641,10 +1670,11 @@
                 <div class="term-p"><span class="term-h">10. DISPUTE RESOLUTION</span>${termsText[10]}</div>
                 <div class="term-p"><span class="term-h">11. TRAFFIC FINES</span>${termsText[11]}</div>
                 <div class="term-p"><span class="term-h">12. MECHANICAL DIFFICULTIES</span>${termsText[12]}</div>
+                <div class="term-p"><span class="term-h">13. INSURANCE & LIABILITY NOTICES</span>${termsText[13]}</div>
             </div>
             <div style="margin-top:auto; padding:15px; border-top:1px solid #000; margin-bottom: 50px;">
                 <strong>I have read and accepted all terms.</strong> <br><br><br> Signature: __________________________
-                <div style="font-size:9pt; margin-top:5px;">${new Date().toLocaleString('sv-SE')}</div>
+                <div style="font-size:9pt; margin-top:5px;">Date: ........................</div>
             </div>
         </div>
     </div>`;
@@ -1782,7 +1812,7 @@
                     <div style="width:30%;">
                          PICKUP: Lessee Signature
                          <br><br><br><br>____________________
-                         <div style="font-size:8pt; margin-top:5px;">Date: ${safeVal('p_time').replace('T', ' ')}</div>
+                         <div style="font-size:8pt; margin-top:5px;">Date: ........................</div>
                     </div>
                      <div style="width:30%;">
                          RETURN: Lessee Signature
@@ -1813,14 +1843,36 @@
                 days: c.days
             };
 
-            const genDualReceipt = (title, amount, details) => {
-                // Always generate if amount > 0 OR if it's a deposit (since deposit might be held)
-                // detailed check inside
+            const genDualReceipt = (title, amount, opts) => {
+                // opts: { paymentDetails, balance, isDeposit }
+                const details = opts.paymentDetails || "";
+                const balance = opts.balance || 0;
+                const isDep = opts.isDeposit || false;
+
+                // Cost Breakdown Logic
+                const breakdownHtml = isDep ? "" : `
+                    <div style="font-size:8pt; color:#444; margin-top:5px; border-top:1px dashed #ccc; padding-top:3px;">
+                        <strong>Breakdown:</strong> Base Tariff + Added Services (Insurance, Delivery, Logistics).<br>
+                        <em>*All costs are itemized as requested services.</em>
+                    </div>`;
+
+                // Balance Warning
+                const balanceHtml = (!isDep && balance > 0)
+                    ? `<div style="color:#c0392b; font-weight:bold; margin-top:5px; border:1px solid #c0392b; padding:2px 5px; background:#fff5f5;">⚠ OUTSTANDING BALANCE: ${Math.round(balance).toLocaleString()} EGP</div>`
+                    : (!isDep && balance <= 0 ? `<div style="color:#27ae60; font-weight:bold; margin-top:5px;">Check Out Complete. No Balance Due.</div>` : "");
+
+                // Deposit Note
+                const depNote = isDep
+                    ? `<div style="font-size:7pt; color:#c0392b; margin-top:5px; font-weight:bold;">* NON-REFUNDABLE IF CONTRACT TERMS ARE VIOLATED.</div>`
+                    : "";
+
+                const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com&size=80x80";
 
                 const singleRecHtml = (copyType) => `
                     <div class="receipt-half">
                         <div class="rec-header">
                             <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="rec-logo">
+                            <img src="${qrUrl}" style="height:60px; width:60px; margin-left:auto; margin-right:15px;">
                             <div style="text-align:right">
                                 <div class="rec-title">OFFICIAL RECEIPT</div>
                                 <div style="font-size:10pt;">DATE: ${today}</div>
@@ -1840,21 +1892,23 @@
                                 <div class="rec-row"><span class="rec-label">PERIOD</span><span class="rec-val">${recData.period} (${recData.days} Days)</span></div>
                             </div>
                         </div>
-                        <div style="margin-top:auto; border:2px solid #ccc; padding:10px; background:#f9f9f9; flex-grow:0; min-height:80px;">
+                        <div style="margin-top:auto; border:2px solid #ccc; padding:10px; background:#f9f9f9; flex-grow:0; min-height:90px;">
                             <div class="rec-row" style="border-bottom:none; font-size:12pt;">
                                 <span class="rec-label">AMOUNT RECEIVED</span>
                                 <span class="rec-val" style="font-size:14pt;">${Math.round(amount).toLocaleString()} EGP</span>
                             </div>
-                            <div class="rec-row" style="border-bottom:none; font-size:10pt; color:#666; margin-top:5px;">
-                                <span class="rec-label">PAYMENT DETAILS</span>
-                                <span class="rec-val">${details}</span>
+                            <div class="rec-row" style="border-bottom:none; font-size:10pt; color:#666; margin-top:5px; display:block;">
+                                <div><span class="rec-label">DETAILS:</span> ${details}</div>
+                                ${breakdownHtml}
+                                ${balanceHtml}
+                                ${depNote}
                             </div>
                         </div>
                         <div class="rec-footer" style="padding-top:10px;">
                              <div style="display:flex; justify-content:space-between; align-items:flex-end;">
                                 <div class="rec-sig-line">
                                     AUTHORIZED SIGNATURE
-                                    <div style="font-size:8pt; margin-top:2px;">${new Date().toLocaleString('sv-SE')}</div>
+                                    <div style="font-size:8pt; margin-top:2px;">Date: ........................</div>
                                 </div>
                             </div>
                         </div>
@@ -1872,11 +1926,17 @@
             };
 
             // 1. RENTAL RECEIPT (Dual)
-            html += genDualReceipt("RENTAL PAYMENT", c.totalRentPaid, rentInfo.text);
+            html += genDualReceipt("RENTAL PAYMENT", c.totalRentPaid, {
+                paymentDetails: rentInfo.text,
+                balance: c.rentPending
+            });
 
             // 2. DEPOSIT RECEIPT (Dual)
             if (totalDepPaid > 0 || c.reqDep > 0) {
-                html += genDualReceipt("SECURITY DEPOSIT", (totalDepPaid > 0 ? totalDepPaid : c.reqDep), depInfo.text || "Pending");
+                html += genDualReceipt("SECURITY DEPOSIT", (totalDepPaid > 0 ? totalDepPaid : c.reqDep), {
+                    paymentDetails: depInfo.text || "Pending",
+                    isDeposit: true
+                });
             }
 
             document.getElementById('contractOutput').innerHTML = html;
