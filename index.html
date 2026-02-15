@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brothers EGY - Contract System v78.0</title>
+    <title>Brothers EGY - Contract System v79.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ================= SCREEN UI (Clean & Optimized) ================= */
+        /* ================= SCREEN UI ================= */
         :root {
             --primary: #04509D; --secondary: #333; --bg: #eef2f5;
             --accent: #e67e22; --success: #27ae60; --danger: #c0392b;
@@ -53,26 +53,22 @@
         }
         .bal-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 3px; }
 
-        .btn-print {
+        .btn-gen {
             background: var(--primary); color: white; border: none; padding: 18px; width: 100%;
             font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; margin-top: 25px;
             display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; text-transform: uppercase;
         }
-        .btn-print:hover { background: #033a75; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
+        .btn-gen:hover { background: #033a75; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
 
         .btn-final-print { background: var(--success); color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; margin: 0 auto 20px auto; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); width:100%; max-width: 1050px; }
         .btn-final-print:hover { background: #219653; transform: scale(1.01); }
-
-        .ins-basic { background-color: #ffebee !important; border: 2px solid #c0392b !important; color: #c0392b !important; }
-        .ins-inter { background-color: #fff3e0 !important; border: 2px solid #e67e22 !important; color: #e67e22 !important; }
-        .ins-full { background-color: #e8f5e9 !important; border: 2px solid #27ae60 !important; color: #27ae60 !important; }
 
         /* ================= A4 PAGE PREVIEW & PRINT STYLES ================= */
         #contractOutput { display: none; margin-top: 20px; }
 
         .a4-page {
-            width: 210mm; min-height: 297mm; padding: 12mm; margin: 0 auto 30px auto;
-            background: white; position: relative; box-sizing: border-box;
+            width: 210mm; height: 296mm; padding: 10mm 15mm; margin: 0 auto 30px auto;
+            background: white; position: relative; box-sizing: border-box; overflow: hidden;
             font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9.5pt; line-height: 1.35; color: #000;
             display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); page-break-after: always;
         }
@@ -82,7 +78,7 @@
         .page-content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; flex-grow:1; }
 
         /* Document Headers */
-        .doc-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 15px; }
+        .doc-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 12px; }
         .logo { width: 180px; height: auto; object-fit: contain; }
         .hq-info { font-size: 8pt; color: #555; line-height: 1.4; text-align: right; }
 
@@ -112,9 +108,11 @@
         .insp-section-head { background: #eee; font-weight: bold; padding: 5px; text-align: center; font-size: 9pt; border-bottom: 1px solid #000; margin-bottom: 5px; }
         .insp-group-head { background: #000; color: #fff; font-weight: bold; font-size: 7.5pt; padding: 2px 4px; margin-top: 5px; margin-bottom: 3px; text-transform: uppercase; border-radius: 2px; }
         
-        .v-insp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; font-size: 7pt; border-bottom: 1px dotted #ccc; padding-bottom: 1px; }
-        .v-label { font-weight: bold; font-size: 7pt; text-transform: uppercase; }
-        .v-check-box { width: 12px; height: 12px; border: 1.5px solid #333; margin-left: 3px; display: inline-block; }
+        /* ALIGNED CHECKBOXES CSS */
+        .v-insp-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; font-size: 7.5pt; border-bottom: 1px dotted #ccc; padding-bottom: 2px; }
+        .v-label { font-weight: bold; font-size: 7pt; text-transform: uppercase; flex: 1; }
+        .v-check-group { display: flex; gap: 4px; align-items: center; }
+        .v-check-box { width: 12px; height: 12px; border: 1.5px solid #333; }
         .v-green { border-color: #27ae60; background: #e8f8f5; }
         .v-red { border-color: #c0392b; background: #fdedec; }
 
@@ -134,13 +132,17 @@
         .rec-amount-val { font-size: 18pt; font-weight: bold; color: #000; }
         .rec-sig-line { border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px; font-size: 9pt; font-weight: bold; }
 
-        /* ONLY APPLIED DURING ACTUAL PRINTING */
+        /* STRICT PRINT PAGE ENFORCEMENT */
         @media print {
-            body { background: white; padding: 0; margin: 0; visibility: hidden; }
+            body { background: white; padding: 0; margin: 0; visibility: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            @page { margin: 0; size: A4; }
             .floating-header, .control-panel, .btn-print, .btn-final-print { display: none !important; }
+            
             #contractOutput { visibility: visible; display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; }
             #contractOutput * { visibility: visible; }
-            .a4-page { box-shadow: none !important; margin: 0 auto !important; border: none !important; page-break-after: always; height: 297mm; }
+            
+            .a4-page { box-shadow: none !important; margin: 0 !important; border: none !important; page-break-after: always; height: 296mm; width: 210mm; overflow: hidden; }
+            .a4-page:last-child { page-break-after: avoid; }
         }
     </style>
 </head>
@@ -150,7 +152,7 @@
     <div class="floating-header">
         <div style="display:flex; align-items:center; gap:15px;">
             <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;">
-            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v78.0</h2>
+            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v79.0</h2>
         </div>
         <div style="display:flex; gap:20px; align-items:center;">
             <div class="rate-group">
@@ -269,7 +271,7 @@
                             <div><label>EGP</label><input type="number" id="pay_rent_egp" placeholder="0" oninput="calc()"></div>
                             <div><label>USD</label><input type="number" id="pay_rent_usd" placeholder="0" oninput="calc()"></div>
                             <div><label>EUR</label><input type="number" id="pay_rent_eur" placeholder="0" oninput="calc()"></div>
-                            <div><label>Card</label><input type="number" id="pay_rent_card" placeholder="0" oninput="calc()"></div>
+                            <div><label>Card (EGP)</label><input type="number" id="pay_rent_card" placeholder="0" oninput="calc()"></div>
                         </div>
                     </div>
 
@@ -279,7 +281,7 @@
                             <div><label>EGP</label><input type="number" id="pay_dep_egp" placeholder="0" oninput="calc()"></div>
                             <div><label>USD</label><input type="number" id="pay_dep_usd" placeholder="0" oninput="calc()"></div>
                             <div><label>EUR</label><input type="number" id="pay_dep_eur" placeholder="0" oninput="calc()"></div>
-                            <div><label>Card</label><input type="number" id="pay_dep_card" placeholder="0" oninput="calc()"></div>
+                            <div><label>Card (EGP)</label><input type="number" id="pay_dep_card" placeholder="0" oninput="calc()"></div>
                         </div>
                     </div>
 
@@ -289,11 +291,24 @@
                             <option value="Intermediate">Intermediate (70% / 30%)</option>
                             <option value="Full Protection">Full Protection (Zero Liability)</option>
                         </select></div>
-                        <div><label>Add-ons</label>
-                            <div style="font-size:12px; display:flex; gap:15px; margin-top:10px;">
-                                <label style="display:flex; align-items:center; gap:5px; text-transform:none; font-size:12px; margin:0;"><input type="checkbox" id="add_km" onchange="calc()" style="width:15px; height:15px;"> Unl. KM (500)</label>
-                                <label style="display:flex; align-items:center; gap:5px; text-transform:none; font-size:12px; margin:0;"><input type="checkbox" id="add_dr" onchange="calc()" style="width:15px; height:15px;"> Driver (250)</label>
-                                <label style="display:flex; align-items:center; gap:5px; text-transform:none; font-size:12px; margin:0;"><input type="checkbox" id="add_st" onchange="calc()" style="width:15px; height:15px;"> Child Seat (250)</label>
+                        
+                        <div><label>Add-ons (Toggle & Set Rate/Day)</label>
+                            <div style="display:flex; flex-direction:column; gap:5px; margin-top:5px;">
+                                <div style="display:flex; align-items:center; gap:5px;">
+                                    <input type="checkbox" id="add_km" onchange="calc()" style="width:15px; height:15px; margin:0;">
+                                    <span style="font-size:12px; width:65px;">Unl. KM</span>
+                                    <input type="number" id="rate_km" value="500" oninput="calc()" style="height:26px; padding:2px 8px;">
+                                </div>
+                                <div style="display:flex; align-items:center; gap:5px;">
+                                    <input type="checkbox" id="add_dr" onchange="calc()" style="width:15px; height:15px; margin:0;">
+                                    <span style="font-size:12px; width:65px;">Driver</span>
+                                    <input type="number" id="rate_dr" value="250" oninput="calc()" style="height:26px; padding:2px 8px;">
+                                </div>
+                                <div style="display:flex; align-items:center; gap:5px;">
+                                    <input type="checkbox" id="add_st" onchange="calc()" style="width:15px; height:15px; margin:0;">
+                                    <span style="font-size:12px; width:65px;">Child Seat</span>
+                                    <input type="number" id="rate_st" value="250" oninput="calc()" style="height:26px; padding:2px 8px;">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -312,13 +327,17 @@
                         <div style="text-align:center; font-weight:bold; font-size:12px; margin-bottom:10px; color:var(--accent);">DEPOSIT</div>
                         <div class="bal-row"><span>Target:</span> <strong id="val_dep_req">0</strong></div>
                         <div class="bal-row"><span>Held:</span> <strong id="val_dep_paid">0</strong></div>
+                        <div style="background:rgba(0,0,0,0.2); padding:5px; border-radius:4px; text-align:center; margin-top:5px;">
+                            <div style="font-size:9px;">DEPOSIT STATUS</div>
+                            <div id="val_dep_pending" style="font-size:13px; font-weight:bold;">0</div>
+                        </div>
                     </div>
 
                     <div style="margin-top:auto;">
                         <div class="bal-row"><span>Due:</span> <strong id="val_total_due">0</strong></div>
                         <div class="bal-row"><span>Paid:</span> <strong id="val_total_paid" style="color:var(--success);">0</strong></div>
                         <div style="background:rgba(0,0,0,0.2); padding:10px; border-radius:6px; text-align:center; margin-top:10px;">
-                            <div style="font-size:10px;">PENDING</div>
+                            <div style="font-size:10px;">RENT PENDING</div>
                             <div id="val_rent_pending" style="font-size:18px; font-weight:bold; color:var(--danger);">0</div>
                         </div>
                     </div>
@@ -338,7 +357,7 @@
             {code:"33", model:"Haval Jolion", year:"2022", plate:"ب ا ن | 2 6 4 9", vin:"606889", motor:"21499022758"},
             {code:"38", model:"Chevrolet Aveo", year:"2020", plate:"ع د ب | 8 2 6 3", vin:"E009927", motor:"191160037"},
             {code:"47", model:"Hyundai Tucson", year:"2022", plate:"ه س ب | 4 2 6 3", vin:"KMHJE81BGN", motor:"G4FPNU539488"},
-            {code:"48", model:"Jetour x90 plus", year:"2026", plate:"ف ص ب | 2 9 1 5", vin:"LVTDB21B5TH013984", motor:"SH02227"},
+            {code:"48", model:"Jetour X90 Plus", year:"2026", plate:"ف ص ب | 2 9 1 5", vin:"LVTDB21B5TH013984", motor:"SH02227"},
             {code:"34", model:"MG ZS", year:"2025", plate:"ق ه س | 5 3 6 5", vin:"LSJW74U61SZ027362", motor:"3050131"},
             {code:"35", model:"MG ZS", year:"2022", plate:"و ن س | 5 8 5 4", vin:"15665", motor:"130301"},
             {code:"36", model:"MG ZS", year:"2022", plate:"م ج ب | 1 6 8 9", vin:"90006", motor:"71197"},
@@ -430,11 +449,11 @@
 
             const r = safeNum('rateRent'), i = safeNum('rateIns'), fee_d = safeNum('fee_del'), fee_c = safeNum('fee_col');
 
-            // ADD ONS
+            // ADD ONS (Dynamic Rates)
             let adds = 0; let addOnsList = [];
-            if (document.getElementById('add_km').checked) { adds += 500; addOnsList.push(`Unl. KM`); }
-            if (document.getElementById('add_dr').checked) { adds += 250; addOnsList.push("Driver"); }
-            if (document.getElementById('add_st').checked) { adds += 250; addOnsList.push("Child Seat"); }
+            if (document.getElementById('add_km').checked) { let rKM = safeNum('rate_km'); adds += rKM; addOnsList.push(`Unl. KM (${rKM})`); }
+            if (document.getElementById('add_dr').checked) { let rDR = safeNum('rate_dr'); adds += rDR; addOnsList.push(`Driver (${rDR})`); }
+            if (document.getElementById('add_st').checked) { let rST = safeNum('rate_st'); adds += rST; addOnsList.push(`Child Seat (${rST})`); }
             let addOnsStr = addOnsList.length > 0 ? addOnsList.join(", ") : "None";
 
             let totalRentOnly = (mode === "Monthly") ? (r * mult) + (i * days) + (adds * days) : ((r + i + adds) * mult);
@@ -457,9 +476,13 @@
             document.getElementById('val_dep_paid').innerText = totalDepPaid.toLocaleString();
 
             let rPenEl = document.getElementById('val_rent_pending');
-            if (rentPending > 0) rPenEl.innerHTML = `<span style="color:#e74c3c">${rentPending.toLocaleString()}</span>`;
-            else if (rentPending < 0) rPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(rentPending).toLocaleString()}</span>`;
-            else rPenEl.innerHTML = `<span style="color:white">0</span>`;
+            if (rentPending > 0) rPenEl.innerHTML = `<span style="color:#e74c3c">${rentPending.toLocaleString()} EGP</span>`;
+            else if (rentPending < 0) rPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(rentPending).toLocaleString()} EGP</span>`;
+            else rPenEl.innerHTML = `<span style="color:white">0 (PAID)</span>`;
+
+            let dPenEl = document.getElementById('val_dep_pending');
+            if (depPending > 0) dPenEl.innerHTML = `<span style="color:#e74c3c">${depPending.toLocaleString()} EGP</span>`;
+            else dPenEl.innerHTML = `<span style="color:#2ecc71">FULLY HELD</span>`;
 
             return { days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending, reqDep, addOnsStr };
         }
@@ -478,9 +501,12 @@
                 let egp = safeNum(pfx + '_egp'), u = safeNum(pfx + '_usd'), e = safeNum(pfx + '_eur'), card = safeNum(pfx + '_card');
                 let total = egp + (u * usd) + (e * eur) + card;
                 let parts = [];
-                if (egp > 0) parts.push(egp + " Cash"); if (u > 0) parts.push(u + " USD"); if (e > 0) parts.push(e + " EUR"); if (card > 0) parts.push(card + " Card");
+                if (egp > 0) parts.push(egp + " Cash (EGP)"); 
+                if (u > 0) parts.push(u + " USD (Rate: " + usd + ")"); 
+                if (e > 0) parts.push(e + " EUR (Rate: " + eur + ")"); 
+                if (card > 0) parts.push(card + " Card (EGP)");
                 let detail = parts.length > 0 ? `(${parts.join(' + ')})` : "";
-                return { total: total, text: `${Math.round(total).toLocaleString()} EGP ${detail}`, breakdownDetails: detail };
+                return { total: total, text: `<strong>${Math.round(total).toLocaleString()} EGP</strong> <span style="font-size:8.5pt; font-weight:normal;">${detail}</span>`, breakdownDetails: detail };
             };
 
             let rentInfo = buildPayStr('pay_rent'); let depInfo = buildPayStr('pay_dep');
@@ -507,10 +533,10 @@
             // --- PAGE 1: CONTRACT ---
             let html = `
             <div class="a4-page">
-                <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" loading="eager"></div>
+                <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
                 <div class="page-content">
                     <div class="doc-head">
-                        <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="logo" loading="eager">
+                        <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="logo">
                         <div style="text-align:center">
                             <h1 style="margin:0; font-size:18pt; color:#04509D">CAR RENTAL AGREEMENT</h1>
                             <div style="font-weight:bold; font-size:12pt;">${cid}</div>
@@ -527,9 +553,10 @@
                     <div class="box-section"><span class="bs-title">PARTIES</span>
                         <table class="pt" style="margin:0">
                             <tr><td width="30%"><strong>LESSOR</strong><br>El Alakhua El Mutahidun<br>${brName}</td>
-                                <td><strong>LESSEE</strong><br>Name: ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>
-                                Passport: ${safeVal('cl_pass')} | Nation: ${safeVal('cl_nation')}<br>
-                                Phone: ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | Addr: ${safeVal('cl_addr')}<br>
+                                <td><strong>LESSEE</strong><br>
+                                <b>Name:</b> ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>
+                                <b>Passport / ID:</b> ${safeVal('cl_pass')} | <b>License No:</b> ${safeVal('cl_lic')} | <b>Nation:</b> ${safeVal('cl_nation')}<br>
+                                <b>Phone:</b> ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | <b>Addr:</b> ${safeVal('cl_addr')}<br>
                                 ${safeVal('cl_add_driver') ? '<b>Add. Driver:</b> ' + safeVal('cl_add_driver') : ''}</td></tr>
                         </table>
                     </div>
@@ -554,7 +581,7 @@
                             ${c.fee_c > 0 ? `<tr><td>Pickup Fee (${dText})</td><td>Fixed</td><td align="right">${c.fee_c}</td></tr>` : ''}
                             <tr style="font-weight:bold; border-top:2px solid #000;"><td colspan="2" align="right">TOTAL CONTRACT VALUE:</td><td align="right">${Math.round(c.totalDue).toLocaleString()} EGP</td></tr>
                         </table>
-                        <div class="${insClass}" style="border:1px solid #000; padding:5px; text-align:center; font-size:9pt; margin-bottom:5px;">
+                        <div class="${insClass}" style="border:1px solid #000; padding:5px; text-align:center; font-size:9pt; margin-bottom:5px; border-radius:4px;">
                             ${simpleInsText[insKey]}
                         </div>
                         <div style="background:#eee; padding:5px; text-align:center;">
@@ -574,7 +601,7 @@
                         The Lessee bears full legal and criminal liability for the rented vehicle during the entire rental period.
                     </div>
 
-                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px; margin-bottom: 30px;">
+                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px;">
                         <div style="display:flex; justify-content:space-between; text-align:center; font-weight:bold; font-size:10pt;">
                             <div style="width:40%;">LESSOR SIGNATURE<br><br><br>____________________<div style="font-size:9pt; margin-top:5px;">Date: ........................</div></div>
                             <div style="width:40%;">LESSEE SIGNATURE<br><br><br>____________________<div style="font-size:9pt; margin-top:5px;">Date: ........................</div></div>
@@ -599,7 +626,7 @@
 
                         <div class="term-p" style="border:2px solid #e67e22; padding:5px; background:#fff8e1; break-inside:avoid;">
                             <span class="term-h" style="color:#e67e22; border-bottom-color:#e67e22;">5. YOUR INSURANCE PACKAGE: ${insKey.toUpperCase()}</span>
-                            ${insContent}
+                            <div style="font-weight:normal; font-size:8pt; margin-top:5px; line-height:1.3;">${insContent}</div>
                         </div>
                         
                         <div class="term-p"><span class="term-h">6. THEFT & LOSS WAIVER</span>${termsText[6]}</div>
@@ -611,15 +638,22 @@
                         <div class="term-p"><span class="term-h">12. MECHANICAL DIFFICULTIES</span>${termsText[12]}</div>
                         <div class="term-p"><span class="term-h">13. INSURANCE & LIABILITY NOTICES</span>${termsText[13]}</div>
                     </div>
-                    <div style="margin-top:auto; padding:15px; border-top:1px solid #000; margin-bottom: 30px;">
-                        <strong>I have read and accepted all terms.</strong> <br><br><br> Signature: __________________________
+                    <div style="margin-top:auto; padding:15px; border-top:1px solid #000; font-weight:bold; text-align:center;">
+                        <strong>I have read and accepted all terms & conditions.</strong> <br><br><br> Signature: __________________________
                         <div style="font-size:9pt; margin-top:5px;">Date: ........................</div>
                     </div>
                 </div>
             </div>`;
 
             // --- PAGE 3: INSPECTION ---
-            const chkRow = (lbl) => `<div class="v-insp-row"><span class="v-label">${lbl}</span><div class="v-check-box v-green"></div><div class="v-check-box v-red"></div></div>`;
+            const chkRow = (lbl) => `
+                <div class="v-insp-row">
+                    <span class="v-label">${lbl}</span>
+                    <div class="v-check-group">
+                        <div class="v-check-box v-green"></div><div class="v-check-box v-red"></div>
+                    </div>
+                </div>`;
+            
             const checklistGroups = `
                 <div style="display:flex; flex-wrap:wrap; gap:5px; margin-top:5px;">
                     <div style="width:48%;"><div class="insp-group-head">PASSENGER</div>${chkRow('(D) FEND F')}${chkRow('(L) DOOR F')}${chkRow('(K) DOOR R')}${chkRow('(J) FEND R')}</div>
@@ -646,7 +680,7 @@
                         <div style="font-size:7pt;"><strong>TIRE:</strong> _________________</div>
                     </div>
                     ${checklistGroups}
-                    <div style="margin-top:5px; border:1px solid #ccc; padding:2px; min-height:50px;">
+                    <div style="margin-top:5px; border:1px solid #ccc; padding:2px; min-height:40px;">
                         <div style="font-size:7pt; font-weight:bold;">NOTES / ACCESSORIES:</div>
                         <div style="font-size:7pt;">Spare Tire [ ] Jack [ ] Fire Ext [ ] Triangle [ ]</div>
                     </div>
@@ -694,7 +728,7 @@
                         ${returnHtml}
                     </div>
 
-                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px; margin-bottom: 50px;">
+                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px;">
                         <div style="display:flex; justify-content:space-between; text-align:center; font-weight:bold; font-size:10pt;">
                             <div style="width:30%;">PICKUP: Lessee<br><br><br><br>____________________<div style="font-size:8pt; margin-top:5px;">Date: ........................</div></div>
                             <div style="width:30%;">RETURN: Lessee<br><br><br><br>____________________<div style="font-size:8pt; margin-top:5px;">Date: ........................</div></div>
@@ -706,9 +740,11 @@
 
             // --- PAGE 4: RECEIPTS ---
             const recData = {
-                client: `${safeVal('cl_fname')} ${safeVal('cl_sname')}`, pass: safeVal('cl_pass'),
-                phone: `${safeVal('cl_ph_code')} ${safeVal('cl_phone')}`, con: cid,
-                car: `${safeVal('manModel')} | Plate: ${safeVal('h_plate')} | (${safeVal('h_year')})`,
+                client: `${safeVal('cl_fname')} ${safeVal('cl_sname')}`, 
+                pass: safeVal('cl_pass'),
+                phone: `${safeVal('cl_ph_code')} ${safeVal('cl_phone')}`, 
+                con: cid,
+                car: `${safeVal('manModel')} (${safeVal('h_year')}) | Plate: ${safeVal('h_plate')}`,
                 period: `${safeVal('p_time').replace('T', ' ')} to ${safeVal('d_time').replace('T', ' ')}`
             };
 
@@ -717,12 +753,12 @@
                     <div class="rec-header">
                         <table style="width:100%; border-collapse:collapse;">
                             <tr>
-                                <td width="20%"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:50px;"></td>
+                                <td width="20%"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:45px;"></td>
                                 <td width="60%" align="center">
                                     <div class="rec-title">OFFICIAL RECEIPT</div>
                                     <div style="font-size:9pt;">${copyType}</div>
                                 </td>
-                                <td width="20%" align="right"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com&size=80x80" style="height:50px;"></td>
+                                <td width="20%" align="right"><img src="https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com&size=80x80" style="height:45px;"></td>
                             </tr>
                         </table>
                         <div style="text-align:right; font-size:9pt; margin-top:5px;">DATE: ${isBlank ? "_________________" : today}</div>
@@ -738,7 +774,7 @@
                         <div class="rec-col">
                             <div class="rec-row"><span class="rec-label">CONTRACT NO</span><span class="rec-val">${recData.con}</span></div>
                             <div class="rec-row"><span class="rec-label">VEHICLE</span><span class="rec-val">${recData.car}</span></div>
-                            <div class="rec-row"><span class="rec-label">PERIOD</span><span class="rec-val">${recData.period}<br>(${c.days} Days)</span></div>
+                            <div class="rec-row"><span class="rec-label">PERIOD</span><span class="rec-val" style="font-size:8pt;">${recData.period}<br>(${c.days} Days)</span></div>
                         </div>
                     </div>
 
@@ -749,7 +785,7 @@
                         </div>
                         <div class="rec-amount-row" style="margin-bottom:0;">
                             <span class="rec-amount-lbl" style="font-size:8pt;">PAYMENT DETAILS</span>
-                            <span class="rec-val" style="font-size:9pt;">${isBlank ? "________________________" : details}</span>
+                            <span class="rec-val" style="font-size:8pt;">${isBlank ? "________________________" : details}</span>
                         </div>
                     </div>
                     
@@ -786,7 +822,9 @@
             document.getElementById('contractOutput').style.display = "block";
             document.getElementById('btnRealPrint').style.display = "block";
             
-            setTimeout(() => { document.getElementById('btnRealPrint').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+            setTimeout(() => {
+                document.getElementById('btnRealPrint').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
         }
     </script>
 </body>
