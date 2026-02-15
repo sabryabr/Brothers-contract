@@ -1595,7 +1595,7 @@
                     <tr><th>Item Description</th><th>Rate / Calculation</th><th style="text-align:right">Amount (EGP)</th></tr>
                     <tr><td>Base Rent</td><td>${rateTxt}</td><td align="right">${Math.round(base).toLocaleString()}</td></tr>
                     ${c.i > 0 ? `<tr><td>Insurance Fees</td><td>${c.i} x ${c.days} Days</td><td align="right">${(c.i * c.days).toLocaleString()}</td></tr>` : ''}
-                    ${c.adds > 0 ? `<tr><td>Add-ons</td><td>${c.adds} x ${c.days} Days</td><td align="right">${(c.adds * c.days).toLocaleString()}</td></tr>` : ''}
+                    ${c.adds > 0 ? `<tr><td>Add-ons (${c.addOnsStr})</td><td>${c.adds} x ${c.days} Days</td><td align="right">${(c.adds * c.days).toLocaleString()}</td></tr>` : ''}
                     ${c.fee_d > 0 ? `<tr><td>Delivery Fee (${pText})</td><td>Fixed</td><td align="right">${c.fee_d}</td></tr>` : ''}
                     ${c.fee_c > 0 ? `<tr><td>Pickup Fee (${dText})</td><td>Fixed</td><td align="right">${c.fee_c}</td></tr>` : ''}
                     <tr style="font-weight:bold; border-top:2px solid #000;"><td colspan="2" align="right">TOTAL CONTRACT VALUE:</td><td align="right">${Math.round(c.totalDue).toLocaleString()} EGP</td></tr>
@@ -1873,48 +1873,51 @@
                     </div>`;
 
                 // Balance Warning
-                const balanceHtml = (!isDep && balance > 0)
+                // Balance Warning
+                const balanceHtml = (opts.isBlank) ? "" : ((!isDep && balance > 0)
                     ? `<div style="color:#c0392b; font-weight:bold; margin-top:5px; border:1px solid #c0392b; padding:2px 5px; background:#fff5f5;">⚠ OUTSTANDING BALANCE: ${Math.round(balance).toLocaleString()} EGP</div>`
-                    : (!isDep && balance <= 0 ? `<div style="color:#27ae60; font-weight:bold; margin-top:5px;">Check Out Complete. No Balance Due.</div>` : "");
+                    : (!isDep && balance <= 0 ? `<div style="color:#27ae60; font-weight:bold; margin-top:5px;">Check Out Complete. No Balance Due.</div>` : ""));
 
                 // Deposit Note
                 const depNote = isDep
-                    ? `<div style="font-size:7pt; color:#c0392b; margin-top:5px; font-weight:bold;">* NON-REFUNDABLE IF CONTRACT TERMS ARE VIOLATED.</div>`
+                    ? `<div style="font-size:7pt; color:#c0392b; margin-top:5px; font-weight:bold;">* Fully refundable if returned in same condition. Deductions apply for new damages/fines.</div>`
                     : "";
 
                 const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com&size=80x80";
 
-                const singleRecHtml = (copyType) => `
+                const singleRecHtml = (copyType, isBlank = false) => `
                     <div class="receipt-half">
                         <div class="rec-header">
-                            <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" class="rec-logo">
-                            <img src="${qrUrl}" style="height:60px; width:60px; margin-left:auto; margin-right:15px;">
-                            <div style="text-align:right">
-                                <div class="rec-title">OFFICIAL RECEIPT</div>
-                                <div style="font-size:10pt;">DATE: ${today}</div>
-                                <div style="font-size:10pt; font-weight:bold;">${title}</div>
-                                <div style="font-size:8pt; color:#555;">${copyType}</div>
-                            </div>
+                            <table style="width:100%; border-collapse:collapse;">
+                                <tr>
+                                    <td width="20%"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:50px;"></td>
+                                    <td width="60%" align="center">
+                                        <div class="rec-title">OFFICIAL RECEIPT</div>
+                                        <div style="font-size:9pt;">${copyType}</div>
+                                    </td>
+                                    <td width="20%" align="right"><img src="${qrUrl}" style="height:50px;"></td>
+                                </tr>
+                            </table>
+                            <div style="text-align:right; font-size:9pt; margin-top:5px;">DATE: ${isBlank ? "_________________" : today}</div>
+                            <div style="text-align:right; font-weight:bold;">${title}</div>
                         </div>
-                        <div class="rec-grid">
-                            <div>
-                                <div class="rec-row"><span class="rec-label">RECEIVED FROM</span><span class="rec-val">${recData.client}</span></div>
-                                <div class="rec-row"><span class="rec-label">LICENSE NO</span><span class="rec-val">${recData.lic}</span></div>
-                                <div class="rec-row"><span class="rec-label">PHONE</span><span class="rec-val">${recData.phone}</span></div>
-                            </div>
-                            <div>
-                                <div class="rec-row"><span class="rec-label">CONTRACT NO</span><span class="rec-val">${recData.con}</span></div>
-                                <div class="rec-row"><span class="rec-label">VEHICLE</span><span class="rec-val">${recData.car}</span></div>
-                                <div class="rec-row"><span class="rec-label">PERIOD</span><span class="rec-val">${recData.period} (${recData.days} Days)</span></div>
-                            </div>
-                        </div>
+                        
+                        <table class="rec-grid" style="width:100%; border-collapse:collapse; margin-bottom:10px;">
+                            <tr><td class="rec-row"><span class="rec-label">RECEIVED FROM</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.client}</span></td></tr>
+                            <tr><td class="rec-row"><span class="rec-label">LICENSE NO</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.lic}</span></td></tr>
+                            <tr><td class="rec-row"><span class="rec-label">PHONE</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.phone}</span></td></tr>
+                            <tr><td class="rec-row"><span class="rec-label">CONTRACT NO</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.con}</span></td></tr>
+                            <tr><td class="rec-row"><span class="rec-label">VEHICLE</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.car}</span></td></tr>
+                            <tr><td class="rec-row"><span class="rec-label">PERIOD</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.period} (${recData.days} Days)</span></td></tr>
+                        </table>
+
                         <div style="margin-top:auto; border:2px solid #ccc; padding:10px; background:#f9f9f9; flex-grow:0; min-height:90px;">
                             <div class="rec-row" style="border-bottom:none; font-size:12pt;">
                                 <span class="rec-label">AMOUNT RECEIVED</span>
-                                <span class="rec-val" style="font-size:14pt;">${Math.round(amount).toLocaleString()} EGP</span>
+                                <span class="rec-val" style="font-size:14pt;">${isBlank ? "_________________ EGP" : Math.round(amount).toLocaleString() + " EGP"}</span>
                             </div>
                             <div class="rec-row" style="border-bottom:none; font-size:10pt; color:#666; margin-top:5px; display:block;">
-                                <div><span class="rec-label">DETAILS:</span> ${details}</div>
+                                <div><span class="rec-label">DETAILS:</span> ${isBlank ? "________________________________" : details}</div>
                                 ${breakdownHtml}
                                 ${balanceHtml}
                                 ${depNote}
@@ -1934,9 +1937,9 @@
                 <div class="a4-page" style="display:flex; flex-direction:column; justify-content:space-between; padding:10mm; height:297mm;">
                     <div class="watermark"><img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png"></div>
                     <div class="page-content" style="height:100%; display:flex; flex-direction:column; justify-content:space-between;">
-                        ${singleRecHtml('CLIENT COPY')}
+                        ${singleRecHtml('CLIENT COPY', opts.isBlank)}
                         <div style="text-align:center; border-top:1px dashed #999; color:#999;">- - - - - DETACH HERE - - - - -</div>
-                        ${singleRecHtml('COMPANY COPY')}
+                        ${singleRecHtml('COMPANY COPY', opts.isBlank)}
                     </div>
                 </div>`;
             };
@@ -1946,6 +1949,18 @@
                 paymentDetails: rentInfo.text,
                 balance: c.rentPending
             });
+
+            // Monthly Loop (Blank Installments)
+            if (c.mode === 'Monthly' && c.mult > 1) {
+                let numMonths = Math.ceil(c.mult);
+                for (let m = 2; m <= numMonths; m++) {
+                    html += genDualReceipt(`MONTHLY INSTALLMENT ${m}`, 0, {
+                        paymentDetails: "",
+                        balance: 0,
+                        isBlank: true
+                    });
+                }
+            }
 
             // 2. DEPOSIT RECEIPT (Dual)
             if (totalDepPaid > 0 || c.reqDep > 0) {
