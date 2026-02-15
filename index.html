@@ -50,16 +50,21 @@
 
         /* Hidden on screen */
 
+        /* Hidden on screen */
+
+        /* Hidden on screen */
+
+        /* Hidden on screen */
+
         .control-panel {
-            max-width: 1280px;
+            max-width: 98%;
+            /* Maximized width for bigger fields */
             margin: 0 auto 40px auto;
             background: white;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
             border-top: 6px solid var(--primary);
-            width: 95%;
-            max-width: 1000px;
-            /* Constrain width on large screens */
+            width: 98%;
         }
 
         .cp-head {
@@ -74,24 +79,199 @@
             border-bottom: 4px solid var(--primary);
         }
 
-        .cp-head h2 {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            color: var(--primary);
-            margin: 0;
+        /* ... existing styles ... */
+
+        /* Ensure inputs fit in grids */
+        .grid-3 input,
+        .grid-4 input,
+        .grid-5 input,
+        .grid-2 input,
+        select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+            padding: 8px 10px;
+            /* Taller inputs */
+            height: 38px;
+            /* Fixed robust height */
+            font-size: 14px;
         }
 
-        .rate-group {
-            background: var(--primary);
-            color: white;
-            padding: 5px 15px;
-            border-radius: 6px;
-            display: flex;
+        .grid-4 div,
+        .grid-3 div,
+        .grid-2 div,
+        .grid-5 div {
+            min-width: 0;
+        }
+
+        .grid-4 div[style*="display:flex"] {
+            width: 100%;
+        }
+
+        /* COMPACT SPACING (Less "spaces", bigger fields) */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            /* Reduced gap */
+            margin-bottom: 5px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: 0.8fr repeat(4, 1fr);
+            gap: 4px;
+            margin-bottom: 5px;
             align-items: center;
+        }
+
+        .cp-head {
+            background: white;
+            color: var(--primary);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        /* ... existing styles ... */
+
+        /* Ensure inputs fit in grids */
+        .grid-3 input,
+        .grid-4 input,
+        .grid-5 input,
+        .grid-2 input,
+        select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+        }
+
+        .grid-4 div,
+        .grid-3 div,
+        .grid-2 div,
+        .grid-5 div {
+            min-width: 0;
+        }
+
+        .grid-4 div[style*="display:flex"] {
+            width: 100%;
+        }
+
+        /* FIXED LENGTH FIELDS - preventing shrinking */
+        /* Using minmax with 0 to allow shrinking if absolutely needed, but prefer 1fr */
+        /* To enforce "fitting" without horizontal scroll on standard screens */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 10px;
-            box-shadow: 0 4px 6px rgba(4, 80, 157, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: 0.8fr repeat(4, 1fr);
+            gap: 5px;
+            margin-bottom: 5px;
+            align-items: center;
+        }
+
+        .cp-head {
+            background: white;
+            color: var(--primary);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--primary);
+        }
+
+        /* ... existing styles ... */
+
+        /* Ensure inputs fit in grids */
+        .grid-3 input,
+        .grid-4 input,
+        .grid-5 input,
+        .grid-2 input,
+        select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+        }
+
+        .grid-4 div,
+        .grid-3 div,
+        .grid-2 div,
+        .grid-5 div {
+            min-width: 0;
+        }
+
+        .grid-4 div[style*="display:flex"] {
+            width: 100%;
+        }
+
+        /* FIXED LENGTH FIELDS - preventing shrinking */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(160px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .grid-5 {
+            display: grid;
+            grid-template-columns: 0.8fr repeat(4, minmax(100px, 1fr));
+            gap: 5px;
+            margin-bottom: 5px;
+            align-items: center;
         }
 
         .cp-body {
@@ -112,16 +292,40 @@
             gap: 8px;
         }
 
+        /* Ensure inputs fit in grids */
+        /* Ensure inputs fit in grids */
+        .grid-3 input,
+        .grid-4 input,
+        .grid-5 input,
+        .grid-2 input,
+        select {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            min-width: 0 !important;
+            max-width: 100% !important;
+        }
+
+        .grid-4 div,
+        .grid-3 div,
+        .grid-2 div,
+        .grid-5 div {
+            min-width: 0;
+        }
+
+        .grid-4 div[style*="display:flex"] {
+            width: 100%;
+        }
+
         .grid-2 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             margin-bottom: 10px;
         }
 
         .grid-3 {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 10px;
             margin-bottom: 10px;
         }
@@ -1105,6 +1309,7 @@
         <div class="grid-4">
             <div><label>Client Name</label><input type="text" id="cl_fname" placeholder="Full Name"></div>
             <div><label>Passport / ID</label><input type="text" id="cl_pass"></div>
+            <div><label>Nationality</label><input type="text" id="cl_nation" placeholder="Country"></div>
             <div><label>Phone</label>
                 <div style="display:flex; gap:5px;">
                     <input type="text" id="cl_ph_code" value="+20" style="width:50px; text-align:center;"
@@ -1112,17 +1317,17 @@
                     <input type="text" id="cl_phone" placeholder="1XXXXXXXXX" style="flex:1;">
                 </div>
             </div>
-            <div><label>Email</label><input type="email" id="cl_email"></div>
         </div>
 
-        <div class="grid-3" style="margin-top:5px;">
+        <div class="grid-4" style="margin-top:5px;">
+            <div><label>Email</label><input type="email" id="cl_email"></div>
             <div><label>Driver License (Main)</label><input type="text" id="cl_lic" placeholder="License No"></div>
             <div><label>Additional Driver</label><input type="text" id="cl_add_driver" placeholder="Name"></div>
             <div><label>Add. Driver License</label><input type="text" id="cl_add_lic" placeholder="License No"></div>
         </div>
 
         <!-- Hidden/Extra Fields -->
-        <input type="hidden" id="cl_sname"><input type="hidden" id="cl_nation">
+        <input type="hidden" id="cl_sname">
         <input type="hidden" id="cl_dob">
         <input type="hidden" id="cl_addr">
 
@@ -1625,7 +1830,9 @@
             </div>` : ''}
             
              <div style="text-align:center; border:2px dashed #000; padding:10px; font-size:9pt; margin-top:10px;">
-                <strong>IMPORTANT:</strong> Contract is void for any period NOT covered by an official payment receipt.
+                <strong>IMPORTANT:</strong> Contract is void for any period NOT covered by an official payment receipt.<br>
+                <strong>LIABILITY:</strong> If the RETURN CHECK is not closed/signed, the Lessee retains full liability for the vehicle until official closure.
+                The Lessee bears full legal and criminal liability for the rented vehicle during the entire rental period.
             </div>
 
             <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px; margin-bottom: 50px;">
@@ -1860,7 +2067,8 @@
             // Receipt Data Builder
             const recData = {
                 client: `${safeVal('cl_fname')} ${safeVal('cl_sname')}`,
-                lic: safeVal('cl_lic'),
+                pass: safeVal('cl_pass'),
+                nation: safeVal('cl_nation'),
                 phone: `${safeVal('cl_ph_code')} ${safeVal('cl_phone')}`,
                 car: `${safeVal('manModel')} | Plate: ${safeVal('h_plate')} | (${safeVal('h_year')})`,
                 period: `${safeVal('p_time').replace('T', ' ')} to ${safeVal('d_time').replace('T', ' ')}`,
@@ -1883,7 +2091,6 @@
                     </div>`;
 
                 // Balance Warning
-                // Balance Warning
                 const balanceHtml = (opts.isBlank) ? "" : ((!isDep && balance > 0)
                     ? `<div style="color:#c0392b; font-weight:bold; margin-top:5px; border:1px solid #c0392b; padding:2px 5px; background:#fff5f5;">⚠ OUTSTANDING BALANCE: ${Math.round(balance).toLocaleString()} EGP</div>`
                     : (!isDep && balance <= 0 ? `<div style="color:#27ae60; font-weight:bold; margin-top:5px;">Check Out Complete. No Balance Due.</div>` : ""));
@@ -1896,7 +2103,7 @@
                 const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?data=https://brothersegy.com&size=80x80";
 
                 const singleRecHtml = (copyType, isBlank = false) => `
-                    <div class="receipt-half">
+                    <div class="receipt-half" style="display:flex; flex-direction:column;">
                         <div class="rec-header">
                             <table style="width:100%; border-collapse:collapse;">
                                 <tr>
@@ -1914,7 +2121,8 @@
                         
                         <table class="rec-grid" style="width:100%; border-collapse:collapse; margin-bottom:10px;">
                             <tr><td class="rec-row"><span class="rec-label">RECEIVED FROM</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.client}</span></td></tr>
-                            <tr><td class="rec-row"><span class="rec-label">LICENSE NO</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.lic}</span></td></tr>
+                            <tr><td class="rec-row"><span class="rec-label">PASSPORT / ID</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.pass}</span></td></tr>
+                            <tr><td class="rec-row"><span class="rec-label">NATIONALITY</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.nation}</span></td></tr>
                             <tr><td class="rec-row"><span class="rec-label">PHONE</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.phone}</span></td></tr>
                             <tr><td class="rec-row"><span class="rec-label">CONTRACT NO</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.con}</span></td></tr>
                             <tr><td class="rec-row"><span class="rec-label">VEHICLE</span></td><td class="rec-row" align="right"><span class="rec-val">${recData.car}</span></td></tr>
