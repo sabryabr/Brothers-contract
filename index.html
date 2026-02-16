@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brothers EGY - Contract System v83.0</title>
+    <title>Brothers EGY - Contract System v84.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ================= SCREEN UI ================= */
@@ -27,18 +27,10 @@
 
         /* FLOATING PILL HEADER */
         .floating-header {
-            max-width: 1050px;
-            margin: 10px auto 20px auto;
-            background: white;
-            border: 3px solid var(--primary);
-            border-radius: 50px;
-            padding: 10px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            max-width: 1050px; margin: 10px auto 20px auto; background: white;
+            border: 3px solid var(--primary); border-radius: 50px; padding: 10px 30px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
-
         .rate-group { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
         .badge-live { background: #27ae60; color: white; padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: bold; text-transform: uppercase; }
         .live-clock { font-family: monospace; font-weight: bold; font-size: 13px; color: var(--primary); }
@@ -48,7 +40,7 @@
         .control-panel { max-width: 1050px; margin: 0 auto 40px auto; background: transparent; }
         .cp-body { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); }
 
-        .section-head { font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; margin: 25px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; }
+        .section-head { font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; margin: 25px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 8px; }
         .section-head:first-child { margin-top: 0; }
 
         label { display: block; font-size: 10px; font-weight: 700; color: #555; margin-bottom: 4px; text-transform: uppercase; }
@@ -175,7 +167,7 @@
     <div class="floating-header">
         <div style="display:flex; align-items:center; gap:15px;">
             <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;" alt="Logo">
-            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v83.0</h2>
+            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v84.0</h2>
         </div>
         <div style="display:flex; gap:20px; align-items:center;">
             <div class="rate-group">
@@ -196,7 +188,7 @@
     <div class="control-panel">
         <div class="cp-body">
 
-            <div class="section-head">1. Contract & Branch</div>
+            <div class="section-head"><i class="fa-solid fa-file-signature"></i> 1. Contract & Branch</div>
             <div class="grid-3">
                 <div><label>Issuing Branch</label>
                     <select id="issuingBranch" onchange="calc()">
@@ -221,7 +213,7 @@
                 </div>
             </div>
 
-            <div class="section-head">2. Vehicle Details</div>
+            <div class="section-head"><i class="fa-solid fa-car"></i> 2. Vehicle Details</div>
             <div class="grid-2">
                 <div><label>Select From Fleet</label><select id="carSelect" onchange="loadCar()"><option value="">-- Select Car --</option></select></div>
                 <div><label>Manual Model Input</label><input type="text" id="manModel"></div>
@@ -237,7 +229,7 @@
                 <div><label>Ins. Fee (Daily)</label><input type="number" id="rateIns" value="0" oninput="calc()"></div>
             </div>
 
-            <div class="section-head">3. Client & Dates</div>
+            <div class="section-head"><i class="fa-solid fa-user"></i> 3. Client & Dates</div>
             <div class="grid-4">
                 <div><label>First Name</label><input type="text" id="cl_fname" placeholder="First"></div>
                 <div><label>Surname</label><input type="text" id="cl_sname" placeholder="Last"></div>
@@ -282,7 +274,7 @@
                 </div>
             </div>
 
-            <div class="section-head">4. Money & Payments</div>
+            <div class="section-head"><i class="fa-solid fa-money-bills"></i> 4. Money & Payments</div>
             <div style="display:flex; gap:15px;">
                 <div style="flex:7;">
                     <div class="grid-3">
@@ -378,13 +370,12 @@
     <div id="contractOutput"></div>
 
     <div style="display:none;">
-        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous">
-        <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
+        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
         <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png" crossorigin="anonymous">
     </div>
 
     <script>
-        // --- 1. FULL DATA CONSTANTS (PLATES FLIPPED) ---
+        // --- 1. FULL DATA CONSTANTS ---
         const fleet = [
             {code:"33", model:"Haval Jolion", year:"2022", plate:"2 6 4 9 | ن ا ب", vin:"606889", motor:"21499022758"},
             {code:"38", model:"Chevrolet Aveo", year:"2020", plate:"8 2 6 3 | ب د ع", vin:"E009927", motor:"191160037"},
@@ -568,9 +559,8 @@
             const prevCon = safeVal('prevCon');
             const extHtml = safeVal('conType') === 'Extension' ? `<div style="font-size:10pt; font-weight:bold; margin-top:3px;">(EXTENSION TO ${prevCon})</div>` : '';
 
-            // Safe fallback images
+            // Using Logo and Car Template perfectly
             const logoSrc = document.getElementById('img_logo').src;
-            const waterSrc = document.getElementById('img_water').src;
             const carSrc = document.getElementById('img_car').src;
 
             let html = ``;
@@ -578,7 +568,7 @@
             // --- PAGE 1: CONTRACT ---
             html += `
             <div class="a4-page">
-                <div class="watermark"><img src="${waterSrc}"></div>
+                <div class="watermark"><img src="${logoSrc}"></div>
                 <div class="page-content">
                     <div class="doc-head">
                         <img src="${logoSrc}" class="logo">
@@ -609,7 +599,7 @@
 
                     <div class="box-section"><span class="bs-title">VEHICLE & PERIOD</span>
                         <table class="pt">
-                            <tr><th>Model</th><td>${safeVal('manModel')}</td><th>Plate</th><td dir="ltr" style="text-align:right;"><b>${safeVal('h_plate')}</b></td><th>KM Out</th><td>${safeVal('kmOut')}</td></tr>
+                            <tr><th>Model</th><td>${safeVal('manModel')}</td><th>Plate</th><td dir="ltr" style="text-align:left;"><b>${safeVal('h_plate')}</b></td><th>KM Out</th><td>${safeVal('kmOut')}</td></tr>
                             <tr><th>VIN</th><td>${safeVal('h_vin')}</td><th>Motor</th><td>${safeVal('h_motor')}</td><th>Allow</th><td>${document.getElementById('add_km').checked ? "Unlimited" : (120 * c.days) + " KM"}</td></tr>
                             <tr><th>Pickup</th><td>${safeVal('p_time').replace('T', ' ')}<br>${pText}</td>
                                 <th>Dropoff</th><td>${safeVal('d_time').replace('T', ' ')}<br>${dText}</td>
@@ -661,7 +651,7 @@
 
             html += `
             <div class="a4-page">
-                <div class="watermark"><img src="${waterSrc}"></div>
+                <div class="watermark"><img src="${logoSrc}"></div>
                 <div class="page-content">
                     <div class="doc-head"><strong>TERMS & CONDITIONS</strong><span>Page 2/4</span></div>
                     <div class="terms-grid">
@@ -768,7 +758,7 @@
 
             html += `
             <div class="a4-page">
-                <div class="watermark"><img src="${waterSrc}"></div>
+                <div class="watermark"><img src="${logoSrc}"></div>
                 <div class="page-content">
                     <div class="doc-head"><strong>VISUAL INSPECTION REPORT</strong><span>Page 3/4</span></div>
                     <div style="font-size:8pt; text-align:center; font-weight:bold; margin-bottom:5px;">Contract: ${cid} | Date: ${today}</div>
@@ -822,7 +812,7 @@
                         </div>
                         <div class="rec-col">
                             <div class="rec-row"><span class="rec-label">CONTRACT NO</span><span class="rec-val">${recData.con}</span></div>
-                            <div class="rec-row"><span class="rec-label">VEHICLE</span><span class="rec-val" dir="ltr" style="text-align:right;">${recData.car}</span></div>
+                            <div class="rec-row"><span class="rec-label">VEHICLE</span><span class="rec-val" dir="ltr" style="text-align:left;">${recData.car}</span></div>
                             ${isDeposit ? '' : `<div class="rec-row"><span class="rec-label">PERIOD</span><span class="rec-val" style="font-size:8pt;">${periodStr}</span></div>`}
                         </div>
                     </div>
