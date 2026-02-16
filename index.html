@@ -252,11 +252,14 @@
                         <input type="text" id="cl_phone" placeholder="1XXXXXXXXX">
                     </div>
                 </div>
+                <div><label>Email Address</label><input type="email" id="cl_email" placeholder="client@mail.com"></div>
                 <div><label>Driver License</label><input type="text" id="cl_lic" placeholder="Main License"></div>
                 <div><label>Address</label><input type="text" id="cl_addr" placeholder="Local Address"></div>
-                <div><label>Additional Driver</label><input type="text" id="cl_add_driver" placeholder="Name"></div>
             </div>
-            <input type="hidden" id="cl_add_lic">
+            <div class="grid-2" style="margin-top:10px;">
+                <div><label>Additional Driver Name</label><input type="text" id="cl_add_driver" placeholder="Optional Name"></div>
+                <div><label>Additional Driver License</label><input type="text" id="cl_add_lic" placeholder="Optional License"></div>
+            </div>
 
             <div class="grid-4" style="margin-top:10px;">
                 <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
@@ -367,7 +370,7 @@
                 </div>
             </div>
 
-            <button id="btnGen" class="btn-gen" onclick="generatePreview()"><i class="fa-solid fa-file-contract"></i> 1. GENERATE PREVIEW</button>
+            <button id="btnGen" class="btn-gen" onclick="generatePreview()" disabled><i class="fa fa-spinner fa-spin"></i> LOADING RESOURCES...</button>
         </div>
     </div>
 
@@ -375,13 +378,24 @@
     <div id="contractOutput"></div>
 
     <div style="display:none;">
-        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
-        <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
-        <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" crossorigin="anonymous">
+        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous" onload="resourceLoaded()" onerror="resourceError()">
+        <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous" onload="resourceLoaded()">
+        <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png" crossorigin="anonymous" onload="resourceLoaded()">
     </div>
 
     <script>
-        // --- 1. FULL DATA CONSTANTS (PLATES FLIPPED) ---
+        // --- 1. SYSTEM LOGIC ---
+        let loadedCount = 0;
+        function resourceLoaded() {
+            loadedCount++;
+            if(loadedCount >= 3) {
+                const btn = document.getElementById('btnGen');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-file-contract"></i> 1. GENERATE PREVIEW';
+            }
+        }
+        function resourceError() { resourceLoaded(); } // Proceed even if an image blocks
+
         const fleet = [
             {code:"33", model:"Haval Jolion", year:"2022", plate:"2 6 4 9 | ن ا ب", vin:"606889", motor:"21499022758"},
             {code:"38", model:"Chevrolet Aveo", year:"2020", plate:"8 2 6 3 | ب د ع", vin:"E009927", motor:"191160037"},
@@ -433,7 +447,7 @@
 
             setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString(); }, 1000);
 
-            // Fetch Live Rates
+            // Fetch Live Rates silently
             fetch('https://api.exchangerate-api.com/v4/latest/USD')
                 .then(r => r.json()).then(d => {
                     if (d.rates.EGP) {
@@ -565,10 +579,10 @@
             const prevCon = safeVal('prevCon');
             const extHtml = safeVal('conType') === 'Extension' ? `<div style="font-size:10pt; font-weight:bold; margin-top:3px;">(EXTENSION TO ${prevCon})</div>` : '';
 
-            // Safe fallback images if network is down
-            const logoSrc = "https://brothersegy.com/wp-content/uploads/2026/02/12345.png";
-            const waterSrc = "https://brothersegy.com/wp-content/uploads/2026/02/12345.png";
-            const carSrc = "https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg";
+            // Safe fallback images
+            const logoSrc = document.getElementById('img_logo').src;
+            const waterSrc = document.getElementById('img_water').src;
+            const carSrc = document.getElementById('img_car').src;
 
             let html = ``;
 
@@ -598,8 +612,9 @@
                                 <td><strong>LESSEE</strong><br>
                                 <b>Name:</b> ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>
                                 <b>Passport / ID:</b> ${safeVal('cl_pass')} | <b>License No:</b> ${safeVal('cl_lic')} | <b>Nation:</b> ${safeVal('cl_nation')}<br>
-                                <b>Phone:</b> ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | <b>Addr:</b> ${safeVal('cl_addr')}<br>
-                                ${safeVal('cl_add_driver') ? '<b>Add. Driver:</b> ' + safeVal('cl_add_driver') : ''}</td></tr>
+                                <b>Phone:</b> ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | <b>Email:</b> ${safeVal('cl_email')}<br>
+                                <b>Addr:</b> ${safeVal('cl_addr')}<br>
+                                ${safeVal('cl_add_driver') ? '<b>Add. Driver:</b> ' + safeVal('cl_add_driver') + (safeVal('cl_add_lic') ? ' | <b>Lic:</b> ' + safeVal('cl_add_lic') : '') : ''}</td></tr>
                         </table>
                     </div>
 
@@ -643,7 +658,7 @@
                         The Lessee bears full legal and criminal liability for the rented vehicle during the entire rental period.
                     </div>
 
-                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px; margin-bottom: 30px;">
+                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px;">
                         <div style="display:flex; justify-content:space-between; text-align:center; font-weight:bold; font-size:10pt;">
                             <div style="width:40%;">LESSOR SIGNATURE<br><br><br>____________________<div style="font-size:9pt; margin-top:5px;">Date: ........................</div></div>
                              <div style="width:40%;">LESSEE SIGNATURE<br><br><br>____________________<div style="font-size:9pt; margin-top:5px;">Date: ........................</div></div>
