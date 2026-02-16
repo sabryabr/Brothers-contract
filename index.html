@@ -9,18 +9,36 @@
     <style>
         /* ================= SCREEN UI ================= */
         :root {
-            --primary: #04509D; --secondary: #333; --bg: #eef2f5;
-            --accent: #e67e22; --success: #27ae60; --danger: #c0392b;
+            --primary: #04509D;
+            --secondary: #333;
+            --bg: #eef2f5;
+            --accent: #e67e22;
+            --success: #27ae60;
+            --danger: #c0392b;
         }
 
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 10px 20px; color: #333; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 10px 20px;
+            color: #333;
+        }
 
         /* FLOATING PILL HEADER */
         .floating-header {
-            max-width: 1050px; margin: 10px auto 20px auto; background: white;
-            border: 3px solid var(--primary); border-radius: 50px; padding: 10px 30px;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            max-width: 1050px;
+            margin: 10px auto 20px auto;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50px;
+            padding: 10px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
+
         .rate-group { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
         .badge-live { background: #27ae60; color: white; padding: 2px 6px; border-radius: 4px; font-size: 8px; font-weight: bold; text-transform: uppercase; }
         .live-clock { font-family: monospace; font-weight: bold; font-size: 13px; color: var(--primary); }
@@ -30,7 +48,7 @@
         .control-panel { max-width: 1050px; margin: 0 auto 40px auto; background: transparent; }
         .cp-body { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08); }
 
-        .section-head { font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; margin: 25px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; display: flex; align-items: center; gap: 8px; }
+        .section-head { font-size: 14px; font-weight: 800; color: var(--secondary); text-transform: uppercase; margin: 25px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; }
         .section-head:first-child { margin-top: 0; }
 
         label { display: block; font-size: 10px; font-weight: 700; color: #555; margin-bottom: 4px; text-transform: uppercase; }
@@ -74,7 +92,7 @@
         #contractOutput { display: none; margin-top: 20px; }
 
         .a4-page {
-            width: 210mm; min-height: 297mm; padding: 10mm 15mm; margin: 0 auto 30px auto;
+            width: 210mm; height: 296mm; padding: 10mm 15mm; margin: 0 auto 30px auto;
             background: white; position: relative; box-sizing: border-box; overflow: hidden;
             font-family: 'Helvetica', 'Arial', sans-serif; font-size: 9.5pt; line-height: 1.35; color: #000;
             display: flex; flex-direction: column; box-shadow: 0 0 20px rgba(0, 0, 0, 0.15); page-break-after: always;
@@ -138,25 +156,16 @@
         .rec-amount-val { font-size: 18pt; font-weight: bold; color: #000; }
         .rec-sig-line { border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px; font-size: 9pt; font-weight: bold; }
 
-        /* ================= STRICT PRINT ENFORCEMENT ================= */
+        /* STRICT PRINT PAGE ENFORCEMENT */
         @media print {
-            body { background: white; padding: 0; margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { background: white; padding: 0; margin: 0; visibility: hidden; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
             @page { margin: 0; size: A4; }
+            .floating-header, .control-panel, .btn-print, .btn-final-print { display: none !important; }
             
-            /* Hide EVERYTHING except the print output container */
-            body > *:not(#contractOutput) { display: none !important; }
-            #contractOutput { display: block !important; margin: 0; }
+            #contractOutput { visibility: visible; display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; }
+            #contractOutput * { visibility: visible; }
             
-            .a4-page { 
-                box-shadow: none !important; 
-                margin: 0 !important; 
-                border: none !important; 
-                page-break-after: always; 
-                page-break-inside: avoid; 
-                height: 296mm; /* Keeps it strictly inside A4 bounds to prevent blank pages */
-                width: 210mm; 
-                overflow: hidden; 
-            }
+            .a4-page { box-shadow: none !important; margin: 0 !important; border: none !important; page-break-after: always; page-break-inside: avoid; height: 297mm; width: 210mm; overflow: hidden; }
             .a4-page:last-child { page-break-after: avoid; }
         }
     </style>
@@ -188,7 +197,7 @@
     <div class="control-panel">
         <div class="cp-body">
 
-            <div class="section-head"><i class="fa-solid fa-file-signature"></i> 1. Contract & Branch</div>
+            <div class="section-head">1. Contract & Branch</div>
             <div class="grid-3">
                 <div><label>Issuing Branch</label>
                     <select id="issuingBranch" onchange="calc()">
@@ -213,7 +222,7 @@
                 </div>
             </div>
 
-            <div class="section-head"><i class="fa-solid fa-car"></i> 2. Vehicle Details</div>
+            <div class="section-head">2. Vehicle Details</div>
             <div class="grid-2">
                 <div><label>Select From Fleet</label><select id="carSelect" onchange="loadCar()"><option value="">-- Select Car --</option></select></div>
                 <div><label>Manual Model Input</label><input type="text" id="manModel"></div>
@@ -229,7 +238,7 @@
                 <div><label>Ins. Fee (Daily)</label><input type="number" id="rateIns" value="0" oninput="calc()"></div>
             </div>
 
-            <div class="section-head"><i class="fa-solid fa-user"></i> 3. Client & Dates</div>
+            <div class="section-head">3. Client & Dates</div>
             <div class="grid-4">
                 <div><label>First Name</label><input type="text" id="cl_fname" placeholder="First"></div>
                 <div><label>Surname</label><input type="text" id="cl_sname" placeholder="Last"></div>
@@ -243,15 +252,11 @@
                         <input type="text" id="cl_phone" placeholder="1XXXXXXXXX">
                     </div>
                 </div>
-                <div><label>Email Address</label><input type="email" id="cl_email" placeholder="client@mail.com"></div>
                 <div><label>Driver License</label><input type="text" id="cl_lic" placeholder="Main License"></div>
                 <div><label>Address</label><input type="text" id="cl_addr" placeholder="Local Address"></div>
+                <div><label>Additional Driver</label><input type="text" id="cl_add_driver" placeholder="Name"></div>
             </div>
-            
-            <div class="grid-2">
-                <div><label>Additional Driver Name</label><input type="text" id="cl_add_driver" placeholder="Optional Name"></div>
-                <div><label>Additional Driver License</label><input type="text" id="cl_add_lic" placeholder="Optional License"></div>
-            </div>
+            <input type="hidden" id="cl_add_lic">
 
             <div class="grid-4" style="margin-top:10px;">
                 <div><label>Pickup Date/Time</label><input type="datetime-local" id="p_time" onchange="calc()"></div>
@@ -274,7 +279,7 @@
                 </div>
             </div>
 
-            <div class="section-head"><i class="fa-solid fa-money-bills"></i> 4. Money & Payments</div>
+            <div class="section-head">4. Money & Payments</div>
             <div style="display:flex; gap:15px;">
                 <div style="flex:7;">
                     <div class="grid-3">
@@ -370,24 +375,13 @@
     <div id="contractOutput"></div>
 
     <div style="display:none;">
-        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous" onload="resourceLoaded()" onerror="resourceError()">
-        <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous" onload="resourceLoaded()">
-        <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" crossorigin="anonymous" onload="resourceLoaded()">
+        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
+        <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
+        <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg" crossorigin="anonymous">
     </div>
 
     <script>
-        // --- 1. SYSTEM LOGIC ---
-        let loadedCount = 0;
-        function resourceLoaded() {
-            loadedCount++;
-            if(loadedCount >= 3) {
-                const btn = document.getElementById('btnGen');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-file-contract"></i> 1. GENERATE PREVIEW';
-            }
-        }
-        function resourceError() { resourceLoaded(); } // Proceed even if an image blocks
-
+        // --- 1. FULL DATA CONSTANTS (PLATES FLIPPED) ---
         const fleet = [
             {code:"33", model:"Haval Jolion", year:"2022", plate:"2 6 4 9 | ن ا ب", vin:"606889", motor:"21499022758"},
             {code:"38", model:"Chevrolet Aveo", year:"2020", plate:"8 2 6 3 | ب د ع", vin:"E009927", motor:"191160037"},
@@ -439,7 +433,7 @@
 
             setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString(); }, 1000);
 
-            // Fetch Live Rates silently
+            // Fetch Live Rates
             fetch('https://api.exchangerate-api.com/v4/latest/USD')
                 .then(r => r.json()).then(d => {
                     if (d.rates.EGP) {
@@ -571,10 +565,10 @@
             const prevCon = safeVal('prevCon');
             const extHtml = safeVal('conType') === 'Extension' ? `<div style="font-size:10pt; font-weight:bold; margin-top:3px;">(EXTENSION TO ${prevCon})</div>` : '';
 
-            // Safe fallback images
-            const logoSrc = document.getElementById('img_logo').src;
-            const waterSrc = document.getElementById('img_water').src;
-            const carSrc = document.getElementById('img_car').src;
+            // Safe fallback images if network is down
+            const logoSrc = "https://brothersegy.com/wp-content/uploads/2026/02/12345.png";
+            const waterSrc = "https://brothersegy.com/wp-content/uploads/2026/02/12345.png";
+            const carSrc = "https://brothersegy.com/wp-content/uploads/2026/02/تصميم-هيكل-السيارة-للعقود.jpg";
 
             let html = ``;
 
@@ -604,9 +598,8 @@
                                 <td><strong>LESSEE</strong><br>
                                 <b>Name:</b> ${safeVal('cl_fname')} ${safeVal('cl_sname')}<br>
                                 <b>Passport / ID:</b> ${safeVal('cl_pass')} | <b>License No:</b> ${safeVal('cl_lic')} | <b>Nation:</b> ${safeVal('cl_nation')}<br>
-                                <b>Phone:</b> ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | <b>Email:</b> ${safeVal('cl_email')}<br>
-                                <b>Addr:</b> ${safeVal('cl_addr')}<br>
-                                ${safeVal('cl_add_driver') ? '<b>Add. Driver:</b> ' + safeVal('cl_add_driver') + (safeVal('cl_add_lic') ? ' | <b>Lic:</b> ' + safeVal('cl_add_lic') : '') : ''}</td></tr>
+                                <b>Phone:</b> ${safeVal('cl_ph_code')} ${safeVal('cl_phone')} | <b>Addr:</b> ${safeVal('cl_addr')}<br>
+                                ${safeVal('cl_add_driver') ? '<b>Add. Driver:</b> ' + safeVal('cl_add_driver') : ''}</td></tr>
                         </table>
                     </div>
 
