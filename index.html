@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brothers EGY - Contract System v82.0</title>
+    <title>Brothers EGY - Contract System v83.0</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* ================= SCREEN UI ================= */
@@ -77,8 +77,7 @@
             display: flex; justify-content: center; align-items: center; gap: 10px; transition: 0.3s; text-transform: uppercase;
         }
         .btn-gen:hover { background: #033a75; transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); }
-        .btn-gen:disabled { background: #95a5a6; cursor: wait; transform: none; box-shadow: none; }
-
+        
         .btn-final-print {
             background: var(--success); color: white; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; margin: 0 auto 20px auto; display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.2); width:100%; max-width: 1050px;
         }
@@ -165,7 +164,7 @@
             #contractOutput { visibility: visible; display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; }
             #contractOutput * { visibility: visible; }
             
-            .a4-page { box-shadow: none !important; margin: 0 !important; border: none !important; page-break-after: always; page-break-inside: avoid; height: 297mm; width: 210mm; overflow: hidden; }
+            .a4-page { box-shadow: none !important; margin: 0 !important; border: none !important; page-break-after: always; page-break-inside: avoid; height: 296mm; width: 210mm; overflow: hidden; }
             .a4-page:last-child { page-break-after: avoid; }
         }
     </style>
@@ -176,7 +175,7 @@
     <div class="floating-header">
         <div style="display:flex; align-items:center; gap:15px;">
             <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;" alt="Logo">
-            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v82.0</h2>
+            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v83.0</h2>
         </div>
         <div style="display:flex; gap:20px; align-items:center;">
             <div class="rate-group">
@@ -256,6 +255,7 @@
                 <div><label>Driver License</label><input type="text" id="cl_lic" placeholder="Main License"></div>
                 <div><label>Address</label><input type="text" id="cl_addr" placeholder="Local Address"></div>
             </div>
+            
             <div class="grid-2" style="margin-top:10px;">
                 <div><label>Additional Driver Name</label><input type="text" id="cl_add_driver" placeholder="Optional Name"></div>
                 <div><label>Additional Driver License</label><input type="text" id="cl_add_lic" placeholder="Optional License"></div>
@@ -370,7 +370,7 @@
                 </div>
             </div>
 
-            <button id="btnGen" class="btn-gen" onclick="generatePreview()" disabled><i class="fa fa-spinner fa-spin"></i> LOADING RESOURCES...</button>
+            <button id="btnGen" class="btn-gen" onclick="generatePreview()"><i class="fa-solid fa-file-contract"></i> 1. GENERATE PREVIEW</button>
         </div>
     </div>
 
@@ -378,24 +378,13 @@
     <div id="contractOutput"></div>
 
     <div style="display:none;">
-        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous" onload="resourceLoaded()" onerror="resourceError()">
-        <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous" onload="resourceLoaded()">
-        <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png" crossorigin="anonymous" onload="resourceLoaded()">
+        <img id="img_logo" src="https://brothersegy.com/wp-content/uploads/2025/07/22wdd.jpg" crossorigin="anonymous">
+        <img id="img_water" src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" crossorigin="anonymous">
+        <img id="img_car" src="https://brothersegy.com/wp-content/uploads/2026/02/car-template.png" crossorigin="anonymous">
     </div>
 
     <script>
-        // --- 1. SYSTEM LOGIC ---
-        let loadedCount = 0;
-        function resourceLoaded() {
-            loadedCount++;
-            if(loadedCount >= 3) {
-                const btn = document.getElementById('btnGen');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fa-solid fa-file-contract"></i> 1. GENERATE PREVIEW';
-            }
-        }
-        function resourceError() { resourceLoaded(); } // Proceed even if an image blocks
-
+        // --- 1. FULL DATA CONSTANTS (PLATES FLIPPED) ---
         const fleet = [
             {code:"33", model:"Haval Jolion", year:"2022", plate:"2 6 4 9 | ن ا ب", vin:"606889", motor:"21499022758"},
             {code:"38", model:"Chevrolet Aveo", year:"2020", plate:"8 2 6 3 | ب د ع", vin:"E009927", motor:"191160037"},
@@ -658,7 +647,7 @@
                         The Lessee bears full legal and criminal liability for the rented vehicle during the entire rental period.
                     </div>
 
-                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px;">
+                    <div style="margin-top:auto; border-top:2px solid #000; padding-top:10px; margin-bottom: 30px;">
                         <div style="display:flex; justify-content:space-between; text-align:center; font-weight:bold; font-size:10pt;">
                             <div style="width:40%;">LESSOR SIGNATURE<br><br><br>____________________<div style="font-size:9pt; margin-top:5px;">Date: ........................</div></div>
                              <div style="width:40%;">LESSEE SIGNATURE<br><br><br>____________________<div style="font-size:9pt; margin-top:5px;">Date: ........................</div></div>
