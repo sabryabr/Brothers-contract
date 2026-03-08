@@ -692,7 +692,7 @@
     <div class="floating-header">
         <div style="display:flex; align-items:center; gap:15px;">
             <img src="https://brothersegy.com/wp-content/uploads/2026/02/12345.png" style="height:40px;" alt="Logo">
-            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v84.0</h2>
+            <h2 style="margin:0; color:var(--primary); font-size:18px;">Smart Contract v85.0</h2>
         </div>
         <div style="display:flex; gap:20px; align-items:center;">
             <div class="rate-group">
@@ -865,37 +865,43 @@
                                 <option value="Full Protection">Full Protection (Zero Liability)</option>
                             </select></div>
 
-                    <div><label>Add-ons & KM Package</label>
-                        <div style="display:flex; flex-direction:column; gap:5px; margin-top:5px;">
-                            <div style="display:flex; align-items:center; gap:5px;">
-                                <select id="km_pkg" onchange="calc()" style="height:26px; font-size:11px; padding:0 5px;">
-                                    <option value="0" data-km="0">Standard (120 KM/Day)</option>
-                                    <option value="1800" data-km="500">500 KM Extra</option>
-                                    <option value="2700" data-km="750">750 KM Extra</option>
-                                    <option value="3600" data-km="1000">1000 KM Extra</option>
-                                    <option value="5400" data-km="1500">1500 KM Package</option>
-                                    <option value="7200" data-km="2000">2000 KM Package</option>
-                                    <option value="10800" data-km="3000">3000 KM Package</option>
-                                    <option value="500" data-km="999999">Unlimited KM (Per Day)</option>
-                                </select>
-                                <input type="number" id="km_pkg_cost_manual" value="0" oninput="calc()" placeholder="Cost Override" style="height:26px; width:80px; padding:2px 5px;">
-                            </div>
-                            <div style="display:flex; align-items:center; gap:5px;">
-                                <input type="checkbox" id="add_dr" onchange="calc()" style="width:15px; height:15px; margin:0;">
-                                <span style="font-size:12px; width:65px;">Driver</span>
-                                <input type="number" id="rate_dr" value="250" oninput="calc()" style="height:26px; padding:2px 8px;">
-                            </div>
-                            <div style="display:flex; align-items:center; gap:5px;">
-                                <input type="checkbox" id="add_st" onchange="calc()" style="width:15px; height:15px; margin:0;">
-                                <span style="font-size:12px; width:65px;">Child Seat</span>
-                                <input type="number" id="rate_st" value="250" oninput="calc()" style="height:26px; padding:2px 8px;">
+                        <div><label>Add-ons & KM Package</label>
+                            <div style="display:flex; flex-direction:column; gap:5px; margin-top:5px;">
+                                <div style="display:flex; align-items:center; gap:5px;">
+                                    <select id="km_pkg" onchange="calc()" style="height:26px; font-size:11px; padding:0 5px;">
+                                        <option value="0" data-km="0">Standard (120 KM/Day)</option>
+                                        <option value="1800" data-km="500">500 KM Extra</option>
+                                        <option value="2700" data-km="750">750 KM Extra</option>
+                                        <option value="3600" data-km="1000">1000 KM Extra</option>
+                                        <option value="5400" data-km="1500">1500 KM Package</option>
+                                        <option value="7200" data-km="2000">2000 KM Package</option>
+                                        <option value="10800" data-km="3000">3000 KM Package</option>
+                                        <option value="500" data-km="999999">Unlimited KM (Per Day)</option>
+                                    </select>
+                                    <input type="number" id="km_pkg_cost_manual" value="0" oninput="calc()" placeholder="Cost Override" style="height:26px; width:80px; padding:2px 5px;">
+                                </div>
+                                <div style="display:flex; align-items:center; gap:5px;">
+                                    <input type="checkbox" id="add_dr" onchange="calc()"
+                                        style="width:15px; height:15px; margin:0;">
+                                    <span style="font-size:12px; width:65px;">Driver</span>
+                                    <input type="number" id="rate_dr" value="250" oninput="calc()"
+                                        style="height:26px; padding:2px 8px;">
+                                </div>
+                                <div style="display:flex; align-items:center; gap:5px;">
+                                    <input type="checkbox" id="add_st" onchange="calc()"
+                                        style="width:15px; height:15px; margin:0;">
+                                    <span style="font-size:12px; width:65px;">Child Seat</span>
+                                    <input type="number" id="rate_st" value="250" oninput="calc()"
+                                        style="height:26px; padding:2px 8px;">
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
                 <div class="balance-box" style="flex:3;">
                     <div
-                        style="border-bottom:1px dashed rgba(255,255,255,0.3); padding-bottom:10px; margin-bottom:10px;">
+                        style="border-bottom:1px dashed rgba(255, 255, 255, 0.3); padding-bottom:10px; margin-bottom:10px;">
                         <div style="text-align:center; font-weight:bold; font-size:12px; margin-bottom:10px;">RENT
                             ESTIMATE</div>
                         <div class="bal-row"><span>Base:</span> <strong id="c_rent">0</strong></div>
@@ -906,14 +912,14 @@
                     </div>
 
                     <div
-                        style="border-bottom:1px dashed rgba(255,255,255,0.3); padding-bottom:10px; margin-bottom:10px;">
+                        style="border-bottom:1px dashed rgba(255, 255, 255, 0.3); padding-bottom:10px; margin-bottom:10px;">
                         <div
                             style="text-align:center; font-weight:bold; font-size:12px; margin-bottom:10px; color:var(--accent);">
                             DEPOSIT</div>
                         <div class="bal-row"><span>Target:</span> <strong id="val_dep_req">0</strong></div>
                         <div class="bal-row"><span>Held:</span> <strong id="val_dep_paid">0</strong></div>
                         <div
-                            style="background:rgba(0,0,0,0.2); padding:5px; border-radius:4px; text-align:center; margin-top:5px;">
+                            style="background:rgba(0, 0, 0, 0.2); padding:5px; border-radius:4px; text-align:center; margin-top:5px;">
                             <div style="font-size:9px;">DEPOSIT STATUS</div>
                             <div id="val_dep_pending" style="font-size:13px; font-weight:bold;">0</div>
                         </div>
@@ -924,7 +930,7 @@
                         <div class="bal-row"><span>Paid:</span> <strong id="val_total_paid"
                                 style="color:var(--success);">0</strong></div>
                         <div
-                            style="background:rgba(0,0,0,0.2); padding:10px; border-radius:6px; text-align:center; margin-top:10px;">
+                            style="background:rgba(0, 0, 0, 0.2); padding:10px; border-radius:6px; text-align:center; margin-top:10px;">
                             <div style="font-size:10px;">RENT PENDING</div>
                             <div id="val_rent_pending" style="font-size:18px; font-weight:bold; color:var(--danger);">0
                             </div>
@@ -969,8 +975,8 @@
         ];
 
         const termsText = {
-            1: `* <strong>Minimum Age:</strong> You must be 21 years or older.<br>* <strong>License:</strong> You must hold a valid driving license for at least 1 year.<br>* <strong>Documents:</strong> Valid ID (or Passport for foreigners) and a Driving License accepted in Egypt are mandatory.<br>* <strong>Authorized Drivers:</strong> Only the person named on the contract may drive. Additional drivers must be approved and listed.`,
-            2: `* <strong>24-Hour Cycle:</strong> Rental charges are calculated based on 24-hour units.<br>* <strong>Rental Cycle:</strong> Charges based on 24-hour units. Every hour is charged from the 1st hour. If the period is exceeded by 5 hours, a full additional day is charged.<br>* <strong>Extensions:</strong> Any extension must be approved by the Company. Unauthorized late returns are charged at a higher local tariff.<br>* <strong>Early Return:</strong> No refunds are issued for vehicles returned early (Non-refundable).`,
+            1: `* <strong>Minimum Age:</strong> You must be 21 years or older.<br>* <strong>License:</strong> Valid ID and Driving License accepted in Egypt are mandatory.<br>* <strong>Authorized Drivers:</strong> Only the person named on the contract may drive. Additional drivers must be approved and listed.`,
+            2: `* <strong>24-Hour Cycle:</strong> Charges based on 24-hour units.<br>* <strong>Rental Cycle:</strong> Charges based on 24-hour units. Every hour is charged from the 1st hour. If the period is exceeded by 5 hours, a full additional day is charged.<br>* <strong>Extensions:</strong> Any extension must be approved by the Company. Unauthorized late returns are charged at a higher local tariff.<br>* <strong>Early Return:</strong> No refunds are issued for vehicles returned early (Non-refundable).`,
             3: `* <strong>Free Cancellation:</strong> Full refund if cancelled more than 48 hours before pickup.<br>* <strong>Late Cancellation (<48h):</strong> If cancelled less than 48 hours before pickup, 30% of the booking value is retained.<br>* <strong>No Show:</strong> Failure to pick up the car without prior notice results in a 100% forfeiture of the booking amount.`,
             4: `* <strong>Mileage Limit:</strong> Standard limit is 120 KM/day (unless an Extra KM Package is purchased). Total allowance is summed (Standard 120/Day + Package KM). Extra KM charged upon return.<br>* <strong>Delivery Locations:</strong> Delivery is available to Hotels and Airports. We do not deliver to private accommodation.<br>* <strong>One-Way Rental:</strong> Dropping off at a different branch incurs a specific fee based on distance.`,
             6: `* <strong>Theft Policy:</strong> Theft is <strong>NOT</strong> covered by insurance. The vehicle is the Lessee's sole responsibility and must be parked in secure locations.`,
@@ -1046,13 +1052,12 @@
 
             const r = safeNum('rateRent'), i = safeNum('rateIns'), fee_d = safeNum('fee_del'), fee_c = safeNum('fee_col');
 
-            // NEW ADD ONS & KM CALCULATION LOGIC
+            // --- KM & ADD ONS CALCULATION ---
             let adds = 0; let addOnsList = [];
             const kmSel = document.getElementById('km_pkg');
             const pkgKM = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
             let kmPackageCost = safeNum('km_pkg_cost_manual') || parseFloat(kmSel.value);
 
-            // Logic: If Unlimited, multiply by days. If fixed package, use flat fee.
             if (pkgKM === 999999) { 
                 adds += (kmPackageCost * days); 
                 addOnsList.push(`Unl. KM Package`); 
@@ -1065,7 +1070,7 @@
             if (document.getElementById('add_st').checked) { adds += (safeNum('rate_st') * days); addOnsList.push(`Child Seat`); }
             let addOnsStr = addOnsList.length > 0 ? addOnsList.join(", ") : "None";
 
-            let totalRentOnly = (mode === "Monthly") ? (r * mult) + (i * days) + (adds * days) : ((r + i + adds) * mult);
+            let totalRentOnly = (mode === "Monthly") ? (r * mult) + (i * days) + adds : ((r + i) * mult) + adds;
             let totalDue = Math.round(totalRentOnly + fee_d + fee_c);
 
             let totalRentPaid = Math.round(safeNum('pay_rent_egp') + (safeNum('pay_rent_usd') * rateUsd) + (safeNum('pay_rent_eur') * rateEur) + safeNum('pay_rent_card'));
@@ -1094,7 +1099,7 @@
             else if (depPending < 0) dPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(depPending).toLocaleString()} EGP</span>`;
             else dPenEl.innerHTML = `<span style="color:white">0</span>`;
 
-            return { days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending, reqDep, addOnsStr, totalRentOnly };
+            return { days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending, reqDep, addOnsStr, totalRentOnly, kmPackageCost };
         }
 
         // --- 4. GENERATE CONTRACT HTML ---
@@ -1149,6 +1154,11 @@
             const logoSrc = document.getElementById('img_logo').src;
             const carSrc = document.getElementById('img_car').src;
 
+            // --- POINT 3: CALCULATE KM ---
+            const kmSel = document.getElementById('km_pkg');
+            const pkgKMValue = parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km'));
+            const kmAllowedTotal = pkgKMValue === 999999 ? "Unlimited" : (120 * c.days + pkgKMValue).toLocaleString() + " KM Total";
+
             let html = ``;
 
             // --- PAGE 1: CONTRACT ---
@@ -1185,21 +1195,11 @@
 
                     <div class="box-section"><span class="bs-title">VEHICLE & PERIOD</span>
                         <table class="pt">
-                            <tr>
-                                <th>Model</th><td>${safeVal('manModel')}</td>
-                                <th>Plate</th><td dir="ltr" style="text-align:left;"><b>${safeVal('h_plate')}</b></td>
-                                <th>KM Out</th><td>${safeVal('kmOut')}</td>
-                            </tr>
-                            <tr>
-                                <th>VIN</th><td>${safeVal('h_vin')}</td>
-                                <th>Motor</th><td>${safeVal('h_motor')}</td>
-                                <th>Allow</th><td><strong>${(parseInt(document.getElementById('km_pkg').options[document.getElementById('km_pkg').selectedIndex].getAttribute('data-km')) === 999999) ? "Unlimited" : (120 * c.days + parseInt(document.getElementById('km_pkg').options[document.getElementById('km_pkg').selectedIndex].getAttribute('data-km'))).toLocaleString() + " KM Total"}</strong></td>
-                            </tr>
-                            <tr>
-                                <th>Pickup</th><td>${safeVal('p_time').replace('T', ' ')}<br>${pText}</td>
+                            <tr><th>Model</th><td>${safeVal('manModel')}</td><th>Plate</th><td dir="ltr" style="text-align:left;"><b>${safeVal('h_plate')}</b></td><th>KM Out</th><td>${safeVal('kmOut')}</td></tr>
+                            <tr><th>VIN</th><td>${safeVal('h_vin')}</td><th>Motor</th><td>${safeVal('h_motor')}</td><th>Allow</th><td><strong>${kmAllowedTotal}</strong></td></tr>
+                            <tr><th>Pickup</th><td>${safeVal('p_time').replace('T', ' ')}<br>${pText}</td>
                                 <th>Dropoff</th><td>${safeVal('d_time').replace('T', ' ')}<br>${dText}</td>
-                                <th>Duration</th><td>${c.days} Days</td>
-                            </tr>
+                                <th>Duration</th><td>${c.days} Days</td></tr>
                         </table>
                     </div>
 
@@ -1208,7 +1208,9 @@
                             <tr><th>Item Description</th><th>Rate / Calculation</th><th style="text-align:right">Amount (EGP)</th></tr>
                             <tr><td>Base Rent</td><td>${rateTxt}</td><td align="right">${Math.round(base).toLocaleString()}</td></tr>
                             ${c.i > 0 ? `<tr><td>Insurance Fees</td><td>${c.i} x ${c.days} Days</td><td align="right">${(c.i * c.days).toLocaleString()}</td></tr>` : ''}
-                            ${c.adds > 0 ? `<tr><td>Add-ons (${c.addOnsStr})</td><td>${c.adds} x ${c.days} Days</td><td align="right">${(c.adds * c.days).toLocaleString()}</td></tr>` : ''}
+                            ${c.kmPackageCost > 0 ? `<tr><td>Mileage Package (${kmSel.options[kmSel.selectedIndex].text})</td><td>Package Fee</td><td align="right">${c.kmPackageCost.toLocaleString()}</td></tr>` : ''}
+                            ${document.getElementById('add_dr').checked ? `<tr><td>Additional Driver</td><td>${safeNum('rate_dr')} x ${c.days} Days</td><td align="right">${(safeNum('rate_dr') * c.days).toLocaleString()}</td></tr>` : ''}
+                            ${document.getElementById('add_st').checked ? `<tr><td>Child Car Seat</td><td>${safeNum('rate_st')} x ${c.days} Days</td><td align="right">${(safeNum('rate_st') * c.days).toLocaleString()}</td></tr>` : ''}
                             ${c.fee_d > 0 ? `<tr><td>Delivery Fee (${pText})</td><td>Fixed</td><td align="right">${c.fee_d}</td></tr>` : ''}
                             ${c.fee_c > 0 ? `<tr><td>Pickup Fee (${dText})</td><td>Fixed</td><td align="right">${c.fee_c}</td></tr>` : ''}
                             <tr style="font-weight:bold; border-top:2px solid #000;"><td colspan="2" align="right">TOTAL CONTRACT VALUE:</td><td align="right">${Math.round(c.totalDue).toLocaleString()} EGP</td></tr>
@@ -1252,7 +1254,7 @@
                     <div class="doc-head"><strong>TERMS & CONDITIONS</strong><span>Page 2/4</span></div>
                     <div class="terms-grid">
                         <div class="term-p"><span class="term-h">1. DRIVER REQUIREMENTS & ELIGIBILITY</span>${termsText[1]}</div>
-                        <div class="term-p"><span class="term-h">2. RENTAL PERIOD & EXTENSIONS</span>${termsText[2]}</div>
+                        <div class="term-p"><span class="term-h">2. RENTAL CYCLE & EXTENSIONS</span>${termsText[2]}</div>
                         <div class="term-p"><span class="term-h">3. CANCELLATION & NO-SHOW POLICY</span>${termsText[3]}</div>
                         <div class="term-p"><span class="term-h">4. DELIVERY & MILEAGE</span>${termsText[4]}</div>
 
@@ -1293,8 +1295,6 @@
                     <div style="width:48%;"><div class="insp-group-head">REAR</div>${chkRow('(Q) TRUNK')}${chkRow('(H) BUMPER')}${chkRow('(I) LIGHTS')}</div>
                     <div style="width:48%;"><div class="insp-group-head">DRIVER</div>${chkRow('(M) FEND F')}${chkRow('(C) DOOR F')}${chkRow('(B) DOOR R')}${chkRow('(A) FEND R')}</div>
                 </div>`;
-
-            let kmAllowedTotal = document.getElementById('add_km').checked ? "Unlimited" : (parseInt(safeVal('kmOut') || 0) + (120 * c.days));
 
             let pickupHtmlClean = `
                 <div class="insp-left-col">
@@ -1375,14 +1375,6 @@
             </div>`;
 
             // --- PAGE 4+: RECEIPTS ---
-            const recData = {
-                client: `${safeVal('cl_fname')} ${safeVal('cl_sname')}`,
-                pass: safeVal('cl_pass'),
-                phone: `${safeVal('cl_ph_code')} ${safeVal('cl_phone')}`,
-                con: cid,
-                car: `${safeVal('manModel')} (${safeVal('h_year')}) | Plate: ${safeVal('h_plate')}`
-            };
-
             const singleRecHtml = (title, copyType, amountStr, details, isBlankDate = false, periodStr = "", isDeposit = false) => `
                 <div class="receipt-half">
                     <div class="rec-header">
@@ -1502,14 +1494,13 @@
 
         // PRINT HANDLER
         function printContract() {
-            // Temporarily set document title to Contract ID to ensure PDF saves with correct name
             const oldTitle = document.title;
             const cidEl = document.getElementById('preview-cid');
             if (cidEl) {
                 document.title = cidEl.innerText;
             }
             window.print();
-            document.title = oldTitle; // Restore
+            document.title = oldTitle;
         }
     </script>
 </body>
