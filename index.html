@@ -24,14 +24,14 @@
             font-family: 'Segoe UI', Tahoma, sans-serif;
             background: var(--bg);
             margin: 0;
-            padding: 10px 20px;
+            padding: 20px 20px; /* Added extra top padding so it never feels cut off */
             color: #eee; 
         }
 
         /* FLOATING PILL HEADER */
         .floating-header {
             max-width: 1050px;
-            margin: 10px auto 20px auto;
+            margin: 0 auto 25px auto;
             background: rgba(15, 20, 25, 0.5);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
@@ -580,8 +580,7 @@
         };
 
         // --- 2. INIT & FETCH RATES ---
-        // Executes immediately to bypass iframe race conditions
-        function initApp() {
+        document.addEventListener("DOMContentLoaded", function () {
             try {
                 const sel = document.getElementById('carSelect');
                 if (sel && sel.options.length === 1) {
@@ -613,7 +612,7 @@
             } catch(err) {
                 console.error("Init Error: ", err);
             }
-        }
+        });
 
         // --- 3. HELPERS & MATH ---
         function safeVal(id) { var el = document.getElementById(id); return el ? el.value : ""; }
@@ -1097,7 +1096,7 @@
             document.getElementById('btnRealPrint').style.display = "block";
 
             setTimeout(() => {
-                document.getElementById('btnRealPrint').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
             }, 100);
         }
 
@@ -1111,9 +1110,6 @@
             window.print();
             document.title = oldTitle;
         }
-
-        // Execute initialization immediately
-        initApp();
     </script>
 </body>
 
