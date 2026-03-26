@@ -16,7 +16,6 @@
             --accent: #e67e22;
             --success: #2ecc71;
             --danger: #e74c3c;
-            /* Drastically lowered opacity for better video visibility */
             --glass-bg: rgba(15, 20, 25, 0.35); 
             --glass-border: rgba(255, 255, 255, 0.15);
         }
@@ -581,36 +580,40 @@
         };
 
         // --- 2. INIT & FETCH RATES ---
-        // Changed to DOMContentLoaded to prevent script from freezing if logo takes too long to load
-        document.addEventListener("DOMContentLoaded", function () {
-            const sel = document.getElementById('carSelect');
-            if (sel) {
-                fleet.forEach(c => {
-                    let opt = document.createElement('option');
-                    opt.value = c.code;
-                    opt.text = `[${c.code}] ${c.model} (${c.year}) - ${c.plate}`;
-                    sel.add(opt);
-                });
-            }
+        // Executes immediately to bypass iframe race conditions
+        function initApp() {
+            try {
+                const sel = document.getElementById('carSelect');
+                if (sel && sel.options.length === 1) {
+                    fleet.forEach(c => {
+                        let opt = document.createElement('option');
+                        opt.value = c.code;
+                        opt.text = `[${c.code}] ${c.model} (${c.year}) - ${c.plate}`;
+                        sel.add(opt);
+                    });
+                }
 
-            setInterval(() => { 
-                const clk = document.getElementById('clock');
-                if (clk) clk.innerText = new Date().toLocaleString(); 
-            }, 1000);
+                setInterval(() => { 
+                    const clk = document.getElementById('clock');
+                    if (clk) clk.innerText = new Date().toLocaleString(); 
+                }, 1000);
 
-            // Fetch Live Rates silently
-            fetch('https://api.exchangerate-api.com/v4/latest/USD')
-                .then(r => r.json()).then(d => {
-                    if (d.rates.EGP) {
-                        document.getElementById('ex_usd').value = d.rates.EGP.toFixed(2);
-                        if (d.rates.EUR) document.getElementById('ex_eur').value = (d.rates.EGP / d.rates.EUR).toFixed(2);
+                fetch('https://api.exchangerate-api.com/v4/latest/USD')
+                    .then(r => r.json()).then(d => {
+                        if (d.rates && d.rates.EGP) {
+                            const usdEl = document.getElementById('ex_usd');
+                            const eurEl = document.getElementById('ex_eur');
+                            if(usdEl) usdEl.value = d.rates.EGP.toFixed(2);
+                            if(eurEl && d.rates.EUR) eurEl.value = (d.rates.EGP / d.rates.EUR).toFixed(2);
+                        }
                         calc();
-                    }
-                }).catch(e => { calc(); });
-            
-            // Force calc immediately to populate UI
-            setTimeout(calc, 200);
-        });
+                    }).catch(e => { console.warn("Rate fetch failed", e); calc(); });
+                
+                calc();
+            } catch(err) {
+                console.error("Init Error: ", err);
+            }
+        }
 
         // --- 3. HELPERS & MATH ---
         function safeVal(id) { var el = document.getElementById(id); return el ? el.value : ""; }
@@ -632,70 +635,72 @@
         function toggleMode() { document.getElementById('lbl_rate').innerText = (safeVal('rentalMode') === 'Monthly') ? "Monthly Rent (EGP)" : "Daily Rent (EGP)"; calc(); }
 
         function calc() {
-            const rateUsd = safeNum('ex_usd') || 50; const rateEur = safeNum('ex_eur') || 54;
-            const pStr = safeVal('p_time'); const dStr = safeVal('d_time'); const mode = safeVal('rentalMode');
+            try {
+                const rateUsd = safeNum('ex_usd') || 50; const rateEur = safeNum('ex_eur') || 54;
+                const pStr = safeVal('p_time'); const dStr = safeVal('d_time'); const mode = safeVal('rentalMode');
 
-            let days = 1;
-            if (pStr && dStr) {
-                const p = new Date(pStr), d = new Date(dStr);
-                if (d > p) { days = Math.ceil(Math.abs(d - p) / (1000 * 60 * 60 * 24)); if (days < 1) days = 1; }
-            }
+                let days = 1;
+                if (pStr && dStr) {
+                    const p = new Date(pStr), d = new Date(dStr);
+                    if (d > p) { days = Math.ceil(Math.abs(d - p) / (1000 * 60 * 60 * 24)); if (days < 1) days = 1; }
+                }
 
-            let mult = (mode === "Monthly") ? ((days / 30).toFixed(1) < 1 ? 1 : parseFloat((days / 30).toFixed(1))) : days;
+                let mult = (mode === "Monthly") ? ((days / 30).toFixed(1) < 1 ? 1 : parseFloat((days / 30).toFixed(1))) : days;
 
-            const r = safeNum('rateRent'), i = safeNum('rateIns'), fee_d = safeNum('fee_del'), fee_c = safeNum('fee_col');
+                const r = safeNum('rateRent'), i = safeNum('rateIns'), fee_d = safeNum('fee_del'), fee_c = safeNum('fee_col');
 
-            // --- KM & ADD ONS CALCULATION ---
-            let adds = 0; let addOnsList = [];
-            const kmSel = document.getElementById('km_pkg');
-            const pkgKM = kmSel && kmSel.selectedIndex >= 0 ? parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km')) : 0;
-            let kmPackageCost = safeNum('km_pkg_cost_manual') || (kmSel ? parseFloat(kmSel.value) : 0);
+                // --- KM & ADD ONS CALCULATION ---
+                let adds = 0; let addOnsList = [];
+                const kmSel = document.getElementById('km_pkg');
+                const pkgKM = kmSel && kmSel.selectedIndex >= 0 ? parseInt(kmSel.options[kmSel.selectedIndex].getAttribute('data-km')) : 0;
+                let kmPackageCost = safeNum('km_pkg_cost_manual') || (kmSel ? parseFloat(kmSel.value) : 0);
 
-            if (pkgKM === 999999) {
-                adds += (kmPackageCost * days);
-                addOnsList.push(`Unl. KM Package`);
-            } else if (kmPackageCost > 0) {
-                adds += kmPackageCost;
-                addOnsList.push(`Extra KM Package`);
-            }
+                if (pkgKM === 999999) {
+                    adds += (kmPackageCost * days);
+                    addOnsList.push(`Unl. KM Package`);
+                } else if (kmPackageCost > 0) {
+                    adds += kmPackageCost;
+                    addOnsList.push(`Extra KM Package`);
+                }
 
-            const cb_dr = document.getElementById('add_dr');
-            const cb_st = document.getElementById('add_st');
-            if (cb_dr && cb_dr.checked) { adds += (safeNum('rate_dr') * days); addOnsList.push(`Driver`); }
-            if (cb_st && cb_st.checked) { adds += (safeNum('rate_st') * days); addOnsList.push(`Child Seat`); }
-            let addOnsStr = addOnsList.length > 0 ? addOnsList.join(", ") : "None";
+                const cb_dr = document.getElementById('add_dr');
+                const cb_st = document.getElementById('add_st');
+                if (cb_dr && cb_dr.checked) { adds += (safeNum('rate_dr') * days); addOnsList.push(`Driver`); }
+                if (cb_st && cb_st.checked) { adds += (safeNum('rate_st') * days); addOnsList.push(`Child Seat`); }
+                let addOnsStr = addOnsList.length > 0 ? addOnsList.join(", ") : "None";
 
-            let totalRentOnly = (mode === "Monthly") ? (r * mult) + (i * days) + adds : ((r + i) * mult) + adds;
-            let totalDue = Math.round(totalRentOnly + fee_d + fee_c);
+                let totalRentOnly = (mode === "Monthly") ? (r * mult) + (i * days) + adds : ((r + i) * mult) + adds;
+                let totalDue = Math.round(totalRentOnly + fee_d + fee_c);
 
-            let totalRentPaid = Math.round(safeNum('pay_rent_egp') + (safeNum('pay_rent_usd') * rateUsd) + (safeNum('pay_rent_eur') * rateEur) + safeNum('pay_rent_card'));
-            let rentPending = totalDue - totalRentPaid;
+                let totalRentPaid = Math.round(safeNum('pay_rent_egp') + (safeNum('pay_rent_usd') * rateUsd) + (safeNum('pay_rent_eur') * rateEur) + safeNum('pay_rent_card'));
+                let rentPending = totalDue - totalRentPaid;
 
-            let reqDep = safeNum('req_deposit');
-            let totalDepPaid = Math.round(safeNum('pay_dep_egp') + (safeNum('pay_dep_usd') * rateUsd) + (safeNum('pay_dep_eur') * rateEur) + safeNum('pay_dep_card'));
-            let depPending = reqDep - totalDepPaid;
+                let reqDep = safeNum('req_deposit');
+                let totalDepPaid = Math.round(safeNum('pay_dep_egp') + (safeNum('pay_dep_usd') * rateUsd) + (safeNum('pay_dep_eur') * rateEur) + safeNum('pay_dep_card'));
+                let depPending = reqDep - totalDepPaid;
 
-            // Update UI
-            document.getElementById('c_days').innerText = days;
-            document.getElementById('c_rent').innerText = Math.round(totalRentOnly).toLocaleString();
-            document.getElementById('c_fees').innerText = Math.round(fee_d + fee_c).toLocaleString();
-            document.getElementById('c_total_preview').innerText = totalDue.toLocaleString() + " EGP";
-            document.getElementById('val_total_due').innerText = totalDue.toLocaleString();
-            document.getElementById('val_total_paid').innerText = totalRentPaid.toLocaleString();
-            document.getElementById('val_dep_req').innerText = reqDep.toLocaleString();
-            document.getElementById('val_dep_paid').innerText = totalDepPaid.toLocaleString();
+                // Update UI
+                document.getElementById('c_days').innerText = days;
+                document.getElementById('c_rent').innerText = Math.round(totalRentOnly).toLocaleString();
+                document.getElementById('c_fees').innerText = Math.round(fee_d + fee_c).toLocaleString();
+                document.getElementById('c_total_preview').innerText = totalDue.toLocaleString() + " EGP";
+                document.getElementById('val_total_due').innerText = totalDue.toLocaleString();
+                document.getElementById('val_total_paid').innerText = totalRentPaid.toLocaleString();
+                document.getElementById('val_dep_req').innerText = reqDep.toLocaleString();
+                document.getElementById('val_dep_paid').innerText = totalDepPaid.toLocaleString();
 
-            let rPenEl = document.getElementById('val_rent_pending');
-            if (rentPending > 0) rPenEl.innerHTML = `<span style="color:#e74c3c">${rentPending.toLocaleString()} EGP</span>`;
-            else if (rentPending < 0) rPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(rentPending).toLocaleString()} EGP</span>`;
-            else rPenEl.innerHTML = `<span style="color:white">0 (PAID)</span>`;
+                let rPenEl = document.getElementById('val_rent_pending');
+                if (rentPending > 0) rPenEl.innerHTML = `<span style="color:#e74c3c">${rentPending.toLocaleString()} EGP</span>`;
+                else if (rentPending < 0) rPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(rentPending).toLocaleString()} EGP</span>`;
+                else rPenEl.innerHTML = `<span style="color:white">0 (PAID)</span>`;
 
-            let dPenEl = document.getElementById('val_dep_pending');
-            if (depPending > 0) dPenEl.innerHTML = `<span style="color:#e74c3c">${depPending.toLocaleString()} EGP</span>`;
-            else if (depPending < 0) dPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(depPending).toLocaleString()} EGP</span>`;
-            else dPenEl.innerHTML = `<span style="color:white">0</span>`;
+                let dPenEl = document.getElementById('val_dep_pending');
+                if (depPending > 0) dPenEl.innerHTML = `<span style="color:#e74c3c">${depPending.toLocaleString()} EGP</span>`;
+                else if (depPending < 0) dPenEl.innerHTML = `<span style="color:#2ecc71">+${Math.abs(depPending).toLocaleString()} EGP</span>`;
+                else dPenEl.innerHTML = `<span style="color:white">0</span>`;
 
-            return { days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending, reqDep, addOnsStr, totalRentOnly, kmPackageCost };
+                return { days, mult, r, i, adds, fee_d, fee_c, totalDue, mode, totalRentPaid, rentPending, depPending, reqDep, addOnsStr, totalRentOnly, kmPackageCost };
+            } catch(e) { console.error(e); }
         }
 
         // --- 4. GENERATE CONTRACT HTML ---
@@ -1106,6 +1111,9 @@
             window.print();
             document.title = oldTitle;
         }
+
+        // Execute initialization immediately
+        initApp();
     </script>
 </body>
 
